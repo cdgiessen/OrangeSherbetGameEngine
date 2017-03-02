@@ -7,11 +7,16 @@
 
 #include <vector>
 
+#include "OrangeSherbetGameEngine.h"
+
 typedef std::chrono::high_resolution_clock Clock; //gets me a timer
 
 void main() {
 	std::cout << "Starting up the Orange Sherbet Game Engine, Version 0.0.1" << std::endl;
 	
+	Osge::OrangeSherbetGameEngine gameEngine();
+
+
 	std::cout << "Begin vertex tests" << std::endl << std::endl;
 	const int vecTestSize = 5000;
 	cml::vec3f vectors[vecTestSize];

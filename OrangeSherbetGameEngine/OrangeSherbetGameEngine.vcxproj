@@ -153,9 +153,11 @@
   <ItemGroup>
     <ClCompile Include="AllocatorPool.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OrangeSherbetGameEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllocatorPool.h" />
+    <ClInclude Include="OrangeSherbetGameEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,9 +21,15 @@
     <ClCompile Include="AllocatorPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OrangeSherbetGameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllocatorPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrangeSherbetGameEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
