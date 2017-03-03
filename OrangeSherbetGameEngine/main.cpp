@@ -7,6 +7,8 @@
 
 #include <vector>
 
+#include <GLFW\glfw3.h>
+
 #include "OrangeSherbetGameEngine.h"
 
 typedef std::chrono::high_resolution_clock Clock; //gets me a timer
@@ -79,4 +81,26 @@ void main() {
 
 	std::cout << "Press any key to continue..." << std::endl;
 	std::getchar();
+
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
+	if (window == nullptr)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		//return -1;
+	}
+	glfwMakeContextCurrent(window);
+
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwPollEvents();
+		glfwSwapBuffers(window);
+	}
+	glfwTerminate();
 }
