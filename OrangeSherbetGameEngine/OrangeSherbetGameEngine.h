@@ -1,14 +1,9 @@
 #pragma once
 
+#include "InputManager.h"
+#include <GLFW\glfw3.h>
+
 namespace Osge {
-
-	//All the subsystems.
-	//Memory Manager (pool, stack, etc)
-	//File System(resource loading and save state loading)
-	
-	//Rendering/animation/texture graphics	
-	//Physics manager
-
 
 	class OrangeSherbetGameEngine
 	{
@@ -16,13 +11,22 @@ namespace Osge {
 		OrangeSherbetGameEngine();
 		~OrangeSherbetGameEngine();
 
-		void StartUp (){
-			//Start pointers to subsystems
-		};
+		int StartUp();
 
-		void ShutDown() {
-			//Shut them down in reverse order	
-		};
+		int ShutDown();
+
+
+	
+		//All the subsystems
+		//Memory Manager (pool, stack, etc)
+		//File System(resource loading and save state loading)
+
+		//Rendering/animation/texture graphics	
+		//Physics manager
+
+		GLFWwindow *window;
+
+		InputManager *inputManager;
 	};
 
 }
