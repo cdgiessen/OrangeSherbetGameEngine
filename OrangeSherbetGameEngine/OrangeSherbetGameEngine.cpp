@@ -23,7 +23,7 @@ namespace Osge {
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 		// Create a GLFWwindow object that we can use for GLFW's functions
-		GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+		window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
 		if (window == nullptr)
 		{
 			std::cout << "Failed to create GLFW window" << std::endl;

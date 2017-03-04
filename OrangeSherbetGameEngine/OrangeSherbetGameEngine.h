@@ -1,7 +1,16 @@
 #pragma once
 
-#include "InputManager.h"
+#ifndef ORANGE_SHERBET_GAME_ENGINE_H
+
+
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include <GLFW\glfw3.h>
+
+#include "InputManager.h"
+
+
 
 namespace Osge {
 
@@ -30,4 +39,6 @@ namespace Osge {
 	};
 
 }
+
+#endif // !ORANGE_SHERBET_GAME_ENGINE_H
 

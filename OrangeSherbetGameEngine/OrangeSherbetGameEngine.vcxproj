@@ -71,8 +71,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\lib;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -81,8 +81,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\lib;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -102,7 +102,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -137,7 +137,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -162,12 +162,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AllocatorPool.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OrangeSherbetGameEngine.cpp" />
+    <ClCompile Include="Tester.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllocatorPool.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="OrangeSherbetGameEngine.h" />
   </ItemGroup>
