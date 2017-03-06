@@ -6,11 +6,12 @@ namespace Osge {
 
 	InputManager::InputManager(GLFWwindow* window)
 	{
-		//glfwSetKeyCallback(window, UpdateKeyPressed);
-		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		//glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)UpdateMousButton);
-		//glfwSetCursorPosCallback(window, UpdateMouseMoved);
-		//glfwSetScrollCallback(window, UpdateScrollMoved);
+		InputManager *ipm = this;
+//		glfwSetKeyCallback(window, ipm->UpdateKeyPressed);
+//		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+//		glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)(ipm->UpdateMousButton));
+//		glfwSetCursorPosCallback(window, ipm->UpdateMouseMoved);
+//		glfwSetScrollCallback(window, ipm->UpdateScrollMoved);
 		//register callbacks
 	}
 
