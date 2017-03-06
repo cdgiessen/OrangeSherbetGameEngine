@@ -3,7 +3,7 @@
 #ifndef GAME_OBJECT_H
 
 #include "CML\cml.h"
-
+#include "Transform.h"
 class GameObject
 {
 public:
@@ -11,7 +11,7 @@ public:
 	~GameObject();
 
 private:
-	cml::vec3f position;
+	Transform transform;
 };
 
 #endif // !GAME_OBJECT_H

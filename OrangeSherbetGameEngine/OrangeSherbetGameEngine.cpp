@@ -34,6 +34,6 @@ namespace Osge {
 	}
 
 	int OrangeSherbetGameEngine::ShutDown() {
-
+		return 0;
 	}
 }
