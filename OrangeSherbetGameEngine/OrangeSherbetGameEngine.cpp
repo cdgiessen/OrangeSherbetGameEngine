@@ -31,11 +31,9 @@ namespace Osge {
 			return -1;
 		}
 		glfwMakeContextCurrent(window);
-		return 0;
 	}
 
 	int OrangeSherbetGameEngine::ShutDown() {
-
 		return 0;
 	}
 }
