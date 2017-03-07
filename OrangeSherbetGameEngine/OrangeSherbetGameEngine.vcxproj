@@ -165,16 +165,31 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="OrangeSherbetGameEngine.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Tester.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllocatorPool.h" />
+    <ClInclude Include="DumbCamera.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="OrangeSherbetGameEngine.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Transform.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DefaultFragmentShader.glsl" />
+    <None Include="DefaultVertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="TestTexture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

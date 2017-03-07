@@ -1,6 +1,7 @@
 #pragma once
 
 #ifndef GAME_OBJECT_H
+#define GAME_OBJECT_H
 
 #include "CML\cml.h"
 #include "Transform.h"
@@ -11,7 +12,7 @@ public:
 	~GameObject();
 
 private:
-	Transform transform;
+	Osge::Transform transform;
 };
 
 #endif // !GAME_OBJECT_H

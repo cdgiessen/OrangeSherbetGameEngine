@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef INPUT_MANAGER_H
-
+#define INPUT_MANAGER_H
 
 #include <GLFW\glfw3.h>
 
@@ -12,6 +12,7 @@ namespace Osge {
 	class InputManager
 	{
 	public:
+		InputManager();
 		InputManager(GLFWwindow* window);
 		~InputManager();
 

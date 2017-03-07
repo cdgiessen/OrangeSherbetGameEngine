@@ -4,6 +4,10 @@
 
 namespace Osge {
 
+	InputManager::InputManager()
+	{
+	}
+
 	InputManager::InputManager(GLFWwindow* window)
 	{
 		InputManager *ipm = this;

@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef ORANGE_SHERBET_GAME_ENGINE_H
-
+#define ORANGE_SHERBET_GAME_ENGINE_H
 
 #define GLEW_STATIC
 #include <GL/glew.h>
