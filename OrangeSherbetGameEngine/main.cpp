@@ -170,6 +170,9 @@ int main() {
 		// Draw the triangle
 		defaultShader.Use();
 		glBindVertexArray(VAO);
+
+
+
 		glDrawArrays(GL_TRIANGLES, 0, 12);
 		glBindVertexArray(0);
 
