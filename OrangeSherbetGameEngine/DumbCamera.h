@@ -16,11 +16,13 @@ enum Camera_Movement {
 	FORWARD,
 	BACKWARD,
 	LEFT,
-	RIGHT
+	RIGHT,
+	UP,
+	DOWN
 };
 
 // Default camera values
-const GLfloat YAW = -90.0f;
+const GLfloat YAW = 0.0f;
 const GLfloat PITCH = 0.0f;
 const GLfloat SPEED = 3.0f;
 const GLfloat SENSITIVTY = 0.25f;
@@ -67,7 +69,7 @@ public:
 	// Returns the view matrix calculated using Eular Angles and the LookAt Matrix
 	cml::mat4f GetViewMatrix()
 	{
-		return createLookAt(this->Position, this->Position + this->Front, this->Up);
+		return cml::mat4f::createLookAt(this->Position, this->Position + this->Front, this->Up);
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -82,6 +84,11 @@ public:
 			this->Position -= this->Right * velocity;
 		if (direction == RIGHT)
 			this->Position += this->Right * velocity;
+
+		if (direction == UP)
+			this->Position += this->Up * velocity;
+		if (direction == DOWN)
+			this->Position -= this->Up * velocity;
 	}
 
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
@@ -132,39 +139,6 @@ private:
 		this->Right.norm();
 		this->Up = (cml::vec3f::cross(this->Right, this->Front));
 		this->Up.norm();
-	}
-
-	static cml::mat4f createLookAt(const cml::vec3f& eyePos, const cml::vec3f& centerPos, const cml::vec3f& upDir)
-	{
-		cml::vec3f forward, side, up;
-		cml::mat4f m;
-
-		forward = centerPos - eyePos;
-		up = upDir;
-
-		forward.norm();
-
-		// Side = forward x up
-		side = cml::vec3f::cross(up, forward);
-		side.norm();
-
-		// Recompute up as: up = side x forward
-		up = cml::vec3f::cross(forward,side);
-
-		m.at(0, 0) = side.x;
-		m.at(1, 0) = side.y;
-		m.at(2, 0) = side.z;
-
-		m.at(0, 1) = up.x;
-		m.at(1, 1) = up.y;
-		m.at(2, 1) = up.z;
-
-		m.at(0, 2) = -forward.x;
-		m.at(1, 2) = -forward.y;
-		m.at(2, 2) = -forward.z;
-
-		m = m * cml::mat4f::createTranslationMatrix(cml::vec3f(-eyePos.x, -eyePos.y, -eyePos.z));
-		return m;
 	}
 };
 
