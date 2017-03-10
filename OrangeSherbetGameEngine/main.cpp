@@ -11,13 +11,18 @@
 
 #include "Shader.h"
 
-#include "Camera.h"
+#include "DumbCamera.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void OnMouseMoved(GLFWwindow* window, double xpos, double ypos);
+GLfloat lastX = 400, lastY = 300;
+bool firstMouse = true;
+
+void OnMouseButton(GLFWwindow* window, int glfwButton, int glfwAction);
 
 // Default Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -26,48 +31,50 @@ GLFWwindow *window;
 
 GLuint VAO, VBO, EBO;
 
+Camera camera(cml::vec3f(0, 0, 0));
+
 GLfloat cubeVerts[] = {
-	-0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f,  0.5f, -0.5f,
-	0.5f,  0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f, -0.5f,  0.5f,
-	0.5f, -0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-
-	0.5f,  0.5f,  0.5f,
-	0.5f,  0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-
-	-0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f, -0.5f,
-	0.5f, -0.5f,  0.5f,
-	0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
-
-	-0.5f,  0.5f, -0.5f,
-	0.5f,  0.5f, -0.5f,
-	0.5f,  0.5f,  0.5f,
-	0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,	 0.0f, 1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f,
+						
+	-0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+	0.5f, -0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,	 0.0f, 0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,	 1.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 0.0f,
+						 
+	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+						  
+	0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+	0.5f, -0.5f, -0.5f,	 0.0f, 0.0f, 1.0f,
+	0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 1.0f,
+	0.5f, -0.5f,  0.5f,	 0.0f, 1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
+						  
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+	0.5f, -0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+	0.5f, -0.5f,  0.5f,	 1.0f, 1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f,
+						 
+	-0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
+	0.5f,  0.5f, -0.5f,	 1.0f, 1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,	 0.0f, 0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,	 1.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
 };
 
 void setup_window() {
@@ -97,8 +104,8 @@ void setup_window() {
 	//glfwSetWindowSizeCallback(window, window_size_callback);
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)OnMouseButton);
-	//glfwSetCursorPosCallback(window, OnMouseMoved);
+	glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)OnMouseButton);
+	glfwSetCursorPosCallback(window, OnMouseMoved);
 	//glfwSetScrollCallback(window, OnScrollMoved);
 
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
@@ -118,11 +125,14 @@ void setup_vao() {
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(GLfloat), cubeVerts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 6 * 36 * sizeof(GLfloat), cubeVerts, GL_STATIC_DRAW);
 
 	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);					
+													
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 	// Normal attribute
 
 	glBindVertexArray(0); // Unbind VAO
@@ -149,14 +159,16 @@ int main() {
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
 
-	Camera camera(cml::vec3f(0, 60, 0));
-
 	setup_vao();
+
+	camera.Position = cml::vec3f(0, 0, -5);
 
 	// Define the viewport dimensions
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
+	
 	glViewport(0, 0, width, height);
+	//glEnable(GL_DEPTH_TEST);
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -171,32 +183,24 @@ int main() {
 
 		// Draw the triangle
 		defaultShader.Use();
-		/*
-		// Projection 
-		cml::mat4f view;
-		cml::mat4f projection;
-		cml::mat4f model;
+		glBindVertexArray(VAO);
 
-		view = camera.GetViewMatrix();
-		projection = cml::mat4f::createFrustum(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
-		// Get the uniform locations
-		GLfloat angle = 20.0f;
-		//model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
-		//model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.05f, glm::vec3(0.0f, 0.5f, 0.0f));
-		
+		cml::mat4f view = cml::mat4f(); //camera.GetViewMatrix();
+		cml::mat4f projection =  cml::mat4f::createPerspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);;
+		cml::mat4f model = cml::mat4f();
 		
 		GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
-		// Pass the matrices to the shader
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::value_ptr(model));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::value_ptr(projection));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::value_ptr(view));
-		*/
-		glBindVertexArray(VAO);
 
-		glDrawArrays(GL_TRIANGLES, 0, 12);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::mat4f::value_ptr(model));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
+
+		std::cout << "Camera position = " << camera.Position << "Camera Rotation = " << camera.Front <<std::endl;
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
@@ -213,5 +217,46 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	std::cout << key << std::endl;
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+
+	float deltaTime = 0.05f;
+
+	// Camera controls
+	if (key == GLFW_KEY_W)
+		camera.ProcessKeyboard(FORWARD, deltaTime);
+	if (key == GLFW_KEY_S)
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
+	if (key == GLFW_KEY_A)
+		camera.ProcessKeyboard(LEFT, deltaTime);
+	if (key == GLFW_KEY_D)
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (key == GLFW_KEY_Q)
+		camera.ProcessKeyboard(DOWN, deltaTime);
+	if (key == GLFW_KEY_E)
+		camera.ProcessKeyboard(UP, deltaTime);
 }
 
+void OnMouseMoved(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	GLfloat xoffset = xpos - lastX;
+	GLfloat yoffset = lastY - ypos;  // Reversed since y-coordinates go from bottom to left
+
+	lastX = xpos;
+	lastY = ypos;
+
+	std::cout << "Mouse Moved" << std::endl;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void OnMouseButton(GLFWwindow* window, int glfwButton, int glfwAction) {
+	//mouseHeldDown = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
+		std::cout << "Left Clicked" << std::endl;
+}
