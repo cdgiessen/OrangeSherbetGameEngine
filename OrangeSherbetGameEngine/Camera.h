@@ -1,9 +1,10 @@
-
-
 #pragma once
 
+#ifndef CAMERA_H
+#define CAMERA_H
+
 // Std. Includes
-#include <vector>
+//#include <vector>
 
 // GL Includes
 #include <GL/glew.h>
@@ -168,3 +169,4 @@ private:
 	}
 };
 
+#endif // !CAMERA_H

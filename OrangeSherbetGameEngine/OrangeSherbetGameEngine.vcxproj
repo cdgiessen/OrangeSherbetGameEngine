@@ -173,7 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllocatorPool.h" />
-    <ClInclude Include="DumbCamera.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mesh.h" />

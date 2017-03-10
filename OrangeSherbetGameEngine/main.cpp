@@ -11,7 +11,7 @@
 
 #include "Shader.h"
 
-#include "DumbCamera.h"
+#include "Camera.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -149,6 +149,8 @@ int main() {
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
 
+	Camera camera(cml::vec3f(0, 60, 0));
+
 	setup_vao();
 
 	// Define the viewport dimensions
@@ -169,9 +171,29 @@ int main() {
 
 		// Draw the triangle
 		defaultShader.Use();
+		/*
+		// Projection 
+		cml::mat4f view;
+		cml::mat4f projection;
+		cml::mat4f model;
+
+		view = camera.GetViewMatrix();
+		projection = cml::mat4f::createFrustum(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
+		// Get the uniform locations
+		GLfloat angle = 20.0f;
+		//model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+		//model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.05f, glm::vec3(0.0f, 0.5f, 0.0f));
+		
+		
+		GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
+		GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
+		GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
+		// Pass the matrices to the shader
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::value_ptr(model));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::value_ptr(projection));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::value_ptr(view));
+		*/
 		glBindVertexArray(VAO);
-
-
 
 		glDrawArrays(GL_TRIANGLES, 0, 12);
 		glBindVertexArray(0);
