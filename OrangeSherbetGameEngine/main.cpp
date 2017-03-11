@@ -7,11 +7,15 @@
 
 #include <GLFW\glfw3.h>
 
+#include <glm\glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "OrangeSherbetGameEngine.h"
 
 #include "Shader.h"
 
-#include "DumbCamera.h"
+#include "CameraGLM.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -30,51 +34,58 @@ const GLuint WIDTH = 800, HEIGHT = 600;
 GLFWwindow *window;
 
 GLuint VAO, VBO, EBO;
+GLuint triangleVBO, triangleVAO;
 
-Camera camera(cml::vec3f(0, 0, 0));
+Camera camera(glm::vec3(-3, 0, 0));
 
 GLfloat cubeVerts[] = {
-	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-	0.5f,  0.5f, -0.5f,	 0.0f, 1.0f, 0.0f,
-	0.5f,  0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f,
-						
-	-0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-	0.5f, -0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,	 0.0f, 0.0f, 0.0f,
-	0.5f,  0.5f,  0.5f,	 1.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 0.0f,
-						 
-	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
-						  
-	0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
-	0.5f,  0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
-	0.5f, -0.5f, -0.5f,	 0.0f, 0.0f, 1.0f,
-	0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 1.0f,
-	0.5f, -0.5f,  0.5f,	 0.0f, 1.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
-						  
-	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
-	0.5f, -0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
-	0.5f, -0.5f,  0.5f,	 1.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f,
-						 
-	-0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
-	0.5f,  0.5f, -0.5f,	 1.0f, 1.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,	 0.0f, 0.0f, 0.0f,
-	0.5f,  0.5f,  0.5f,	 1.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f
+	 -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+	 -0.5f, 0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
+	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+
+	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
+	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
+	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
+	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+
+	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+
+	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
+	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+	-0.5f, 0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+	-0.5f, 0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
+	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
+
+	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+	-0.5f, 0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
+	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
+	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+
+	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+	0.5f, 0.5f,  0.5f,	1.0f, 1.0f, 1.0f,
+	0.5f, 0.5f,  0.5f,	1.0f, 1.0f, 1.0f,
+	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f
+};
+
+GLfloat triangle[] = {
+	0,0,0, 1,0,0,
+	0,1,0, 0,1,0,
+	1,0,0, 0,0,1
 };
 
 void setup_window() {
@@ -159,16 +170,14 @@ int main() {
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
 
-	setup_vao();
-
-	camera.Position = cml::vec3f(0, 0, -5);
-
 	// Define the viewport dimensions
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	
 	glViewport(0, 0, width, height);
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
+
+	setup_vao();
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -179,34 +188,44 @@ int main() {
 		// Render
 		// Clear the colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
 		// Draw the triangle
 		defaultShader.Use();
-		glBindVertexArray(VAO);
+		//glBindVertexArray(VAO);
 
-		cml::mat4f view = cml::mat4f(); //camera.GetViewMatrix();
-		cml::mat4f projection =  cml::mat4f::createPerspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);;
-		cml::mat4f model = cml::mat4f();
+		glm::mat4 view = camera.GetViewMatrix();
+		//cml::mat4f view = camera.GetViewMatrix();
+		//cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
+
+		glm::mat4 model = glm::mat4();
 		
 		GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::mat4f::value_ptr(model));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
-
+		
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
+		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		
+		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
-		std::cout << "Camera position = " << camera.Position << "Camera Rotation = " << camera.Front <<std::endl;
+		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}
 
+	glDeleteBuffers(1, &VBO);
+
 	// Terminate GLFW, clearing any resources allocated by GLFW.
+	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
 }

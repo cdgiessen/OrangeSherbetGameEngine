@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glm\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\lib;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\lib;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -81,7 +81,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glm\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\lib;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glew\lib;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\glfw\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -174,6 +174,7 @@
   <ItemGroup>
     <ClInclude Include="AllocatorPool.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraGLM.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mesh.h" />
