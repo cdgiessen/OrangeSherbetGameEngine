@@ -7,15 +7,15 @@
 
 #include <GLFW\glfw3.h>
 
-#include <glm\glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+//#include <glm\glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 
 #include "OrangeSherbetGameEngine.h"
 
 #include "Shader.h"
 
-#include "CameraGLM.h"
+#include "Camera.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -36,7 +36,7 @@ GLFWwindow *window;
 GLuint VAO, VBO, EBO;
 GLuint triangleVBO, triangleVAO;
 
-Camera camera(glm::vec3(-3, 0, 0));
+Camera camera(cml::vec3f(-3, 0, 0));
 
 GLfloat cubeVerts[] = {
 	 -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -194,23 +194,23 @@ int main() {
 		defaultShader.Use();
 		//glBindVertexArray(VAO);
 
-		glm::mat4 view = camera.GetViewMatrix();
-		//cml::mat4f view = camera.GetViewMatrix();
-		//cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
+		//glm::mat4 view = camera.GetViewMatrix();
+		cml::mat4f view = camera.GetViewMatrix();
+		cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
+		//glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
 
-		glm::mat4 model = glm::mat4();
+		cml::mat4f model = cml::mat4f();
 		
 		GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
 
 		
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
-		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::mat4f::value_ptr(model));
+		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
+		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);

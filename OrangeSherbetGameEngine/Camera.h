@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef CAMERA_H
-#define CAMERA_H
-
 // Std. Includes
 //#include <vector>
 
@@ -33,7 +30,7 @@ const GLfloat ZOOM = 45.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
-class CameraCML
+class Camera
 {
 public:
 	// Camera Attributes
@@ -60,7 +57,7 @@ public:
 		this->updateCameraVectors();
 	}
 	// Constructor with scalar values
-	Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch) : Front(-cml::VEC3_FORWARD), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
+	Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch) : Front(cml::VEC3_BACK), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
 	{
 		this->Position = cml::vec3f(posX, posY, posZ);
 		this->WorldUp = cml::vec3f(upX, upY, upZ);
@@ -148,4 +145,3 @@ private:
 	}
 };
 
-#endif // !CAMERA_H

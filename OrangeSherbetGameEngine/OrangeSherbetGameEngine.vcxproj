@@ -174,7 +174,6 @@
   <ItemGroup>
     <ClInclude Include="AllocatorPool.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraGLM.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mesh.h" />
