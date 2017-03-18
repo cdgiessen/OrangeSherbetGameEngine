@@ -5,6 +5,7 @@
 
 #include "CML\cml.h"
 #include "Transform.h"
+
 class GameObject
 {
 public:

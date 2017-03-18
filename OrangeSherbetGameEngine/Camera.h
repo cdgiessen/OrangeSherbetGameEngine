@@ -3,7 +3,7 @@
 // Std. Includes
 //#include <vector>
 
-#include <cmath>
+//#include <cmath>
 
 // GL Includes
 #include <GL/glew.h>
@@ -29,7 +29,8 @@ const GLfloat SENSITIVTY = 0.25f;
 const GLfloat ZOOM = 45.0f;
 
 
-// An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
+// A camera class that processes input and calculates the corresponding 
+// Eular Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
 public:
@@ -39,6 +40,7 @@ public:
 	cml::vec3f Up;
 	cml::vec3f Right;
 	cml::vec3f WorldUp;
+
 	// Eular Angles
 	GLfloat Yaw;
 	GLfloat Pitch;
@@ -48,7 +50,8 @@ public:
 	GLfloat Zoom;
 
 	// Constructor with vectors
-	Camera(cml::vec3f position = cml::VEC3_ZERO, cml::vec3f up = cml::VEC3_UP, GLfloat yaw = YAW, GLfloat pitch = PITCH) : Front(cml::VEC3_BACK), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
+	Camera(cml::vec3f position = cml::VEC3_ZERO, cml::vec3f up = cml::VEC3_UP, GLfloat yaw = YAW, GLfloat pitch = PITCH) 
+		: Front(cml::VEC3_BACK), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
 	{
 		this->Position = position;
 		this->WorldUp = up;
@@ -56,8 +59,10 @@ public:
 		this->Pitch = pitch;
 		this->updateCameraVectors();
 	}
+
 	// Constructor with scalar values
-	Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch) : Front(cml::VEC3_BACK), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
+	Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch) 
+		: Front(cml::VEC3_BACK), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
 	{
 		this->Position = cml::vec3f(posX, posY, posZ);
 		this->WorldUp = cml::vec3f(upX, upY, upZ);
@@ -72,7 +77,8 @@ public:
 		return cml::mat4f::createLookAt(this->Position, this->Position + this->Front, this->Up);
 	}
 
-	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
+	// Processes input received from any keyboard-like input system. 
+	//Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 	void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 	{
 		GLfloat velocity = this->MovementSpeed * deltaTime;
@@ -135,13 +141,11 @@ private:
 		front.x = cos(cml::degToRad(this->Yaw)) * cos(cml::degToRad(this->Pitch));
 		front.y = sin(cml::degToRad(this->Pitch));
 		front.z = sin(cml::degToRad(this->Yaw)) * cos(cml::degToRad(this->Pitch));
-		front.norm();
-		this->Front = front;
+		this->Front = front.norm();
 		// Also re-calculate the Right and Up vector
-		this->Right = (cml::vec3f::cross(this->Front, this->WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-		this->Right.norm();
-		this->Up = (cml::vec3f::cross(this->Right, this->Front));
-		this->Up.norm();
+		this->Right = (cml::vec3f::cross(this->Front, this->WorldUp)).norm();  
+		this->Up = (cml::vec3f::cross(this->Right, this->Front).norm());
+		// Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	}
 };
 

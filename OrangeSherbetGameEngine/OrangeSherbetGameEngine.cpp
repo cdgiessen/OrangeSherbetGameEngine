@@ -16,6 +16,8 @@ namespace Osge {
 
 	int OrangeSherbetGameEngine::StartUp() {
 		inputManager = new Osge::InputManager();
+
+
 		return 0;
 	}
 

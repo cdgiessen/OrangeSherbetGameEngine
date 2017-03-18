@@ -169,6 +169,7 @@
     <ClCompile Include="OrangeSherbetGameEngine.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Tester.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,11 +178,13 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshPrimitives.h" />
     <ClInclude Include="OrangeSherbetGameEngine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +192,7 @@
     <None Include="DefaultVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\..\Pictures\SolidColorCube.png" />
     <Image Include="TestTexture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

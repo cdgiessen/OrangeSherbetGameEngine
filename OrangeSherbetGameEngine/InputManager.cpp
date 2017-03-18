@@ -8,10 +8,10 @@ namespace Osge {
 	{
 	}
 
-	InputManager::InputManager(GLFWwindow* window)
+	InputManager::InputManager(GLFWwindow& window)
 	{
-		InputManager *ipm = this;
-//		glfwSetKeyCallback(window, ipm->UpdateKeyPressed);
+		//InputManager ipm = this;
+		//glfwSetKeyCallback(&window, &(UpdateKeyPressed));
 //		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 //		glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)(ipm->UpdateMousButton));
 //		glfwSetCursorPosCallback(window, ipm->UpdateMouseMoved);
@@ -29,7 +29,7 @@ namespace Osge {
 			return keys[key];
 	}
 
-	void InputManager::UpdateKeyPressed(GLFWwindow* window, int key, int scancode, int action, int mode) {
+	void InputManager::UpdateKeyPressed(GLFWwindow& window, int key, int scancode, int action, int mode) {
 		
 		if (key >= 0 && key < inputArraySize)
 		{
@@ -40,16 +40,16 @@ namespace Osge {
 		}
 	}
 
-	void InputManager::UpdateMouseMoved(GLFWwindow* window, double xpos, double ypos) {
+	void InputManager::UpdateMouseMoved(GLFWwindow& window, double xpos, double ypos) {
 
 	}
 
-	void InputManager::UpdateMousButton(GLFWwindow* window, int glfwButton, int glfwAction) {
+	void InputManager::UpdateMousButton(GLFWwindow& window, int glfwButton, int glfwAction) {
 
 
 	}
 
-	void InputManager::UpdateScrollMoved(GLFWwindow* window, double xoffset, double yoffset) {
+	void InputManager::UpdateScrollMoved(GLFWwindow& window, double xoffset, double yoffset) {
 
 
 	}

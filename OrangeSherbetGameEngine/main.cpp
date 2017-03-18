@@ -3,19 +3,23 @@
 #include "CML\cml.h"
 
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include <gl/glew.h>
 
 #include <GLFW\glfw3.h>
 
-//#include <glm\glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+#include <glm\glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "OrangeSherbetGameEngine.h"
 
 #include "Shader.h"
 
 #include "Camera.h"
+
+#include "MeshPrimitives.h"
+
+#include "Mesh.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -37,56 +41,6 @@ GLuint VAO, VBO, EBO;
 GLuint triangleVBO, triangleVAO;
 
 Camera camera(cml::vec3f(-3, 0, 0));
-
-GLfloat cubeVerts[] = {
-	 -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	 -0.5f, 0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
-	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-
-	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
-	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
-	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
-	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-
-	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-
-	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
-	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
-	-0.5f, 0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
-	0.5f, 0.5f,  0.5f,	 1.0f, 1.0f, 1.0f,
-
-	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
-	-0.5f, 0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
-	-0.5f,-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-	-0.5f,-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-
-	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
-	0.5f, 0.5f,  0.5f,	1.0f, 1.0f, 1.0f,
-	0.5f, 0.5f,  0.5f,	1.0f, 1.0f, 1.0f,
-	0.5f,-0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-	0.5f,-0.5f, -0.5f, 0.0f, 1.0f, 0.0f
-};
-
-GLfloat triangle[] = {
-	0,0,0, 1,0,0,
-	0,1,0, 0,1,0,
-	1,0,0, 0,0,1
-};
 
 void setup_window() {
 	std::cout << "Starting GLFW context, OpenGL 3.3" << std::endl; //for now use a version thats going to work regardless
@@ -136,15 +90,19 @@ void setup_vao() {
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, 6 * 36 * sizeof(GLfloat), cubeVerts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 8 * 36 * sizeof(GLfloat), MeshPrimitives::cube, GL_STATIC_DRAW);
 
 	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);					
 													
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-	// Normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);					
+	// Normal attribute								
+							
+	//Texture UV coordinate
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0); // Unbind VAO
 }
@@ -158,14 +116,40 @@ int main() {
 
 	setup_window();
 
+	std::vector<Osge::Vertex> cubeVerticies;
+	int pos = 0;
+	for (int i = 0; i < 36; i++) {
+		cubeVerticies.push_back(Osge::Vertex(
+			cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
+			cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
+			cml::vec2f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++])));
+	}
+
 	Shader defaultShader("DefaultVertexShader.glsl", "DefaultFragmentShader.glsl");
 
-	std::string img_fileName = "TestTexture.png";
+	std::string img_fileName = "SolidColorCube.png";
+	GLuint texture;
 
-	int w = 256;
-	int h = 256;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	int w = 96;
+	int h = 34;
 	int comp;
 	unsigned char* image = stbi_load(img_fileName.c_str(), &w, &h, &comp, STBI_rgb_alpha);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	//float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+	//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	stbi_image_free(image);
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
@@ -178,6 +162,8 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 
 	setup_vao();
+
+	float timeish = 0;
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -194,23 +180,30 @@ int main() {
 		defaultShader.Use();
 		//glBindVertexArray(VAO);
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glUniform1i(glGetUniformLocation(defaultShader.Program, "myTexture"), 0);
+
 		//glm::mat4 view = camera.GetViewMatrix();
 		cml::mat4f view = camera.GetViewMatrix();
-		cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
-		//glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
+		//cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.01f, 1000.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
 
 		cml::mat4f model = cml::mat4f();
 		
+		//timeish += 0.05f;
+		//model.addScaleFactor(cml::vec3f(1, sin(timeish) + 2, sin(timeish) + 2));
+		//model.addTranslation(cml::vec3f(sin(timeish), 0, 0));
+
 		GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
 
 		
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::mat4f::value_ptr(model));
-		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
+		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
-		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -222,11 +215,13 @@ int main() {
 		glfwSwapBuffers(window);
 	}
 
-	glDeleteBuffers(1, &VBO);
+
 
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwDestroyWindow(window);
 	glfwTerminate();
+
+	glDeleteBuffers(1, &VBO);
 	return 0;
 }
 
@@ -269,7 +264,7 @@ void OnMouseMoved(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	std::cout << "Mouse Moved" << std::endl;
+	//std::cout << "Mouse Moved" << std::endl;
 
 	camera.ProcessMouseMovement(xoffset, yoffset);
 }
