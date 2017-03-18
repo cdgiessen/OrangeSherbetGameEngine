@@ -192,7 +192,7 @@
     <None Include="DefaultVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\..\Pictures\SolidColorCube.png" />
+    <Image Include="SolidColorCube.png" />
     <Image Include="TestTexture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

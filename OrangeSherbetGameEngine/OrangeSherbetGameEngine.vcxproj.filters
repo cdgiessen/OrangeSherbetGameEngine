@@ -102,7 +102,7 @@
     <Image Include="TestTexture.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\..\Pictures\SolidColorCube.png">
+    <Image Include="SolidColorCube.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
