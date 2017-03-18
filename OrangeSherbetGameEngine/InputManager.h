@@ -1,32 +1,37 @@
 #pragma once
 
-#ifndef INPUT_MANAGER_H
-#define INPUT_MANAGER_H
-
 #include <GLFW\glfw3.h>
 
 namespace Osge {
 
-	
+	void KeyPressedCallback(GLFWwindow& window, int key, int scancode, int action, int mode);
+	void MouseMovedCallback(GLFWwindow& window, double xpos, double ypos);
+	void MouseButtonCallback(GLFWwindow& window, int glfwButton, int glfwAction);
+	void ScrollWheelMovedCallback(GLFWwindow& window, double xoffset, double yoffset);
 
 	class InputManager
 	{
 	public:
-		InputManager();
-		InputManager(GLFWwindow& window);
+		
+		InputManager(GLFWwindow* window);
 		~InputManager();
 
-		bool GetKey(int key);
+		void SetUp();
 
+		bool GetKey(int key);
+				
 		void UpdateKeyPressed(GLFWwindow& window, int key, int scancode, int action, int mode);
 										
 		void UpdateMouseMoved(GLFWwindow& window, double xpos, double ypos);
 										
-		void UpdateMousButton(GLFWwindow& window, int glfwButton, int glfwAction);
+		void UpdateMouseButton(GLFWwindow& window, int glfwButton, int glfwAction);
 
 		void UpdateScrollMoved(GLFWwindow& window, double xoffset, double yoffset);
 
 	private:
+		GLFWwindow *window;
+
+
 		static const int inputArraySize = 1024;
 		bool keys[inputArraySize];
 
@@ -34,6 +39,7 @@ namespace Osge {
 
 		};
 	};
+
+	static InputManager *inputManager;
 }
 
-#endif // !INPUT_MANAGER_H
