@@ -5,17 +5,16 @@
 
 #include "Shader.h"
 
-namespace Osge {
 
-	class ShaderManager
-	{
-	public:
-		ShaderManager();
-		~ShaderManager();
+class ShaderManager
+{
+public:
+	ShaderManager();
+	~ShaderManager();
 
-		//Shader DefaultShader;
+	//Shader DefaultShader;
 
-	};
+};
 
-}
+
 #endif // !SHADER_MANAGER_H

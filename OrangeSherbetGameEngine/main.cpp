@@ -1,19 +1,21 @@
-
-
-
 #include "OrangeSherbetGameEngine.h"
 
 #include <iostream>
 
 
+void start() {
+	OrangeSherbetGameEngine pOsge;
 
+	pOsge.StartUp();
+	pOsge.TempRun();
+
+}
 
 int main() {
-	OrangeSherbetGameEngine * pOsge = new OrangeSherbetGameEngine();
+	start();
 
-	pOsge->StartUp();
-	pOsge->TempRun();
-	
-	
+	std::cout << std::endl;
 	return 0;
 }
+
+

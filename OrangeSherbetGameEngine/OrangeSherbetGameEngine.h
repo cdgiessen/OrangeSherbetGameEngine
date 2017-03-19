@@ -9,6 +9,7 @@
 
 #include <GLFW\glfw3.h>
 
+#include "Window.h"
 #include "InputManager.h"
 
 class OrangeSherbetGameEngine
@@ -21,11 +22,12 @@ class OrangeSherbetGameEngine
 
 		int ShutDown();
 
-		void setup_window();
+		//void setup_window();
 
 		void TempRun();
 
-		Osge::InputManager *inputManager;
+		Window *window;
+		InputManager *inputManager;
 	
 		//All the subsystems
 		//Memory Manager (pool, stack, etc)

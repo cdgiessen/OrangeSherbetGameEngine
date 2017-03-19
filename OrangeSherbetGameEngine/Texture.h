@@ -1,12 +1,11 @@
 #pragma once
 
-namespace Osge {
 
-	class Texture
-	{
-	public:
-		Texture();
-		~Texture();
-	};
+class Texture
+{
+public:
+	Texture();
+	~Texture();
+};
 
-}
+

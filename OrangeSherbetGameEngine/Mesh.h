@@ -14,50 +14,50 @@
 #include "Shader.h"
 #include "Texture.h"
 
-namespace Osge {
 
-	struct Vertex {
-		cml::vec3f Position; // Position
-		cml::vec3f Normal; // Normal
-		cml::vec2f TexCoords; // TexCoords
 
-		Vertex(cml::vec3f pos, cml::vec3f norm, cml::vec2f tex) {
-			Position = pos;
-			Normal = norm;
-			TexCoords = tex;
-		}
+struct Vertex {
+	cml::vec3f Position; // Position
+	cml::vec3f Normal; // Normal
+	cml::vec2f TexCoords; // TexCoords
+
+	Vertex(cml::vec3f pos, cml::vec3f norm, cml::vec2f tex) {
+		Position = pos;
+		Normal = norm;
+		TexCoords = tex;
+	}
+};
+
+class Mesh {
+public:
+	//Determines if the mesh is vertex array only, or vertexes with indicy array.
+	//Most meshes will be 1, but primitives (like cube) are zero
+	enum VertexBufferIndicyType {
+		VertexArrayOnly = 0,
+		VertexAndIndicy = 1
 	};
 
-	class Mesh {
-	public:
-		//Determines if the mesh is vertex array only, or vertexes with indicy array.
-		//Most meshes will be 1, but primitives (like cube) are zero
-		enum VertexBufferIndicyType {
-			VertexArrayOnly = 0,
-			VertexAndIndicy = 1
-		};
+	//Constructor for meshes with vertex and indicy arrays
+	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
 
-		//Constructor for meshes with vertex and indicy arrays
-		Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
-
-		//Constructor for meshes with only a vertex array
-		Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures);
+	//Constructor for meshes with only a vertex array
+	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures);
 
 
-		void Draw(Shader shader); // Render the mesh
+	void Draw(Shader shader); // Render the mesh
 
-		void setupMesh(); // Initializes all the buffer objects/arrays
+	void setupMesh(); // Initializes all the buffer objects/arrays
 
-	private:
-		VertexBufferIndicyType meshVertexArrayType;
+private:
+	VertexBufferIndicyType meshVertexArrayType;
 
-		/*  Render data  */
-		GLuint VAO, VBO, EBO;
+	/*  Render data  */
+	GLuint VAO, VBO, EBO;
 
-		/*  Mesh Data  */
-		std::vector<Vertex> vertices;
-		std::vector<GLuint> indices;
-		std::vector<Texture> textures;
-	};
-}
+	/*  Mesh Data  */
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+	std::vector<Texture> textures;
+};
+
 #endif // !MESH_H
