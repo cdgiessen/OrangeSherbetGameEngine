@@ -6,6 +6,7 @@
 //#include <cmath>
 
 // GL Includes
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <CML\cml.h>
 
@@ -26,7 +27,7 @@ const GLfloat YAW = 0.0f;
 const GLfloat PITCH = 0.0f;
 const GLfloat SPEED = 3.0f;
 const GLfloat SENSITIVTY = 0.25f;
-const GLfloat ZOOM = 45.0f;
+const GLfloat ZOOM = 70.0f;
 
 
 // A camera class that processes input and calculates the corresponding 

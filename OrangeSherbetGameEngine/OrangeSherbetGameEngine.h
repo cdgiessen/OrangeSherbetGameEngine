@@ -3,6 +3,7 @@
 #ifndef ORANGE_SHERBET_GAME_ENGINE_H
 #define ORANGE_SHERBET_GAME_ENGINE_H
 
+
 #define GLEW_STATIC
 #include <gl/glew.h>
 
@@ -10,25 +11,21 @@
 
 #include "InputManager.h"
 
-// Default Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
-
-
-namespace Osge {
-
-	class OrangeSherbetGameEngine
+class OrangeSherbetGameEngine
 	{
 	public:
 		OrangeSherbetGameEngine();
 		~OrangeSherbetGameEngine();
 
-		int StartUp(GLFWwindow *window);
+		int StartUp();
 
 		int ShutDown();
 
-		void setup_window(GLFWwindow *window);
+		void setup_window();
 
-		InputManager *inputManager;
+		void TempRun();
+
+		Osge::InputManager *inputManager;
 	
 		//All the subsystems
 		//Memory Manager (pool, stack, etc)
@@ -40,7 +37,7 @@ namespace Osge {
 	
 	};
 
-}
+
 
 
 
