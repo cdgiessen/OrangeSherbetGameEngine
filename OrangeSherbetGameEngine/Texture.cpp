@@ -4,7 +4,8 @@
 
 #include "stb_image.h"
 
-Texture::Texture(std::string filename, int w, int h){
+Texture::Texture(std::string filename, int w, int h, TextureType type) : type(type){
+
 	int comp;
 
 	unsigned char* image = stbi_load(filename.c_str(), &w, &h, &comp, STBI_rgb);
@@ -36,6 +37,10 @@ Texture::~Texture() {
 
 GLuint Texture::GetTextureID() {
 	return textureID;
+}
+
+TextureType Texture::GetTextureType() {
+	return type;
 }
 
 void Texture::Bind()

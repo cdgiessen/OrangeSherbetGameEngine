@@ -14,6 +14,7 @@
 #include "Mesh.h"
 
 #include "CML\cml.h"
+#include "CML\mat4.h"
 
 // Default Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -76,7 +77,7 @@ void OrangeSherbetGameEngine::TempMouseMove()
 {
 	camera.ProcessMouseMovement(inputManager->GetMouseOffsetPositionX(), inputManager->GetMouseOffsetPositionY());
 	inputManager->ResetMouseOffset();
-	std::cout << "xoff " << inputManager->GetMouseOffsetPositionX() << " yoff " << inputManager->GetMouseOffsetPositionY() << std::endl;
+	//std::cout << "xoff " << inputManager->GetMouseOffsetPositionX() << " yoff " << inputManager->GetMouseOffsetPositionY() << std::endl;
 }
 
 void OrangeSherbetGameEngine::TempMouseButton(){ //GLFWwindow* window, int glfwButton, int glfwAction) {
@@ -128,7 +129,7 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	Shader defaultShader("DefaultVertexShader.glsl", "DefaultFragmentShader.glsl");
 
-	Texture cubeTexture("SolidColorCube.png", 96, 64);
+	Texture cubeTexture("SolidColorCube.png", 96, 64, (TextureType) 0);
 
 	setup_vao();
 
@@ -153,7 +154,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		
 		glActiveTexture(GL_TEXTURE0);
 		cubeTexture.Bind();
-		glUniform1i(glGetUniformLocation(defaultShader.Program, "myTexture"), 0);
+		glUniform1i(glGetUniformLocation(defaultShader.Program, "t_color"), 0);
 
 
 		cml::mat4f view = camera.GetViewMatrix();

@@ -7,65 +7,64 @@
 
 #include <vector>
 
-namespace Osge {
 
-	class Transform
-	{
-	public:
-		Transform() : position(cml::VEC3_ZERO), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE) {}
-		Transform(cml::vec3f p, cml::quatf r, cml::vec3f s) : position(p), rotation(r), scale(s) {}
-						   
-		Transform(cml::vec3f p) : position(p), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE) {}
-		Transform(cml::vec3f p, cml::quatf r) : position(p), rotation(r), scale(cml::VEC3_ONE) {}
-		Transform(cml::vec3f p, cml::vec3f s) : position(p), rotation(cml::QUAT_IDENTITY), scale(s) {}
-		Transform(cml::quatf r, cml::vec3f s) : position(cml::VEC3_ZERO), rotation(r), scale(s) {}
-		//~Transform();
+class Transform
+{
+public:
+	Transform() : position(cml::VEC3_ZERO), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE) {}
+	Transform(cml::vec3f p, cml::quatf r, cml::vec3f s) : position(p), rotation(r), scale(s) {}
 
-		cml::vec3f GetLocalPosition() {
-			return position;
-		}
+	Transform(cml::vec3f p) : position(p), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE) {}
+	Transform(cml::vec3f p, cml::quatf r) : position(p), rotation(r), scale(cml::VEC3_ONE) {}
+	Transform(cml::vec3f p, cml::vec3f s) : position(p), rotation(cml::QUAT_IDENTITY), scale(s) {}
+	Transform(cml::quatf r, cml::vec3f s) : position(cml::VEC3_ZERO), rotation(r), scale(s) {}
+	//~Transform();
 
-		const cml::vec3f& GetLocalPosition() const{
-			return position;
-		}
+	cml::vec3f GetLocalPosition() {
+		return position;
+	}
 
-		void SetLocalPosition(const cml::vec3f val) {
-			position = val;
-		}
+	const cml::vec3f& GetLocalPosition() const {
+		return position;
+	}
 
-		cml::quatf GetLocalRotation() {
-			return rotation;
-		}
+	void SetLocalPosition(const cml::vec3f val) {
+		position = val;
+	}
 
-		const cml::quatf& GetLocalRotation() const {
-			return rotation;
-		}
+	cml::quatf GetLocalRotation() {
+		return rotation;
+	}
 
-		void SetLocalRotation(const  cml::quatf val) {
-			rotation = val;
-		}
+	const cml::quatf& GetLocalRotation() const {
+		return rotation;
+	}
 
-		cml::vec3f GetLocalScale() {
-			return scale;
-		}
+	void SetLocalRotation(const  cml::quatf val) {
+		rotation = val;
+	}
 
-		const cml::vec3f& GetLocalScale() const {
-			return scale;
-		}
+	cml::vec3f GetLocalScale() {
+		return scale;
+	}
 
-		void SetLocalRotation(const cml::vec3f val) {
-			scale = scale;
-		}
+	const cml::vec3f& GetLocalScale() const {
+		return scale;
+	}
 
-	private:
-		cml::vec3<float> position;
-		cml::quat<float> rotation;
-		cml::vec3<float> scale;
+	void SetLocalRotation(const cml::vec3f val) {
+		scale = scale;
+	}
 
-		//Transform &parent;
-		//std::vector<Transform> children;
-	};
+private:
+	cml::vec3<float> position;
+	cml::quat<float> rotation;
+	cml::vec3<float> scale;
 
-}
+	//Transform &parent;
+	//std::vector<Transform> children;
+};
+
+
 
 #endif // !TRANSFORM_H

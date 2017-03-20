@@ -13,7 +13,7 @@ public:
 	~GameObject();
 
 private:
-	Osge::Transform transform;
+	Transform transform;
 };
 
 #endif // !GAME_OBJECT_H

@@ -14,7 +14,12 @@
 #include "Shader.h"
 #include "Texture.h"
 
-
+struct Material {
+	cml::vec3f ambient;
+	cml::vec3f diffuse;
+	cml::vec3f specular;
+	float shininess;
+};
 
 struct Vertex {
 	cml::vec3f Position; // Position
