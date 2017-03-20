@@ -47,14 +47,17 @@ public:
 
 	//Constructor for meshes with only a vertex array
 	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures);
-
-
+	
 	void Draw(Shader shader); // Render the mesh
 
-	void setupMesh(); // Initializes all the buffer objects/arrays
+	std::vector<Texture> GetTextures() {
+		return textures;
+	}
 
-private:
+
 	VertexBufferIndicyType meshVertexArrayType;
+	
+	void setupMesh(); // Initializes all the buffer objects/arrays
 
 	/*  Render data  */
 	GLuint VAO, VBO, EBO;

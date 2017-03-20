@@ -8,13 +8,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "Shader.h"
-#include "Camera.h"
-#include "MeshPrimitives.h"
-#include "Mesh.h"
-
 #include "CML\cml.h"
 #include "CML\mat4.h"
+
+#include "MeshPrimitives.h"
 
 // Default Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -28,30 +25,12 @@ GLuint triangleVBO, triangleVAO;
 
 Camera camera(cml::vec3f(-3, 0, 0));
 
-void setup_vao() {
-	// Set up vertex data (and buffer(s)) and attribute pointers
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-	glBindVertexArray(VAO);
+glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, 8 * 36 * sizeof(GLfloat), MeshPrimitives::cube, GL_STATIC_DRAW);
-
-	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-	// Normal attribute								
-
-	//Texture UV coordinate
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
-
-	glBindVertexArray(0); // Unbind VAO
-}
+Shader* defaultShader;
+Texture* cubeTexture;
+Mesh* cubeMesh;
+Mesh* quadMesh;
 
 // Is called whenever a key is pressed/released via GLFW
 void OrangeSherbetGameEngine::TempKeyboardInput()
@@ -80,7 +59,7 @@ void OrangeSherbetGameEngine::TempMouseMove()
 	//std::cout << "xoff " << inputManager->GetMouseOffsetPositionX() << " yoff " << inputManager->GetMouseOffsetPositionY() << std::endl;
 }
 
-void OrangeSherbetGameEngine::TempMouseButton(){ //GLFWwindow* window, int glfwButton, int glfwAction) {
+void OrangeSherbetGameEngine::TempMouseButton() { //GLFWwindow* window, int glfwButton, int glfwAction) {
 	//mouseHeldDown = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 	if (glfwGetMouseButton(window->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT))
 		std::cout << "Left Clicked" << std::endl;
@@ -117,21 +96,70 @@ int OrangeSherbetGameEngine::ShutDown() {
 	return 0;
 }
 
+
 void OrangeSherbetGameEngine::TempRun() {
-	/*std::vector<Osge::Vertex> cubeVerticies;
-	int pos = 0;
-	for (int i = 0; i < 36; i++) {
-		cubeVerticies.push_back(Osge::Vertex(
-			cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
-			cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
-			cml::vec2f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++])));
-	}*/
+	std::vector<Vertex> cubeVerticies;
 
-	Shader defaultShader("DefaultVertexShader.glsl", "DefaultFragmentShader.glsl");
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 1.0f)));
 
-	Texture cubeTexture("SolidColorCube.png", 96, 64, (TextureType) 0);
+	//Right face
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.5f)));
 
-	setup_vao();
+	//Back face																											
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 1.0f)));
+
+	//Front face																										
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
+
+	//Bottom face
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 1.0f)));
+
+	//Top face
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
+
+	defaultShader = new Shader("DefaultVertexShader.glsl", "DefaultFragmentShader.glsl");
+	cubeTexture = new Texture("SolidColorCube.png", 96, 64, (TextureType)0);
+	cubeMesh = new Mesh(cubeVerticies, std::vector<Texture>{*cubeTexture});
+
+	Transform* cubeTransform = new Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f));
+
+	GameObject cubeObject[5]{ GameObject(cubeTransform, cubeMesh, defaultShader),
+		GameObject(cubeTransform, cubeMesh, defaultShader),
+		GameObject(cubeTransform, cubeMesh, defaultShader),
+		GameObject(cubeTransform, cubeMesh, defaultShader),
+		GameObject(cubeTransform, cubeMesh, defaultShader) };
+
+	//setup_vao();
 
 	float timeish = 0;
 
@@ -143,40 +171,40 @@ void OrangeSherbetGameEngine::TempRun() {
 
 		TempKeyboardInput();
 		TempMouseMove();
-		
+
 		// Render
 		// Clear the colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the colorbuffer
 
+
 		// Draw the triangle
-		defaultShader.Use();
-		
-		glActiveTexture(GL_TEXTURE0);
-		cubeTexture.Bind();
-		glUniform1i(glGetUniformLocation(defaultShader.Program, "t_color"), 0);
+		//DrawCube();
 
 
 		cml::mat4f view = camera.GetViewMatrix();
-		//cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.01f, 1000.0f);
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
-		cml::mat4f model = cml::mat4f();
+		cml::mat4f model;
+		model.setToTranslation(cml::vec3f(0, 0, 0));
+		model.setScaleFactor(cml::vec3f(1, 2.5, 1));
+		cubeObject[0].transform->SetModelMatrix(model);
+		cubeObject[0].Draw(view);
 
-		//timeish += 0.05f;	//model.addScaleFactor(cml::vec3f(1, sin(timeish) + 2, sin(timeish) + 2));	//model.addTranslation(cml::vec3f(sin(timeish), 0, 0));
+		model.setScaleFactor(cml::vec3f(1, 1, 1));
+		model.setToTranslation(cml::vec3f(1, 0, 0));
+		cubeObject[0].transform->SetModelMatrix(model);
+		cubeObject[1].Draw(view);
 
-		GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
-		GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
-		GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
+		model.setToTranslation(cml::vec3f(2, 0, 0));
+		cubeObject[0].transform->SetModelMatrix(model);
+		cubeObject[2].Draw(view);
 
+		model.setToTranslation(cml::vec3f(3, 0, 0));
+		cubeObject[0].transform->SetModelMatrix(model);
+		cubeObject[3].Draw(view);
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::mat4f::value_ptr(model));
-		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
-
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		model.setToTranslation(cml::vec3f(4, 0, 0));
+		cubeObject[0].transform->SetModelMatrix(model);
+		cubeObject[4].Draw(view);
 
 		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
 

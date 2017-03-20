@@ -1,6 +1,5 @@
 #include "Mesh.h"
 
-
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures)
 {
 	this->vertices = vertices;
@@ -23,54 +22,6 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures)
 	// Now that we have all the required data, set the vertex buffers and its attribute pointers.
 	this->setupMesh();
 }
-
-
-
-
-// Render the mesh
-void Mesh::Draw(Shader shader)
-{
-	for (GLuint i = 0; i < this->textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i); // Active proper texture unit before binding
-		// Retrieve texture number (the N in diffuse_textureN)
-		std::stringstream ss;
-		std::string name;
-		TextureType type = this->textures[i].GetTextureType();
-		switch (type) {
-		case (0) :
-			name = "t_color"; break;
-		case (1) :
-			name = "t_diffuse"; break;
-		case (2) :
-			name = "t_specular"; break;
-		case (3) :
-			name = "t_normal"; break;
-		default : 
-			std::cout << "ERROR :: Couldn't find appropriate case" << std::endl;
-		}
-		// Now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader.Program, (name).c_str()), i);
-		// And finally bind the texture
-		glBindTexture(GL_TEXTURE_2D, this->textures[i].GetTextureID());
-	} 
-
-	//Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
-	glUniform1f(glGetUniformLocation(shader.Program, "material.shininess"), 16.0f);
-	
-	// Draw mesh
-	glBindVertexArray(this->VAO);
-	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	// Always good practice to set everything back to defaults once configured.
-	for (GLuint i = 0; i < this->textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-}
-
 
 // Initializes all the buffer objects/arrays
 void Mesh::setupMesh()
@@ -108,3 +59,54 @@ void Mesh::setupMesh()
 
 	glBindVertexArray(0);
 }
+
+
+// Render the mesh
+void Mesh::Draw(Shader shader)
+{
+	for (GLuint i = 0; i < this->textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i); // Active proper texture unit before binding
+		// Retrieve texture number (the N in diffuse_textureN)
+		std::stringstream ss;
+		std::string name;
+		TextureType type = this->textures[i].GetTextureType();
+		switch (type) {
+		case (0) :
+			name = "t_color"; break;
+		case (1) :
+			name = "t_diffuse"; break;
+		case (2) :
+			name = "t_specular"; break;
+		case (3) :
+			name = "t_normal"; break;
+		default : 
+			std::cout << "ERROR :: Couldn't find appropriate case" << std::endl;
+		}
+		// Now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader.Program, (name).c_str()), i);
+		// And finally bind the texture
+		glBindTexture(GL_TEXTURE_2D, this->textures[i].GetTextureID());
+	} 
+
+	//Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
+	glUniform1f(glGetUniformLocation(shader.Program, "material.shininess"), 16.0f);
+	
+	// Draw mesh
+	glBindVertexArray(this->VAO);
+	if (meshVertexArrayType == Mesh::VertexBufferIndicyType::VertexAndIndicy) {
+		glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	}
+	else {
+		glDrawArrays(GL_TRIANGLES, 0, this->vertices.size());
+	}
+	glBindVertexArray(0);
+
+	// Always good practice to set everything back to defaults once configured.
+	for (GLuint i = 0; i < this->textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+}
+

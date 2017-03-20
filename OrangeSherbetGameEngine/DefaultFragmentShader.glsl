@@ -48,13 +48,13 @@ in vec2 texturePos;
 
 out vec4 color;
 
-//uniform vec3 viewPos;
-//uniform Material material;
+uniform vec3 viewPos;
+uniform Material material;
 
 uniform sampler2D t_color;
-//uniform sampler2D t_diffuse;
-//uniform sampler2D t_specular;
-//uniform sampler2D t_normal;
+uniform sampler2D t_diffuse;
+uniform sampler2D t_specular;
+uniform sampler2D t_normal;
 
 
 

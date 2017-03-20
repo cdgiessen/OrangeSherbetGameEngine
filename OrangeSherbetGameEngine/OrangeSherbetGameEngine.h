@@ -11,6 +11,12 @@
 
 #include "Window.h"
 #include "InputManager.h"
+#include "Shader.h"
+#include "Camera.h"
+#include "Mesh.h"
+
+#include "GameObject.h"
+
 
 class OrangeSherbetGameEngine
 	{
@@ -28,6 +34,7 @@ class OrangeSherbetGameEngine
 		void TempKeyboardInput();
 		void TempMouseMove();
 		void TempMouseButton();
+		
 
 		Window *window;
 		InputManager *inputManager;
@@ -38,8 +45,6 @@ class OrangeSherbetGameEngine
 
 		//Rendering/animation/texture graphics	
 		//Physics manager
-
-	
 	};
 
 
