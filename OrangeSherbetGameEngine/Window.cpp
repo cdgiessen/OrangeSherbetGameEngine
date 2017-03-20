@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-Window::Window(int width, int height, bool fullscreen, char *title)
+Window::Window(int width, int height, bool fullscreen, char *title) : width(width), height(height), fullscreen(false)
 {
 	std::cout << "Creating window..." << std::endl;
 	std::cout << "Starting GLFW context, OpenGL 3.3" << std::endl; //for now use a version thats going to work regardless
@@ -35,14 +35,7 @@ Window::Window(int width, int height, bool fullscreen, char *title)
 
 	glfwSetCursorPos(window, 0, 0); // Set mouse position to center
 
-									//glfwSetKeyCallback(window, key_callback);
-									//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-									//glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)OnMouseButton);
-									//glfwSetCursorPosCallback(window, OnMouseMoved);
-
-									//glfwSetScrollCallback(window, OnScrollMoved);
-
-									// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
+	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
 
 	glfwSwapInterval(1);
@@ -50,6 +43,14 @@ Window::Window(int width, int height, bool fullscreen, char *title)
 	// Initialize GLEW to setup the OpenGL Function pointers
 	glewInit();
 
+	// Define the viewport dimensions
+	if (window == NULL) {
+		std::cout << "SHITS ON FIRE YO" << std::endl;
+	}
+	glfwGetFramebufferSize(window, &width, &height);
+
+	glViewport(0, 0, width, height);
+	glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -68,12 +69,12 @@ GLFWwindow *Window::getGLFWWindow()
 
 int Window::getHeight()
 {
-	return HEIGHT;
+	return height;
 }
 
 int Window::getWidth()
 {
-	return WIDTH;
+	return width;
 }
 
 bool Window::isFullscreen()

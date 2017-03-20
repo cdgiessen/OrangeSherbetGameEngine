@@ -21,8 +21,8 @@ public:
 	void close();
 
 private:
-	int HEIGHT;                     // Height of window
-	int WIDTH;                      // Width of window
+	int height;                     // Height of window
+	int width;                      // Width of window
 	bool fullscreen;                // Is window fullscreen?
 	bool shouldClose;               // Should window close?
 	char *title;                    // Title of window

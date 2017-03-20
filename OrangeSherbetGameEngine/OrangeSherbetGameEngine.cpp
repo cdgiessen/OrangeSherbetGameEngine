@@ -18,12 +18,6 @@
 // Default Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
 
-// Function prototypes
-//void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-//void OnMouseMoved(GLFWwindow* window, double xpos, double ypos);
-GLfloat lastX = 400, lastY = 300;
-bool firstMouse = true;
-
 GLFWwindow *window;
 
 //void OnMouseButton(GLFWwindow* window, int glfwButton, int glfwAction);
@@ -58,188 +52,136 @@ void setup_vao() {
 	glBindVertexArray(0); // Unbind VAO
 }
 
-//// Is called whenever a key is pressed/released via GLFW
-//void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-//{
-//	std::cout << key << std::endl;
-//	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-//		glfwSetWindowShouldClose(window, GL_TRUE);
-//
-//	float deltaTime = 0.05f;
-//
-//	// Camera controls
-//	if (key == GLFW_KEY_W)
-//		camera.ProcessKeyboard(FORWARD, deltaTime);
-//	if (key == GLFW_KEY_S)
-//		camera.ProcessKeyboard(BACKWARD, deltaTime);
-//	if (key == GLFW_KEY_A)
-//		camera.ProcessKeyboard(LEFT, deltaTime);
-//	if (key == GLFW_KEY_D)
-//		camera.ProcessKeyboard(RIGHT, deltaTime);
-//	if (key == GLFW_KEY_Q)
-//		camera.ProcessKeyboard(DOWN, deltaTime);
-//	if (key == GLFW_KEY_E)
-//		camera.ProcessKeyboard(UP, deltaTime);
-//}
+// Is called whenever a key is pressed/released via GLFW
+void OrangeSherbetGameEngine::TempKeyboardInput()
+{
+	float deltaTime = 0.05f;
 
-//void OnMouseMoved(GLFWwindow* window, double xpos, double ypos)
-//{
-//	if (firstMouse)
-//	{
-//		lastX = xpos;
-//		lastY = ypos;
-//		firstMouse = false;
-//	}
-//
-//	GLfloat xoffset = xpos - lastX;
-//	GLfloat yoffset = lastY - ypos;  // Reversed since y-coordinates go from bottom to left
-//
-//	lastX = xpos;
-//	lastY = ypos;
-//
-//	//std::cout << "Mouse Moved" << std::endl;
-//
-//	camera.ProcessMouseMovement(xoffset, yoffset);
-//}
-//
-//void OnMouseButton(GLFWwindow* window, int glfwButton, int glfwAction) {
-//	//mouseHeldDown = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-//	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
-//		std::cout << "Left Clicked" << std::endl;
-//}
+	// Camera controls
+	if (inputManager->GetKey(GLFW_KEY_W))
+		camera.ProcessKeyboard(FORWARD, deltaTime);
+	if (inputManager->GetKey(GLFW_KEY_S))
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
+	if (inputManager->GetKey(GLFW_KEY_A))
+		camera.ProcessKeyboard(LEFT, deltaTime);
+	if (inputManager->GetKey(GLFW_KEY_D))
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (inputManager->GetKey(GLFW_KEY_Q))
+		camera.ProcessKeyboard(DOWN, deltaTime);
+	if (inputManager->GetKey(GLFW_KEY_E))
+		camera.ProcessKeyboard(UP, deltaTime);
+}
+
+void OrangeSherbetGameEngine::TempMouseMove()
+{
+	camera.ProcessMouseMovement(inputManager->GetMouseOffsetPositionX(), inputManager->GetMouseOffsetPositionY());
+	inputManager->ResetMouseOffset();
+	std::cout << "xoff " << inputManager->GetMouseOffsetPositionX() << " yoff " << inputManager->GetMouseOffsetPositionY() << std::endl;
+}
+
+void OrangeSherbetGameEngine::TempMouseButton(){ //GLFWwindow* window, int glfwButton, int glfwAction) {
+	//mouseHeldDown = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+	if (glfwGetMouseButton(window->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT))
+		std::cout << "Left Clicked" << std::endl;
+}
 
 
 
-	OrangeSherbetGameEngine::OrangeSherbetGameEngine()
+OrangeSherbetGameEngine::OrangeSherbetGameEngine()
+{
+	std::cout << "Starting up the Orange Sherbet Game Engine, Version idgaf" << std::endl;
+}
+
+
+OrangeSherbetGameEngine::~OrangeSherbetGameEngine()
+{
+}
+
+int OrangeSherbetGameEngine::StartUp() {
+	window = new Window(WIDTH, HEIGHT, false, "OGSE");
+
+	inputManager = new InputManager(window->getGLFWWindow());
+
+
+
+	return 0;
+}
+
+int OrangeSherbetGameEngine::ShutDown() {
+	delete(inputManager);
+
+	delete(window);
+
+	std::cout << "Bye bye!" << std::endl; //y u ! werk?
+	return 0;
+}
+
+void OrangeSherbetGameEngine::TempRun() {
+	/*std::vector<Osge::Vertex> cubeVerticies;
+	int pos = 0;
+	for (int i = 0; i < 36; i++) {
+		cubeVerticies.push_back(Osge::Vertex(
+			cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
+			cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
+			cml::vec2f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++])));
+	}*/
+
+	Shader defaultShader("DefaultVertexShader.glsl", "DefaultFragmentShader.glsl");
+
+	Texture cubeTexture("SolidColorCube.png", 96, 64);
+
+	setup_vao();
+
+	float timeish = 0;
+
+	// Main Game loop
+	while (!glfwWindowShouldClose(window->getGLFWWindow()))
 	{
-		std::cout << "Starting up the Orange Sherbet Game Engine, Version idgaf" << std::endl;
-	}
+		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
+		glfwPollEvents();
 
-
-	OrangeSherbetGameEngine::~OrangeSherbetGameEngine()
-	{
-	}
-
-	int OrangeSherbetGameEngine::StartUp() {
-		window = new Window(WIDTH, HEIGHT, false, "OGSE");
+		TempKeyboardInput();
+		TempMouseMove();
 		
-		inputManager = new InputManager(window->getGLFWWindow());
-		
-		
+		// Render
+		// Clear the colorbuffer
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the colorbuffer
 
-		return 0;
+		// Draw the triangle
+		defaultShader.Use();
+		
+		glActiveTexture(GL_TEXTURE0);
+		cubeTexture.Bind();
+		glUniform1i(glGetUniformLocation(defaultShader.Program, "myTexture"), 0);
+
+
+		cml::mat4f view = camera.GetViewMatrix();
+		//cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.01f, 1000.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
+		cml::mat4f model = cml::mat4f();
+
+		//timeish += 0.05f;	//model.addScaleFactor(cml::vec3f(1, sin(timeish) + 2, sin(timeish) + 2));	//model.addTranslation(cml::vec3f(sin(timeish), 0, 0));
+
+		GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
+		GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
+		GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
+
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::mat4f::value_ptr(model));
+		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
+
+		// Swap the screen buffers
+		glfwSwapBuffers(window->getGLFWWindow());
 	}
 
-	int OrangeSherbetGameEngine::ShutDown() {
-		delete(inputManager);
-
-		delete(window);
-
-		std::cout << "Bye bye!" << std::endl;
-		return 0;
-	}
-
-	void OrangeSherbetGameEngine::TempRun() {
-		/*std::vector<Osge::Vertex> cubeVerticies;
-		int pos = 0;
-		for (int i = 0; i < 36; i++) {
-			cubeVerticies.push_back(Osge::Vertex(
-				cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
-				cml::vec3f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++]),
-				cml::vec2f(MeshPrimitives::cube[pos++], MeshPrimitives::cube[pos++])));
-		}*/
-
-		Shader defaultShader("DefaultVertexShader.glsl", "DefaultFragmentShader.glsl");
-
-		std::string img_fileName = "SolidColorCube.png";
-		GLuint texture;
-
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		int w = 96;
-		int h = 34;
-		int comp;
-		unsigned char* image = stbi_load(img_fileName.c_str(), &w, &h, &comp, STBI_rgb_alpha);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
-		//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		stbi_image_free(image);
-
-		// Define the viewport dimensions
-		int width, height;
-		if (window->getGLFWWindow() == NULL) {
-			std::cout << "SHITS ON FIRE YO" << std::endl;
-		}
-			glfwGetFramebufferSize(window->getGLFWWindow(), &width, &height);
-		
-
-		glViewport(0, 0, width, height);
-		glEnable(GL_DEPTH_TEST);
-
-		setup_vao();
-
-		float timeish = 0;
-
-		// Game loop
-		while (!glfwWindowShouldClose(window->getGLFWWindow()))
-		{
-			// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
-			glfwPollEvents();
-
-			// Render
-			// Clear the colorbuffer
-			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			// Draw the triangle
-			defaultShader.Use();
-			//glBindVertexArray(VAO);
-
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glUniform1i(glGetUniformLocation(defaultShader.Program, "myTexture"), 0);
-
-			//glm::mat4 view = camera.GetViewMatrix();
-			cml::mat4f view = camera.GetViewMatrix();
-			//cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.01f, 1000.0f);
-			glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
-
-			cml::mat4f model = cml::mat4f();
-
-			//timeish += 0.05f;
-			//model.addScaleFactor(cml::vec3f(1, sin(timeish) + 2, sin(timeish) + 2));
-			//model.addTranslation(cml::vec3f(sin(timeish), 0, 0));
-
-			GLint modelLoc = glGetUniformLocation(defaultShader.Program, "model");
-			GLint viewLoc = glGetUniformLocation(defaultShader.Program, "view");
-			GLint projLoc = glGetUniformLocation(defaultShader.Program, "projection");
-
-
-			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, cml::mat4f::value_ptr(model));
-			//glUniformMatrix4fv(projLoc, 1, GL_FALSE, cml::mat4f::value_ptr(projection));
-			glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-			glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(view));
-
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-			glBindVertexArray(0);
-
-			//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
-
-			// Swap the screen buffers
-			glfwSwapBuffers(window->getGLFWWindow());
-		}
-
-		glDeleteBuffers(1, &VBO);
-	}
+	glDeleteBuffers(1, &VBO);
+}
