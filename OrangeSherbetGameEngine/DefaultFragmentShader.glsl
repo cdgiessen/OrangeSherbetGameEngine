@@ -51,15 +51,13 @@ out vec4 color;
 uniform vec3 viewPos;
 uniform Material material;
 
-uniform sampler2D t_color;
+uniform sampler2D t_albedo;
 uniform sampler2D t_diffuse;
 uniform sampler2D t_specular;
 uniform sampler2D t_normal;
 
-
-
 void main() {
 	
-	vec3 result = vec3(texture(t_color, texturePos));
+	vec3 result = vec3(texture(t_albedo, texturePos));
 	color = vec4(result, 1.0f);
 }

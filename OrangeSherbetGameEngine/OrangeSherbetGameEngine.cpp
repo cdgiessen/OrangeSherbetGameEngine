@@ -151,13 +151,35 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeTexture = new Texture("SolidColorCube.png", 96, 64, (TextureType)0);
 	cubeMesh = new Mesh(cubeVerticies, std::vector<Texture>{*cubeTexture});
 
-	Transform* cubeTransform = new Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f));
+	Transform cubeTransform[5]{ Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
+		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
+		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
+		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
+		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)) };
 
-	GameObject cubeObject[5]{ GameObject(cubeTransform, cubeMesh, defaultShader),
-		GameObject(cubeTransform, cubeMesh, defaultShader),
-		GameObject(cubeTransform, cubeMesh, defaultShader),
-		GameObject(cubeTransform, cubeMesh, defaultShader),
-		GameObject(cubeTransform, cubeMesh, defaultShader) };
+	cml::mat4f model;
+	model.setToTranslation(cml::vec3f(0, 0, 0));
+	model.setScaleFactor(cml::vec3f(1, 2.5, 1));
+	cubeTransform[0].SetModelMatrix(model);
+	model.setScaleFactor(cml::vec3f(1, 1, 1));
+
+	model.setToTranslation(cml::vec3f(1, 0, 0));
+	cubeTransform[1].SetModelMatrix(model);
+
+	model.setToTranslation(cml::vec3f(2, 0, 0));
+	cubeTransform[2].SetModelMatrix(model);
+
+	model.setToTranslation(cml::vec3f(3, 0, 0));
+	cubeTransform[3].SetModelMatrix(model);
+
+	model.setToTranslation(cml::vec3f(4, 0, 0));
+	cubeTransform[4].SetModelMatrix(model);
+
+	GameObject cubeObject[5]{ GameObject(&cubeTransform[0], cubeMesh, defaultShader),
+		GameObject(&cubeTransform[1], cubeMesh, defaultShader),
+		GameObject(&cubeTransform[2], cubeMesh, defaultShader),
+		GameObject(&cubeTransform[3], cubeMesh, defaultShader),
+		GameObject(&cubeTransform[4], cubeMesh, defaultShader) };
 
 	//setup_vao();
 
@@ -181,30 +203,12 @@ void OrangeSherbetGameEngine::TempRun() {
 		// Draw the triangle
 		//DrawCube();
 
-
 		cml::mat4f view = camera.GetViewMatrix();
-		cml::mat4f model;
-		model.setToTranslation(cml::vec3f(0, 0, 0));
-		model.setScaleFactor(cml::vec3f(1, 2.5, 1));
-		cubeObject[0].transform->SetModelMatrix(model);
-		cubeObject[0].Draw(view);
 
-		model.setScaleFactor(cml::vec3f(1, 1, 1));
-		model.setToTranslation(cml::vec3f(1, 0, 0));
-		cubeObject[0].transform->SetModelMatrix(model);
-		cubeObject[1].Draw(view);
-
-		model.setToTranslation(cml::vec3f(2, 0, 0));
-		cubeObject[0].transform->SetModelMatrix(model);
-		cubeObject[2].Draw(view);
-
-		model.setToTranslation(cml::vec3f(3, 0, 0));
-		cubeObject[0].transform->SetModelMatrix(model);
-		cubeObject[3].Draw(view);
-
-		model.setToTranslation(cml::vec3f(4, 0, 0));
-		cubeObject[0].transform->SetModelMatrix(model);
-		cubeObject[4].Draw(view);
+		//RENDER
+		for (int i = 0; i < 5; i++) {
+			cubeObject[i].Draw(view);
+		}
 
 		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
 

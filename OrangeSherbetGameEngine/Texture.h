@@ -5,7 +5,7 @@
 #include <gl/glew.h>
 
 enum TextureType {
-	Color = 0,
+	Albedo = 0,
 	Diffuse = 1,
 	Specular = 2,
 	Normal = 3,

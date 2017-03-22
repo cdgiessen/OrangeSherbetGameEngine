@@ -73,7 +73,7 @@ void Mesh::Draw(Shader shader)
 		TextureType type = this->textures[i].GetTextureType();
 		switch (type) {
 		case (0) :
-			name = "t_color"; break;
+			name = "t_albedo"; break;
 		case (1) :
 			name = "t_diffuse"; break;
 		case (2) :
