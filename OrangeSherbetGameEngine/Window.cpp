@@ -51,6 +51,8 @@ Window::Window(int width, int height, bool fullscreen, char *title) : width(widt
 
 	glViewport(0, 0, width, height);
 	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_CULL_FACE);
 }
 
 

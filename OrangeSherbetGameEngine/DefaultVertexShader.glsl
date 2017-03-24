@@ -7,9 +7,10 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+out vec2 texturePos;
 out vec3 fragmentPos;
 out vec3 normalDir;
-out vec2 texturePos;
+
 
 void main()
 {

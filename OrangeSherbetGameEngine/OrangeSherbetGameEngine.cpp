@@ -100,51 +100,52 @@ int OrangeSherbetGameEngine::ShutDown() {
 void OrangeSherbetGameEngine::TempRun() {
 	std::vector<Vertex> cubeVerticies;
 
+	//Left face
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f),  cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 1.0f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),   cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f),  cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),   cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 1.0f)));
 
 	//Right face
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),  cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),  cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.0f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.5f)));
 
 	//Back face																											
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f),  cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),   cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),   cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f),  cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 1.0f)));
 
 	//Front face																										
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),  cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),  cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
 
 	//Bottom face
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f),  cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 1.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),   cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),   cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f),  cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 1.0f)));
 
 	//Top face
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),  cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),  cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.0f)));
+	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
 
 	defaultShader = new Shader("DefaultVertexShader.glsl", "DefaultFragmentShader.glsl");

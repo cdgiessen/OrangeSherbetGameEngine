@@ -80,6 +80,8 @@ void Mesh::Draw(Shader shader)
 			name = "t_specular"; break;
 		case (3) :
 			name = "t_normal"; break;
+		case (4) :
+			name = "t_emmision"; break;
 		default : 
 			std::cout << "ERROR :: Couldn't find appropriate case" << std::endl;
 		}

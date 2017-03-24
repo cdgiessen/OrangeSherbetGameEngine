@@ -14,17 +14,14 @@ struct PointLight {
     float linear;
     float quadratic;
 	
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+	vec3 color;
 };
 
 struct DirLight {
     vec3 direction;
-	
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+	vec3 color;
+
+
 };
 
 struct SpotLight {
@@ -37,9 +34,7 @@ struct SpotLight {
     float linear;
     float quadratic;
     
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;       
+    vec3 color;       
 }; 
 
 in vec3 fragmentPos;
@@ -56,8 +51,12 @@ uniform sampler2D t_diffuse;
 uniform sampler2D t_specular;
 uniform sampler2D t_normal;
 
+uniform PointLight pointLights[12];
+
 void main() {
 	
 	vec3 result = vec3(texture(t_albedo, texturePos));
 	color = vec4(result, 1.0f);
+
+
 }
