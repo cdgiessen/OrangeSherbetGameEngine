@@ -152,35 +152,51 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeTexture = new Texture("SolidColorCube.png", 96, 64, (TextureType)0);
 	cubeMesh = new Mesh(cubeVerticies, std::vector<Texture>{*cubeTexture});
 
-	Transform cubeTransform[5]{ Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
+	Transform cubeTransform[6]{ 
+		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
+		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
 		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
 		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
 		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
 		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)) };
 
+
 	cml::mat4f model;
-	model.setToTranslation(cml::vec3f(0, 0, 0));
-	model.setScaleFactor(cml::vec3f(1, 2.5, 1));
+	model.setToTranslation(cml::vec3f(3, 0, 0));
+	model.setScaleFactor(cml::vec3f(1, 1, 1));
 	cubeTransform[0].SetModelMatrix(model);
 	model.setScaleFactor(cml::vec3f(1, 1, 1));
 
-	model.setToTranslation(cml::vec3f(1, 0, 0));
+	model.setToTranslation(cml::vec3f(0, 1, 0));
 	cubeTransform[1].SetModelMatrix(model);
 
-	model.setToTranslation(cml::vec3f(2, 0, 0));
+	model.setToTranslation(cml::vec3f(0, 2, 0));
 	cubeTransform[2].SetModelMatrix(model);
 
-	model.setToTranslation(cml::vec3f(3, 0, 0));
+	model.setToTranslation(cml::vec3f(0, 3, 0));
 	cubeTransform[3].SetModelMatrix(model);
 
-	model.setToTranslation(cml::vec3f(4, 0, 0));
+	model.rotate(cml::vec3f(0, 0, 1), 0);
+	model.scale(cml::vec3f(1, 2, 1));
+	model.translate(cml::vec3f(-4, 0, 0));
 	cubeTransform[4].SetModelMatrix(model);
 
-	GameObject cubeObject[5]{ GameObject(&cubeTransform[0], cubeMesh, defaultShader),
+	model.setToTranslation(cml::vec3f(0, 0, 0));
+	model.setScaleFactor(cml::vec3f(1, 1, 1));
+
+	model.rotate(cml::vec3f(0, 0, 1), 3.14f/2.0f);
+	model.scale(cml::vec3f(1, 2, 1));
+	model.translate(cml::vec3f(-1, 0, 0));	
+
+	cubeTransform[5].SetModelMatrix(model);
+
+	GameObject cubeObject[6]{ GameObject(&cubeTransform[0], cubeMesh, defaultShader),
 		GameObject(&cubeTransform[1], cubeMesh, defaultShader),
 		GameObject(&cubeTransform[2], cubeMesh, defaultShader),
 		GameObject(&cubeTransform[3], cubeMesh, defaultShader),
-		GameObject(&cubeTransform[4], cubeMesh, defaultShader) };
+		GameObject(&cubeTransform[4], cubeMesh, defaultShader),
+		GameObject(&cubeTransform[5], cubeMesh, defaultShader)
+	};
 
 	//setup_vao();
 
@@ -189,6 +205,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	// Main Game loop
 	while (!glfwWindowShouldClose(window->getGLFWWindow()))
 	{
+		timeish += 0.016f;
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
@@ -207,7 +224,18 @@ void OrangeSherbetGameEngine::TempRun() {
 		cml::mat4f view = camera.GetViewMatrix();
 
 		//RENDER
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
+			cml::mat4f model;
+			model = cubeObject[i].transform->GetModelMatrix();
+			cml::vec3f invscale = model.getScale();
+			cml::vec3f scale = model.getScale();
+			invscale.x = 1 / invscale.x;
+			invscale.y = 1 / invscale.y;
+			invscale.z = 1 / invscale.z;
+			model.scale(invscale);
+			model.rotate(cml::vec3f((0), (0), (1)), timeish);
+			model.scale(scale);
+			cubeObject[i].transform->SetModelMatrix(model);
 			cubeObject[i].Draw(view);
 		}
 
