@@ -8,12 +8,13 @@
 #include <vector>
 
 //Temporary
-#include <glm\glm.hpp>
+//#include <glm\glm.hpp>
 
 class Transform
 {
 public:
-	Transform(cml::mat4f viewMat, glm::mat4 projectionMat) : position(cml::VEC3_ZERO), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE), model(cml::mat4f()), view(viewMat), projection(projectionMat) {}
+	//Transform(cml::mat4f viewMat, glm::mat4 projectionMat) : position(cml::VEC3_ZERO), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE), model(cml::mat4f()), view(viewMat), projection(projectionMat) {}
+	Transform(cml::mat4f viewMat, cml::mat4f projectionMat) : position(cml::VEC3_ZERO), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE), model(cml::mat4f()), view(viewMat), projection(projectionMat) {}
 	//Transform(cml::vec3f p, cml::quatf r, cml::vec3f s) : position(p), rotation(r), scale(s) {}
 	//
 	//Transform(cml::vec3f p) : position(p), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE) {}
@@ -72,8 +73,13 @@ public:
 		view = newViewMat;
 	}
 
-	glm::mat4 GetProjectionMatrix() { return projection; }
-	void SetProjectionMatrix(glm::mat4 newProjectionMatrix) {
+	//glm::mat4 GetProjectionMatrix() { return projection; }
+	//void SetProjectionMatrix(glm::mat4 newProjectionMatrix) {
+	//	projection = newProjectionMatrix;
+	//}
+
+	cml::mat4f GetProjectionMatrix() { return projection; }
+	void SetProjectionMatrix(cml::mat4f newProjectionMatrix) {
 		projection = newProjectionMatrix;
 	}
 
@@ -84,8 +90,9 @@ private:
 
 	cml::mat4f model;
 	cml::mat4f view;
-	glm::mat4 projection;
-
+	cml::mat4f projection;
+	//glm::mat4 projection;
+	
 	//Transform &parent;
 	//std::vector<Transform> children;
 };

@@ -1,9 +1,9 @@
 #include "OrangeSherbetGameEngine.h"
 #include <iostream>
 
-#include <glm\glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+//#include <glm\glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -153,12 +153,12 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeMesh = new Mesh(cubeVerticies, std::vector<Texture>{*cubeTexture});
 
 	Transform cubeTransform[6]{ 
-		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
-		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
-		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
-		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
-		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)),
-		Transform(camera.GetViewMatrix(), glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f)) };
+		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
+		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
+		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
+		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
+		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
+		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)) };
 
 
 	cml::mat4f model;
@@ -233,7 +233,8 @@ void OrangeSherbetGameEngine::TempRun() {
 			invscale.y = 1 / invscale.y;
 			invscale.z = 1 / invscale.z;
 			model.scale(invscale);
-			model.rotate(cml::vec3f((0), (0), (1)), timeish);
+			model.rotate(cml::vec3f((0), (0), (1)), 0.1);
+			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
 			model.scale(scale);
 			cubeObject[i].transform->SetModelMatrix(model);
 			cubeObject[i].Draw(view);
