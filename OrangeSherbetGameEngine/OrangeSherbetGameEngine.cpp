@@ -1,5 +1,6 @@
 #include "OrangeSherbetGameEngine.h"
 #include <iostream>
+#include <unordered_map>
 
 //#include <glm\glm.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -7,6 +8,9 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader.h>
 
 #include "CML\cml.h"
 #include "CML\mat4.h"
@@ -25,7 +29,7 @@ GLuint triangleVBO, triangleVAO;
 
 Camera camera(cml::vec3f(-3, 0, 0));
 
-glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100000.0f);
+cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f);
 
 Shader* defaultShader;
 Texture* cubeTexture;
@@ -76,6 +80,7 @@ OrangeSherbetGameEngine::OrangeSherbetGameEngine()
 OrangeSherbetGameEngine::~OrangeSherbetGameEngine()
 {
 }
+
 
 int OrangeSherbetGameEngine::StartUp() {
 	window = new Window(WIDTH, HEIGHT, false, "OGSE");
@@ -167,7 +172,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeTransform[0].SetModelMatrix(model);
 	model.setScaleFactor(cml::vec3f(1, 1, 1));
 
-	model.setToTranslation(cml::vec3f(0, 1, 0));
+	model.setToTranslation(cml::vec3f(0, 1, 3));
 	cubeTransform[1].SetModelMatrix(model);
 
 	model.setToTranslation(cml::vec3f(0, 2, 0));
@@ -197,6 +202,62 @@ void OrangeSherbetGameEngine::TempRun() {
 		GameObject(&cubeTransform[4], cubeMesh, defaultShader),
 		GameObject(&cubeTransform[5], cubeMesh, defaultShader)
 	};
+
+	std::vector<Vertex> teapotVertices;
+	std::vector<GLuint> teapotIndices;
+
+	std::string inputfile = "teapot.obj";
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+
+	std::string err;
+	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str());
+
+	if (!err.empty()) { // `err` may contain warning message.
+		std::cerr << err << std::endl;
+	}
+
+	if (!ret) {
+		exit(1);
+	}
+
+	for (const auto& shape : shapes) {
+		for (const auto& index : shape.mesh.indices) {
+			Vertex vertex = {};
+
+			vertex.Position = {
+				attrib.vertices[3 * index.vertex_index + 0],
+				attrib.vertices[3 * index.vertex_index + 1],
+				attrib.vertices[3 * index.vertex_index + 2]
+			};
+
+			vertex.TexCoords = {
+				attrib.texcoords[2 * index.texcoord_index + 0],
+				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+			};
+			
+			//vertex.Normal = {
+			//	attrib.vertices[3 * index.normal_index + 0],
+			//	attrib.vertices[3 * index.normal_index + 1],
+			//	attrib.vertices[3 * index.normal_index + 2]
+			//};
+			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
+
+			teapotVertices.push_back(vertex);
+		}
+	}
+
+
+	Texture* teapotTexture = new Texture("default.png", 128, 128, (TextureType)0);
+	Mesh* teapotMesh = new Mesh(teapotVertices, std::vector<Texture>{*teapotTexture});
+	Transform* teapotTransform = new Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
+	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
+
+	//cml::mat4f model;
+	model = teapot.transform->GetModelMatrix();
+	model.scale(cml::vec3f(0.01f, 0.01f, 0.01f));
+	teapot.transform->SetModelMatrix(model);
 
 	//setup_vao();
 
@@ -233,12 +294,16 @@ void OrangeSherbetGameEngine::TempRun() {
 			invscale.y = 1 / invscale.y;
 			invscale.z = 1 / invscale.z;
 			model.scale(invscale);
-			model.rotate(cml::vec3f((0), (0), (1)), 0.1);
+			model.rotate(cml::vec3f((0), (0), (1)), 0.01);
 			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
 			model.scale(scale);
 			cubeObject[i].transform->SetModelMatrix(model);
 			cubeObject[i].Draw(view);
 		}
+
+		cml::mat4f model;
+		model.scale(cml::vec3f(0.01f, 0.01f, 0.01f));
+		teapot.Draw(view);
 
 		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
 

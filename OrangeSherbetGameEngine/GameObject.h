@@ -3,9 +3,9 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
-#include <glm\glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+//#include <glm\glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 
 #include "CML\cml.h"
 #include "Transform.h"

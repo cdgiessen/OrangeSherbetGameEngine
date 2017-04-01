@@ -31,6 +31,8 @@ struct Vertex {
 		Normal = norm;
 		TexCoords = tex;
 	}
+
+	Vertex() : Position(cml::VEC3_ZERO), Normal(cml::VEC3_ZERO), TexCoords(cml::vec2f(0,0)) {}
 };
 
 class Mesh {
@@ -47,6 +49,8 @@ public:
 
 	//Constructor for meshes with only a vertex array
 	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures);
+
+	
 	
 	void Draw(Shader shader); // Render the mesh
 
@@ -66,6 +70,6 @@ public:
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Texture> textures;
+	std::vector<Material> materials;
 };
-
 #endif // !MESH_H
