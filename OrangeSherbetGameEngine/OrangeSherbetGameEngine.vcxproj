@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\stb_image\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\stb_image\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,7 +129,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Charles\Documents\Visual Studio 2015\Libraries\stb_image\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\stb_image\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;C:\Users\Charles\Documents\Visual Studio 2015\Libraries\tinyobjloader\include;D:\Users\Charles\Documents\Visual Studio 2015\Libraries\cml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -184,7 +184,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
-    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Window.h" />
