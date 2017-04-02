@@ -161,40 +161,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AllocatorPool.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="OrangeSherbetGameEngine.cpp" />
-    <ClCompile Include="ShaderManager.cpp" />
-    <ClCompile Include="Tester.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="src\AllocatorPool.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\InputManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\OrangeSherbetGameEngine.cpp" />
+    <ClCompile Include="src\ShaderManager.cpp" />
+    <ClCompile Include="src\Tester.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Transform.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AllocatorPool.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshPrimitives.h" />
-    <ClInclude Include="OrangeSherbetGameEngine.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="ShaderManager.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="include\AllocatorPool.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\InputManager.h" />
+    <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\MeshPrimitives.h" />
+    <ClInclude Include="include\OrangeSherbetGameEngine.h" />
+    <ClInclude Include="include\resource.h" />
+    <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\ShaderManager.h" />
+    <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\Transform.h" />
+    <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DefaultFragmentShader.glsl" />
-    <None Include="DefaultVertexShader.glsl" />
+    <None Include="Shaders\DefaultFragmentShader.glsl" />
+    <None Include="Shaders\DefaultVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="SolidColorCube.png" />
-    <Image Include="TestTexture.png" />
+    <Image Include="Assets\Images\SolidColorCube.png" />
+    <Image Include="Assets\Images\TestTexture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
