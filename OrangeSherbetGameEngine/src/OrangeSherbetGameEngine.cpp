@@ -101,6 +101,10 @@ int OrangeSherbetGameEngine::ShutDown() {
 
 
 void OrangeSherbetGameEngine::TempRun() {
+	defaultShader = new Shader("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
+	cml::mat4f initCameraView = camera.GetViewMatrix();
+	cml::mat4f perspectiveProjection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f);
+
 	std::vector<Vertex> cubeVerticies;
 
 	//Left face
@@ -151,17 +155,16 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
 	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
 
-	defaultShader = new Shader("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
 	cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
 	cubeMesh = new Mesh(cubeVerticies, std::vector<Texture>{*cubeTexture});
 
 	Transform cubeTransform[6]{ 
-		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
-		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
-		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
-		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
-		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)),
-		Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad	(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f)) };
+		Transform(initCameraView, perspectiveProjection),
+		Transform(initCameraView, perspectiveProjection),
+		Transform(initCameraView, perspectiveProjection),
+		Transform(initCameraView, perspectiveProjection),
+		Transform(initCameraView, perspectiveProjection),
+		Transform(initCameraView, perspectiveProjection) };
 
 
 	cml::mat4f model;
@@ -249,7 +252,7 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	Texture* teapotTexture = new Texture("Assets/Models/teapot/default.png", 128, 128, (TextureType)0);
 	Mesh* teapotMesh = new Mesh(teapotVertices, std::vector<Texture>{*teapotTexture});
-	Transform* teapotTransform = new Transform(camera.GetViewMatrix(), cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
+	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
 	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
 
 	//cml::mat4f model;
@@ -285,15 +288,19 @@ void OrangeSherbetGameEngine::TempRun() {
 		for (int i = 0; i < 6; i++) {
 			cml::mat4f model;
 			model = cubeObject[i].transform->GetModelMatrix();
+			
 			cml::vec3f invscale = model.getScale();
 			cml::vec3f scale = model.getScale();
 			invscale.x = 1 / invscale.x;
 			invscale.y = 1 / invscale.y;
 			invscale.z = 1 / invscale.z;
+			model.translate(cml::vec3f(0.01f, 0, 0));
 			model.scale(invscale);
 			model.rotate(cml::vec3f((0), (0), (1)), 0.01);
 			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
 			model.scale(scale);
+			model.translate(cml::vec3f(0.01f, 0, 0));
+			
 			cubeObject[i].transform->SetModelMatrix(model);
 			cubeObject[i].Draw(view);
 		}
