@@ -1,5 +1,11 @@
 #include "../include/Mesh.h"
 
+//#define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader.h>
+
+//#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures)
 {
 	this->vertices = vertices;
@@ -22,8 +28,6 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures)
 	// Now that we have all the required data, set the vertex buffers and its attribute pointers.
 	this->setupMesh();
 }
-
-
 
 // Initializes all the buffer objects/arrays
 void Mesh::setupMesh()

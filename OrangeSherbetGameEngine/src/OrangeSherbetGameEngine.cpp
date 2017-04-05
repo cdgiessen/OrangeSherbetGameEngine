@@ -22,8 +22,8 @@ GLFWwindow *window;
 
 //void OnMouseButton(GLFWwindow* window, int glfwButton, int glfwAction);
 
-GLuint VAO, VBO, EBO;
-GLuint triangleVBO, triangleVAO;
+//GLuint VAO, VBO, EBO;
+//GLuint triangleVBO, triangleVAO;
 
 Camera camera(cml::vec3f(-3, 0, 0));
 
@@ -105,58 +105,58 @@ void OrangeSherbetGameEngine::TempRun() {
 	cml::mat4f initCameraView = camera.GetViewMatrix();
 	cml::mat4f perspectiveProjection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f);
 
-	std::vector<Vertex> cubeVerticies;
+	std::vector<Vertex> cubeVertices;
+	std::vector<GLuint> cubeIndices;
 
-	//Left face
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f),  cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),   cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f),  cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),   cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, 0.0f, -1.0f), cml::vec2f(0.667f, 1.0f)));
+	std::string cubeinputfile = "Assets/Models/cube/cube.obj";
+	tinyobj::attrib_t cubeAttrib;
+	std::vector<tinyobj::shape_t> cubeShapes;
+	std::vector<tinyobj::material_t> cubeMaterials;
 
-	//Right face
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),  cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.667f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),  cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f), cml::vec3f(0.0f, 0.0f, 1.0f), cml::vec2f(0.333f, 0.5f)));
+	std::string cerr;
+	bool cret = tinyobj::LoadObj(&cubeAttrib, &cubeShapes, &cubeMaterials, &cerr, cubeinputfile.c_str());
 
-	//Back face																											
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f),  cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),   cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),   cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.333f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f),  cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(-1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 1.0f)));
+	if (!cerr.empty()) { // `err` may contain warning message.
+		std::cerr << cerr << std::endl;
+	}
 
-	//Front face																										
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),  cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),  cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f), cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.334f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(1.0f, 0.0f, 0.0f), cml::vec2f(0.0f, 0.0f)));
+	if (!cret) {
+		exit(1);
+	}
 
-	//Bottom face
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, -0.5f),  cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 1.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),   cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, -0.5f, 0.5f),   cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, 0.5f),  cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, -0.5f, -0.5f), cml::vec3f(0.0f, -1.0f, 0.0f), cml::vec2f(1.0f, 1.0f)));
+	for (const auto& shape : cubeShapes) {
+		for (const auto& index : shape.mesh.indices) {
+			Vertex vertex = {};
 
-	//Top face
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, -0.5f),  cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.5f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, 0.5f),  cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(0.5f, 0.5f, 0.5f),   cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(1.0f, 0.0f)));
-	cubeVerticies.push_back(Vertex(cml::vec3f(-0.5f, 0.5f, -0.5f), cml::vec3f(0.0f, 1.0f, 0.0f), cml::vec2f(0.667f, 0.5f)));
+			vertex.Position = {
+				cubeAttrib.vertices[3 * index.vertex_index + 0],
+				cubeAttrib.vertices[3 * index.vertex_index + 1],
+				cubeAttrib.vertices[3 * index.vertex_index + 2]
+			};
 
-	cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
-	cubeMesh = new Mesh(cubeVerticies, std::vector<Texture>{*cubeTexture});
+			vertex.TexCoords = {
+				cubeAttrib.texcoords[2 * index.texcoord_index + 0],
+				1.0f - cubeAttrib.texcoords[2 * index.texcoord_index + 1]
+			};
+
+			vertex.Normal = {
+				cubeAttrib.vertices[3 * index.normal_index + 0],
+				cubeAttrib.vertices[3 * index.normal_index + 1],
+				cubeAttrib.vertices[3 * index.normal_index + 2]
+			};
+
+			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
+
+			cubeVertices.push_back(vertex);
+
+			//cubeIndices.push_back(cubeVertices[vertex]);
+		}
+
+		
+	}
+
+	cubeTexture = new Texture("Assets/Models/cube/default.png", 128, 128, (TextureType)0);
+	cubeMesh = new Mesh(cubeVertices, std::vector<Texture>{ *cubeTexture });
 
 	Transform cubeTransform[6]{ 
 		Transform(initCameraView, perspectiveProjection),
@@ -250,7 +250,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	}
 
 
-	Texture* teapotTexture = new Texture("Assets/Models/teapot/default.png", 128, 128, (TextureType)0);
+	Texture* teapotTexture = new Texture("Assets/Models/teapot/colorful.png", 128, 128, (TextureType)0);
 	Mesh* teapotMesh = new Mesh(teapotVertices, std::vector<Texture>{*teapotTexture});
 	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
 	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
@@ -276,6 +276,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		// Render
 		// Clear the colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
+		//glClearColor(sin(timeish), 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the colorbuffer
 
 
@@ -294,12 +295,12 @@ void OrangeSherbetGameEngine::TempRun() {
 			invscale.x = 1 / invscale.x;
 			invscale.y = 1 / invscale.y;
 			invscale.z = 1 / invscale.z;
-			model.translate(cml::vec3f(0.01f, 0, 0));
+			//model.translate(cml::vec3f(0.01f, 0, 0));
 			model.scale(invscale);
-			model.rotate(cml::vec3f((0), (0), (1)), 0.01);
+			model.rotate(cml::vec3f((0), (0), (1)), i);
 			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
 			model.scale(scale);
-			model.translate(cml::vec3f(0.01f, 0, 0));
+			//model.translate(cml::vec3f(0.01f, 0, 0));
 			
 			cubeObject[i].transform->SetModelMatrix(model);
 			cubeObject[i].Draw(view);
@@ -315,5 +316,5 @@ void OrangeSherbetGameEngine::TempRun() {
 		glfwSwapBuffers(window->getGLFWWindow());
 	}
 
-	glDeleteBuffers(1, &VBO);
+	
 }
