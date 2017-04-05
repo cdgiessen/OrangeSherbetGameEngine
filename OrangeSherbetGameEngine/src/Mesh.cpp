@@ -1,16 +1,10 @@
-#include "../include/Mesh.h"
+#include "Mesh.h"
 
-//#define TINYOBJLOADER_IMPLEMENTATION
-#include <tiny_obj_loader.h>
-
-//#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, Material* material)
 {
 	this->vertices = vertices;
 	this->indices = indices;
-	this->textures = textures;
+	this->material = material;
 
 	this->meshVertexArrayType = Mesh::VertexBufferIndicyType::VertexAndIndicy;
 
@@ -18,10 +12,10 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vecto
 	this->setupMesh();
 }
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures)
+Mesh::Mesh(std::vector<Vertex> vertices, Material* material)
 {
 	this->vertices = vertices;
-	this->textures = textures;
+	this->material = material;
 
 	this->meshVertexArrayType = Mesh::VertexBufferIndicyType::VertexArrayOnly;
 
@@ -70,13 +64,12 @@ void Mesh::setupMesh()
 // Render the mesh
 void Mesh::Draw(Shader shader)
 {
-	for (GLuint i = 0; i < this->textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i); // Active proper texture unit before binding
+	
+		glActiveTexture(GL_TEXTURE0 + 0); // Active proper texture unit before binding
 		// Retrieve texture number (the N in diffuse_textureN)
 		std::stringstream ss;
 		std::string name;
-		TextureType type = this->textures[i].GetTextureType();
+		TextureType type = material->GetAlbedoTexture()->GetTextureType();
 		switch (type) {
 		case (0) :
 			name = "t_albedo"; break;
@@ -92,10 +85,10 @@ void Mesh::Draw(Shader shader)
 			std::cout << "ERROR :: Couldn't find appropriate case" << std::endl;
 		}
 		// Now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader.Program, (name).c_str()), i);
+		glUniform1i(glGetUniformLocation(shader.Program, (name).c_str()), 0);
 		// And finally bind the texture
-		glBindTexture(GL_TEXTURE_2D, this->textures[i].GetTextureID());
-	} 
+		glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
+	
 
 	//Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
 	glUniform1f(glGetUniformLocation(shader.Program, "material.shininess"), 16.0f);
@@ -111,10 +104,9 @@ void Mesh::Draw(Shader shader)
 	glBindVertexArray(0);
 
 	// Always good practice to set everything back to defaults once configured.
-	for (GLuint i = 0; i < this->textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
+	
+		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	
 }
 

@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\AllocatorPool.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
@@ -175,20 +176,21 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\AssetManager.h" />
-    <ClInclude Include="include\AllocatorPool.h" />
-    <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\GameObject.h" />
-    <ClInclude Include="include\InputManager.h" />
-    <ClInclude Include="include\Mesh.h" />
-    <ClInclude Include="include\MeshPrimitives.h" />
-    <ClInclude Include="include\OrangeSherbetGameEngine.h" />
-    <ClInclude Include="include\resource.h" />
-    <ClInclude Include="include\Shader.h" />
-    <ClInclude Include="include\ShaderManager.h" />
-    <ClInclude Include="include\Texture.h" />
-    <ClInclude Include="include\Transform.h" />
-    <ClInclude Include="include\Window.h" />
+    <ClInclude Include="src\AssetManager.h" />
+    <ClInclude Include="src\AllocatorPool.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\InputManager.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\MeshPrimitives.h" />
+    <ClInclude Include="src\OrangeSherbetGameEngine.h" />
+    <ClInclude Include="src\resource.h" />
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\ShaderManager.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Transform.h" />
+    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Material.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\DefaultFragmentShader.glsl" />

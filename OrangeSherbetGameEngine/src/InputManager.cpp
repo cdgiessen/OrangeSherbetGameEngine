@@ -1,4 +1,4 @@
-#include "../include/InputManager.h"
+#include "InputManager.h"
 
 InputManager::InputManager(GLFWwindow* window)
 {

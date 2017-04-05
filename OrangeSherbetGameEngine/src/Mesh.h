@@ -12,14 +12,10 @@
 #include <CML\cml.h>
 
 #include "Shader.h"
-#include "Texture.h"
+#include "Material.h"
 
-struct Material {
-	cml::vec3f ambient;
-	cml::vec3f diffuse;
-	cml::vec3f specular;
-	float shininess;
-};
+//#define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader.h>
 
 struct Vertex {
 	cml::vec3f Position; // Position
@@ -45,18 +41,14 @@ public:
 	};
 
 	//Constructor for meshes with vertex and indicy arrays
-	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
+	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, Material* materials);
 
 	//Constructor for meshes with only a vertex array
-	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures);
+	Mesh(std::vector<Vertex> vertices, Material* materials);
 
 	void Draw(Shader shader); // Render the mesh
 
 	void setupMesh(); // Initializes all the buffer objects/arrays
-	
-	std::vector<Texture> GetTextures() {
-		return textures;
-	}
 
 
 	VertexBufferIndicyType meshVertexArrayType;
@@ -68,7 +60,7 @@ public:
 	/*  Mesh Data  */
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
-	std::vector<Texture> textures;
-	std::vector<Material> materials;
+
+	Material* material;
 };
 #endif // !MESH_H

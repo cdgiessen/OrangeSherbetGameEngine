@@ -1,4 +1,4 @@
-#include "../include/OrangeSherbetGameEngine.h"
+#include "OrangeSherbetGameEngine.h"
 #include <iostream>
 #include <unordered_map>
 
@@ -156,7 +156,8 @@ void OrangeSherbetGameEngine::TempRun() {
 	}
 
 	cubeTexture = new Texture("Assets/Models/cube/default.png", 128, 128, (TextureType)0);
-	cubeMesh = new Mesh(cubeVertices, std::vector<Texture>{ *cubeTexture });
+	Material* cMat = new Material(cubeTexture);
+	cubeMesh = new Mesh(cubeVertices, cMat );
 
 	Transform cubeTransform[6]{ 
 		Transform(initCameraView, perspectiveProjection),
@@ -251,7 +252,8 @@ void OrangeSherbetGameEngine::TempRun() {
 
 
 	Texture* teapotTexture = new Texture("Assets/Models/teapot/colorful.png", 128, 128, (TextureType)0);
-	Mesh* teapotMesh = new Mesh(teapotVertices, std::vector<Texture>{*teapotTexture});
+	Material* tMat = new Material(teapotTexture);
+	Mesh* teapotMesh = new Mesh(teapotVertices, tMat);
 	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
 	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
 
@@ -297,7 +299,7 @@ void OrangeSherbetGameEngine::TempRun() {
 			invscale.z = 1 / invscale.z;
 			//model.translate(cml::vec3f(0.01f, 0, 0));
 			model.scale(invscale);
-			model.rotate(cml::vec3f((0), (0), (1)), i);
+			model.rotate(cml::vec3f((0), (0), (1)), (float)i/10.0f);
 			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
 			model.scale(scale);
 			//model.translate(cml::vec3f(0.01f, 0, 0));

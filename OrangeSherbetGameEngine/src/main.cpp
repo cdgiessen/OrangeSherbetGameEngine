@@ -1,4 +1,4 @@
-#include "../include/OrangeSherbetGameEngine.h"
+#include "OrangeSherbetGameEngine.h"
 
 #include <iostream>
 
