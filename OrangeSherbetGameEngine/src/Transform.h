@@ -4,7 +4,9 @@
 #define TRANSFORM_H
 
 #include <CML\cml.h>
-
+#include <CML\vec3.h>
+#include <CML\mat4.h>
+#include <CML\quat.h>
 #include <vector>
 
 //Temporary
@@ -33,6 +35,12 @@ public:
 
 	void SetLocalPosition(const cml::vec3f val) {
 		position = val;
+		isDirty = true;
+	}
+
+	void Translate(cml::vec3f val) {
+		position += val;
+		isDirty = true;
 	}
 
 	cml::quatf GetLocalRotation() {
@@ -45,6 +53,7 @@ public:
 
 	void SetLocalRotation(const  cml::quatf val) {
 		rotation = val;
+		isDirty = true;
 	}
 
 	cml::vec3f GetLocalScale() {
@@ -55,20 +64,32 @@ public:
 		return scale;
 	}
 
-	void SetLocalRotation(const cml::vec3f val) {
-		scale = scale;
+	void SetLocalScale(const cml::vec3f val) {
+		scale = val;
+		isDirty = true;
 	}
 
 
-	cml::mat4f GetModelMatrix() { return model; }
-	void UpdateModelMatrix() {
-		//Create model matrix here
-	}
-	void SetModelMatrix(cml::mat4f newModelMat) {
-		model = newModelMat;
+	cml::mat4f GetMatrix() {
+		if (isDirty)
+			UpdateMatrix();
+		return model;
 	}
 
-	cml::mat4f GetViewMatrix() { return view; }
+	void UpdateMatrix() {
+		model.identity();
+		model.translate(position);
+		//model.rotate(cml::vec3f(rotation.x, rotation.y, rotation.z), rotation.w);
+		model.scale(scale);
+		isDirty = false;
+	}
+	//void SetModelMatrix(cml::mat4f newModelMat) {
+	//	model = newModelMat;
+	//}
+
+	cml::mat4f GetViewMatrix() { 
+		return view; 
+	}
 	void SetViewMatrix(cml::mat4f newViewMat) {
 		view = newViewMat;
 	}
@@ -78,7 +99,9 @@ public:
 	//	projection = newProjectionMatrix;
 	//}
 
-	cml::mat4f GetProjectionMatrix() { return projection; }
+	cml::mat4f GetProjectionMatrix() { 
+		return projection; 
+	}
 	void SetProjectionMatrix(cml::mat4f newProjectionMatrix) {
 		projection = newProjectionMatrix;
 	}
@@ -88,6 +111,7 @@ private:
 	cml::quat<float> rotation;
 	cml::vec3<float> scale;
 
+	bool isDirty; //if the model has updated and needs to be recalculated
 	cml::mat4f model;
 	cml::mat4f view;
 	cml::mat4f projection;

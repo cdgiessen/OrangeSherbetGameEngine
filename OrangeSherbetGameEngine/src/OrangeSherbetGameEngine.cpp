@@ -167,35 +167,29 @@ void OrangeSherbetGameEngine::TempRun() {
 		Transform(initCameraView, perspectiveProjection),
 		Transform(initCameraView, perspectiveProjection) };
 
+	cubeTransform[0].SetLocalPosition(cml::vec3f(0, 0, 0));
+	cubeTransform[0].SetLocalScale(cml::vec3f(1, 0.75, 1.5));
+	
+	cubeTransform[1].SetLocalPosition(cml::vec3f(0, 1, 1));
 
-	cml::mat4f model;
-	model.setToTranslation(cml::vec3f(3, 0, 0));
-	model.setScaleFactor(cml::vec3f(1, 1, 1));
-	cubeTransform[0].SetModelMatrix(model);
-	model.setScaleFactor(cml::vec3f(1, 1, 1));
+	cubeTransform[2].SetLocalPosition(cml::vec3f(0, 2, 0));
+	cubeTransform[3].SetLocalPosition(cml::vec3f(0, 4, 0));
 
-	model.setToTranslation(cml::vec3f(0, 1, 3));
-	cubeTransform[1].SetModelMatrix(model);
+	cubeTransform[4].SetLocalPosition(cml::vec3f(0, 0, 5));
 
-	model.setToTranslation(cml::vec3f(0, 2, 0));
-	cubeTransform[2].SetModelMatrix(model);
+	cubeTransform[5].SetLocalPosition(cml::vec3f(0, 0, -5));
 
-	model.setToTranslation(cml::vec3f(0, 3, 0));
-	cubeTransform[3].SetModelMatrix(model);
+	//cubeTransform[6].SetLocalPosition(cml::vec3f(3, 3, 3));
+	//cubeTransform[6].SetLocalScale(cml::vec3f(1, 0.25, 2.5));
 
-	model.rotate(cml::vec3f(0, 0, 1), 0);
-	model.scale(cml::vec3f(1, 2, 1));
-	model.translate(cml::vec3f(-4, 0, 0));
-	cubeTransform[4].SetModelMatrix(model);
+	//m5.rotate(cml::vec3f(0, 0, 1), 0);
+	//m5.scale(cml::vec3f(1, 2, 1));
+	//m5.translate(cml::vec3f(-4, 0, 0));
+	//cubeTransform[4].SetModelMatrix(m5);
 
-	model.setToTranslation(cml::vec3f(0, 0, 0));
-	model.setScaleFactor(cml::vec3f(1, 1, 1));
-
-	model.rotate(cml::vec3f(0, 0, 1), 3.14f/2.0f);
-	model.scale(cml::vec3f(1, 2, 1));
-	model.translate(cml::vec3f(-1, 0, 0));	
-
-	cubeTransform[5].SetModelMatrix(model);
+	//m6.rotate(cml::vec3f(0, 0, 1), 3.14f/2.0f);
+	//m6.scale(cml::vec3f(1, 2, 1));
+	//m6.translate(cml::vec3f(-1, 0, 0));	
 
 	GameObject cubeObject[6]{ GameObject(&cubeTransform[0], cubeMesh, defaultShader),
 		GameObject(&cubeTransform[1], cubeMesh, defaultShader),
@@ -258,9 +252,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
 
 	//cml::mat4f model;
-	model = teapot.transform->GetModelMatrix();
-	model.scale(cml::vec3f(0.01f, 0.01f, 0.01f));
-	teapot.transform->SetModelMatrix(model);
+	teapot.transform->SetLocalScale(cml::vec3f(0.01f, 0.01f, 0.01f));
 	//setup_vao();
 
 	float timeish = 0;
@@ -289,27 +281,18 @@ void OrangeSherbetGameEngine::TempRun() {
 
 		//RENDER
 		for (int i = 0; i < 6; i++) {
-			cml::mat4f model;
-			model = cubeObject[i].transform->GetModelMatrix();
+			//cubeObject[i].transform->SetLocalRotation(cml::quatf(0, 0, 1, 0.7));
 			
-			cml::vec3f invscale = model.getScale();
-			cml::vec3f scale = model.getScale();
-			invscale.x = 1 / invscale.x;
-			invscale.y = 1 / invscale.y;
-			invscale.z = 1 / invscale.z;
-			//model.translate(cml::vec3f(0.01f, 0, 0));
-			model.scale(invscale);
-			model.rotate(cml::vec3f((0), (0), (1)), (float)i/10.0f);
+			
+			//model.rotate(cml::vec3f((0), (0), (1)), (float)1/10.0f);
 			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
-			model.scale(scale);
-			//model.translate(cml::vec3f(0.01f, 0, 0));
 			
-			cubeObject[i].transform->SetModelMatrix(model);
+			//cubeObject[i].transform->SetLocalPosition(cml::vec3f(0, sin(timeish), 0));
+			cubeObject[i].transform->SetLocalScale(cml::vec3f(1, sin(timeish) + 1, 1));
 			cubeObject[i].Draw(view);
 		}
 
-		cml::mat4f model;
-		model.scale(cml::vec3f(0.01f, 0.01f, 0.01f));
+		//teapot.transform->
 		teapot.Draw(view);
 
 		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
