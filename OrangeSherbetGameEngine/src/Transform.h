@@ -56,6 +56,14 @@ public:
 		isDirty = true;
 	}
 
+	void SetLocalRotation(const cml::vec3f axis, const float angle) {
+		rotation = cml::quatf(axis, angle);
+	}
+
+	void SetLocalRotation(const cml::vec3f eulerAngles) {
+		rotation = cml::quatf(eulerAngles);
+	}
+
 	cml::vec3f GetLocalScale() {
 		return scale;
 	}
