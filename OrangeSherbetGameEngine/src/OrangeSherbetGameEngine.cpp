@@ -287,6 +287,8 @@ void OrangeSherbetGameEngine::TempRun() {
 			//model.rotate(cml::vec3f((0), (0), (1)), (float)1/10.0f);
 			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
 			
+
+
 			cubeObject[i].transform->SetLocalPosition(glm::vec3(i, sin(-timeish), i+1));
 			cubeObject[i].transform->SetLocalScale(glm::vec3(1, sin(timeish) + 1, 1));
 			cubeObject[i].Draw(view);
