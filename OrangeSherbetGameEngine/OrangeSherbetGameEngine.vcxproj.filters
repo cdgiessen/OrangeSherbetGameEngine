@@ -133,4 +133,8 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="Assets\Models\cube\cube.obj" />
+    <Object Include="Assets\Models\teapot\teapot.obj" />
+  </ItemGroup>
 </Project>

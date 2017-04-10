@@ -206,6 +206,10 @@
     <Image Include="Assets\Models\teapot\colorful.png" />
     <Image Include="Assets\Models\teapot\default.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="Assets\Models\cube\cube.obj" />
+    <Object Include="Assets\Models\teapot\teapot.obj" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
