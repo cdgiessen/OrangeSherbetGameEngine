@@ -44,13 +44,13 @@ void Transform::SetLocalRotation(const  glm::quat val) {
 	isDirty = true;
 }
 
-//void SetLocalRotation(const glm::vec3 axis, const float angle) {
-//	rotation = glm::quat(axis, angle);
-//}
-//
-//void SetLocalRotation(const glm::vec3 eulerAngles) {
-//	rotation = glm ::quat(eulerAngles);
-//}
+void Transform::SetLocalRotation(const float angle, const glm::vec3 &axis) {
+	rotation = glm::angleAxis(angle, axis);
+}
+
+void SetLocalRotation(const glm::vec3 &eulerAngles) {
+	//rotation = glm::mat4_cast(glm::orientate4(eulerAngles))
+}
 
 glm::vec3 Transform::GetLocalScale() {
 	return scale;

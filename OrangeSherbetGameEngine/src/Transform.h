@@ -13,6 +13,7 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\quaternion.hpp>
 //#include <glm/gtx/quaternion.hpp>
+#include <glm/matrix.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 class Transform
@@ -40,15 +41,11 @@ public:
 
 	const glm::quat& GetLocalRotation() const;
 
-	void SetLocalRotation(const  glm::quat val);
+	void SetLocalRotation(const glm::quat val);
 
-	//void SetLocalRotation(const glm::vec3 axis, const float angle) {
-	//	rotation = glm::quat(axis, angle);
-	//}
-	//
-	//void SetLocalRotation(const glm::vec3 eulerAngles) {
-	//	rotation = glm ::quat(eulerAngles);
-	//}
+	void SetLocalRotation(const float angle, const glm::vec3 &axis);
+	
+	void SetLocalRotation(const glm::vec3 &eulerAngles);
 
 	glm::vec3 GetLocalScale();
 
