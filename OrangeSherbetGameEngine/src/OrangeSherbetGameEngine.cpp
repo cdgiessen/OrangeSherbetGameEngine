@@ -2,9 +2,9 @@
 #include <iostream>
 #include <unordered_map>
 
-//#include <glm\glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+#include <glm\glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -12,8 +12,8 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
-#include "CML\cml.h"
-#include "CML\mat4.h"
+//#include "CML\cml.h"
+//#include "CML\mat4.h"
 
 // Default Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -25,9 +25,9 @@ GLFWwindow *window;
 //GLuint VAO, VBO, EBO;
 //GLuint triangleVBO, triangleVAO;
 
-Camera camera(cml::vec3f(-3, 0, 0));
+Camera camera(glm::vec3(-3, 0, 0));
 
-cml::mat4f projection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f);
+glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f);
 
 Shader* defaultShader;
 Texture* cubeTexture;
@@ -102,8 +102,8 @@ int OrangeSherbetGameEngine::ShutDown() {
 
 void OrangeSherbetGameEngine::TempRun() {
 	defaultShader = new Shader("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
-	cml::mat4f initCameraView = camera.GetViewMatrix();
-	cml::mat4f perspectiveProjection = cml::mat4f::createPerspective(cml::degToRad(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f);
+	glm::mat4 initCameraView(camera.GetViewMatrix());
+	glm::mat4 perspectiveProjection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f);
 
 	std::vector<Vertex> cubeVertices;
 	std::vector<GLuint> cubeIndices;
@@ -167,17 +167,17 @@ void OrangeSherbetGameEngine::TempRun() {
 		Transform(initCameraView, perspectiveProjection),
 		Transform(initCameraView, perspectiveProjection) };
 
-	cubeTransform[0].SetLocalPosition(cml::vec3f(0, 0, 0));
-	cubeTransform[0].SetLocalScale(cml::vec3f(1, 0.75, 1.5));
+	cubeTransform[0].SetLocalPosition(glm::vec3(0, 0, 0));
+	cubeTransform[0].SetLocalScale(glm::vec3(1, 0.75, 1.5));
 	
-	cubeTransform[1].SetLocalPosition(cml::vec3f(0, 1, 1));
+	cubeTransform[1].SetLocalPosition(glm::vec3(0, 1, 1));
 
-	cubeTransform[2].SetLocalPosition(cml::vec3f(0, 2, 0));
-	cubeTransform[3].SetLocalPosition(cml::vec3f(0, 4, 0));
+	cubeTransform[2].SetLocalPosition(glm::vec3(0, 2, 0));
+	cubeTransform[3].SetLocalPosition(glm::vec3(0, 4, 0));
 
-	cubeTransform[4].SetLocalPosition(cml::vec3f(0, 0, 5));
+	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, 5));
 
-	cubeTransform[5].SetLocalPosition(cml::vec3f(0, 0, -5));
+	cubeTransform[5].SetLocalPosition(glm::vec3(0, 0, -5));
 
 	//cubeTransform[6].SetLocalPosition(cml::vec3f(3, 3, 3));
 	//cubeTransform[6].SetLocalScale(cml::vec3f(1, 0.25, 2.5));
@@ -252,7 +252,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
 
 	//cml::mat4f model;
-	teapot.transform->SetLocalScale(cml::vec3f(0.01f, 0.01f, 0.01f));
+	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
 
 	float timeish = 0;
@@ -277,7 +277,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		// Draw the triangle
 		//DrawCube();
 
-		cml::mat4f view = camera.GetViewMatrix();
+		glm::mat4 view = camera.GetViewMatrix();
 
 		//RENDER
 		for (int i = 0; i < 6; i++) {
@@ -287,8 +287,8 @@ void OrangeSherbetGameEngine::TempRun() {
 			//model.rotate(cml::vec3f((0), (0), (1)), (float)1/10.0f);
 			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
 			
-			cubeObject[i].transform->SetLocalPosition(cml::vec3f(i, sin(-timeish), i+1));
-			cubeObject[i].transform->SetLocalScale(cml::vec3f(1, sin(timeish) + 1, 1));
+			cubeObject[i].transform->SetLocalPosition(glm::vec3(i, sin(-timeish), i+1));
+			cubeObject[i].transform->SetLocalScale(glm::vec3(1, sin(timeish) + 1, 1));
 			cubeObject[i].Draw(view);
 		}
 

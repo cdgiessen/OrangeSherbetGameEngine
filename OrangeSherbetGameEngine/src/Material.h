@@ -6,7 +6,8 @@
 #include "Texture.h"
 #include "Shader.h"
 
-#include <CML\vec3.h>
+//#include <CML\vec3.h>
+#include <glm/vec3.hpp>
 
 class Material
 {
@@ -27,11 +28,11 @@ public:
 	Texture *normalTex;
 	Texture *emissiveTex;
 
-	cml::vec3f ambient;
-	cml::vec3f diffuse;
-	cml::vec3f specular;
-	cml::vec3f transmittance;
-	cml::vec3f emission;
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+	glm::vec3 transmittance;
+	glm::vec3 emission;
 	float shininess;
 	float ior;       // index of refraction
 	float dissolve;  // 1 == opaque; 0 == fully transparent

@@ -9,7 +9,9 @@
 #include <sstream>
 #include <iostream>
 #include <GL\glew.h>
-#include <CML\cml.h>
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
+//#include <CML\cml.h>
 
 #include "Shader.h"
 #include "Material.h"
@@ -18,17 +20,17 @@
 #include <tiny_obj_loader.h>
 
 struct Vertex {
-	cml::vec3f Position; // Position
-	cml::vec3f Normal; // Normal
-	cml::vec2f TexCoords; // TexCoords
+	glm::vec3 Position; // Position
+	glm::vec3 Normal; // Normal
+	glm::vec2 TexCoords; // TexCoords
 
-	Vertex(cml::vec3f pos, cml::vec3f norm, cml::vec2f tex) {
+	Vertex(glm::vec3 pos, glm::vec3 norm, glm::vec2 tex) {
 		Position = pos;
 		Normal = norm;
 		TexCoords = tex;
 	}
 
-	Vertex() : Position(cml::VEC3_ZERO), Normal(cml::VEC3_ZERO), TexCoords(cml::vec2f(0,0)) {}
+	Vertex() : Position(glm::vec3(0.0f,0.0f,0.0f)), Normal(glm::vec3(0.0f, 0.0f, 0.0f)), TexCoords(glm::vec2(0.0f, 0.0f)) {}
 };
 
 class Mesh {

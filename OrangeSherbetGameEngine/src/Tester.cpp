@@ -1,6 +1,7 @@
 
-#include "CML\cml.h"
-
+//#include "CML\cml.h"
+#include <glm\vec3.hpp>
+#include <glm/mat4x4.hpp>
 #include <vector>
 
 #include <iostream>
@@ -13,16 +14,16 @@ typedef std::chrono::high_resolution_clock Clock; //gets me a timer
 void Tester() {
 	std::cout << "Begin vertex tests" << std::endl << std::endl;
 	const int vecTestSize = 5000;
-	cml::vec3f vectors[vecTestSize];
+	glm::vec3 vectors[vecTestSize];
 
-	auto rotMatrix = cml::mat4f::createRotationMatrix(15.0, 25.0, 180.0);
-	auto transMatrix = cml::mat4f::createTranslationMatrix(cml::vec3f(10.0, -4.0, 25.0));
-	auto scaleMatrix = cml::mat4f::createTranslationMatrix(cml::vec3f(0.12, 3.1, 2.5));
-	auto tranformationMatrix = rotMatrix * transMatrix * scaleMatrix;
+	//auto rotMatrix = glm::rotationMatrix(15.0, 25.0, 180.0);
+	//auto transMatrix = glm ::mat4::createTranslationMatrix(cml::vec3f(10.0, -4.0, 25.0));
+	//auto scaleMatrix = glm::mat4::createTranslationMatrix(cml::vec3f(0.12, 3.1, 2.5));
+	//auto tranformationMatrix = rotMatrix * transMatrix * scaleMatrix;
 
 	for (int i = 0; i < vecTestSize; i++)
 	{
-		vectors[i] = cml::vec3f(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100);
+		vectors[i] = glm::vec3(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100);
 		//std::cout << vectors[i] << std::endl;
 	}
 
@@ -32,8 +33,8 @@ void Tester() {
 	for (int i = 0; i < vecTestSize; i++)
 	{
 		//tranformationMatrix.addScaleFactor(5);
-		tranformationMatrix.addTranslation(cml::vec3f(5, 5, 5));
-		vectors[i] = tranformationMatrix * vectors[i];
+		//tranformationMatrix.addTranslation(cml::vec3f(5, 5, 5));
+		//vectors[i] = tranformationMatrix * vectors[i];
 	}
 	auto endCount = Clock::now();
 

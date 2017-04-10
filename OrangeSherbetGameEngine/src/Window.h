@@ -2,7 +2,8 @@
 
 #include <gl/glew.h>
 #include <GLFW\glfw3.h>
-#include <CML\cml.h>
+//#include <CML\cml.h>
+#include <glm\glm.hpp>
 
 class Window
 {
@@ -30,7 +31,7 @@ private:
 	double timeSinceLastFrame;      // Time since last frame
 	double lastFrameTime; // Time last frame was reported
 
-	cml::mat4f projectionMatrix; //Perspective matrix for the window (used so resizing window doesn't mess stuff up)
+	glm::mat4 projectionMatrix; //Perspective matrix for the window (used so resizing window doesn't mess stuff up)
 	//static Window *myWindow;			//Window reference for resize callback
 
 	// Callback registered with GLFW in init() to change the glViewport to match the new window size
