@@ -3,18 +3,13 @@
 #include <iostream>
 
 
-void start() {
-	OrangeSherbetGameEngine pOsge;
-
-	pOsge.StartUp();
-	pOsge.TempRun();
-
-}
-
 int main() {
-	start();
+	OrangeSherbetGameEngine osge;
 
-	std::cout << std::endl;
+	osge.StartUp();
+	osge.TempRun();
+	osge.ShutDown();
+
 	return 0;
 }
 

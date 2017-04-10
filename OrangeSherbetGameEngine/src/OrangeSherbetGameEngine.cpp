@@ -103,7 +103,7 @@ int OrangeSherbetGameEngine::ShutDown() {
 void OrangeSherbetGameEngine::TempRun() {
 	defaultShader = new Shader("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
 	glm::mat4 initCameraView(camera.GetViewMatrix());
-	glm::mat4 perspectiveProjection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f);
+	glm::mat4 perspectiveProjection(glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
 
 	std::vector<Vertex> cubeVertices;
 	std::vector<GLuint> cubeIndices;
@@ -171,16 +171,13 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 0.75, 1.5));
 	
 	cubeTransform[1].SetLocalPosition(glm::vec3(0, 1, 1));
-
+	
 	cubeTransform[2].SetLocalPosition(glm::vec3(0, 2, 0));
 	cubeTransform[3].SetLocalPosition(glm::vec3(0, 4, 0));
-
+	
 	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, 5));
-
+	
 	cubeTransform[5].SetLocalPosition(glm::vec3(0, 0, -5));
-
-	//cubeTransform[6].SetLocalPosition(cml::vec3f(3, 3, 3));
-	//cubeTransform[6].SetLocalScale(cml::vec3f(1, 0.25, 2.5));
 
 	//m5.rotate(cml::vec3f(0, 0, 1), 0);
 	//m5.scale(cml::vec3f(1, 2, 1));
@@ -289,7 +286,7 @@ void OrangeSherbetGameEngine::TempRun() {
 			
 
 
-			cubeObject[i].transform->SetLocalPosition(glm::vec3(i, sin(-timeish), i+1));
+			//cubeObject[i].transform->SetLocalPosition(glm::vec3(i, sin(-timeish), i+1));
 			cubeObject[i].transform->SetLocalScale(glm::vec3(1, sin(timeish) + 1, 1));
 			cubeObject[i].Draw(view);
 		}
