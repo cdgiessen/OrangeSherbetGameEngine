@@ -112,6 +112,9 @@
     <None Include="Shaders\DefaultVertexShader.glsl">
       <Filter>Resource Files\DefaultShaders</Filter>
     </None>
+    <None Include="Assets\Models\cube\default.mtl" />
+    <None Include="Assets\Models\teapot\default.mtl" />
+    <None Include="Assets\Models\teapot\teapot.max" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Images\SolidColorCube.png">
@@ -120,5 +123,18 @@
     <Image Include="Assets\Images\TestTexture.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\Models\cube\default.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\teapot\colorful.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Models\teapot\default.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Assets\Models\cube\cube.obj" />
+    <Object Include="Assets\Models\teapot\teapot.obj" />
   </ItemGroup>
 </Project>
