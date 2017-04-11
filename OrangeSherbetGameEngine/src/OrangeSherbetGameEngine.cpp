@@ -278,15 +278,9 @@ void OrangeSherbetGameEngine::TempRun() {
 
 		//RENDER
 		for (int i = 0; i < 6; i++) {
-			//cubeObject[i].transform->SetLocalRotation(cml::quatf(0, 0, 1, 0.7));
-			
-			
-			//model.rotate(cml::vec3f((0), (0), (1)), (float)1/10.0f);
-			//model.rotate(cml::vec3f((1), (0), (0)), 0.1);
-			
-
-
-			//cubeObject[i].transform->SetLocalPosition(glm::vec3(i, sin(-timeish), i+1));
+		
+			cubeObject[i].transform->SetLocalRotation(timeish, glm::vec3(0,1,0));
+			cubeObject[i].transform->Translate(glm::vec3(0, 0, 0));
 			cubeObject[i].transform->SetLocalScale(glm::vec3(1, sin(timeish) + 1, 1));
 			cubeObject[i].Draw(view);
 		}

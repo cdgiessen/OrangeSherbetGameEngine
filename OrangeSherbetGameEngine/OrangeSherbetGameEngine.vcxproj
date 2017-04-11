@@ -161,6 +161,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\AllocatorPool.cpp" />
@@ -176,6 +178,8 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="src\AssetManager.h" />
     <ClInclude Include="src\AllocatorPool.h" />
     <ClInclude Include="src\Camera.h" />
