@@ -11,6 +11,7 @@ out vec2 texturePos;
 out vec3 fragmentPos;
 out vec3 normalDir;
 
+out vec3 LightIntensity;
 
 void main()
 {
@@ -18,4 +19,13 @@ void main()
 	fragmentPos = vec3(model * vec4(position, 1.0f));
 	normalDir = mat3(transpose(inverse(model))) * normal;
 	texturePos = textureCoord;
+
+	vec3 tnorm = normalize( normalDir * normal);
+
+	vec4 eyeCoords = model * vec4(position, 1.0);
+
+	vec3 s = normalize(vec3(vec3(0,5,0) - eyeCoords));
+
+	// The diffuse shading equation
+	LightIntensity = vec3(1,1,1) * vec3(1,1,1) * max( dot( s, tnorm ), 0.0 );
 }

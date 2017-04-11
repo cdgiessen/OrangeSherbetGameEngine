@@ -41,6 +41,8 @@ in vec3 fragmentPos;
 in vec3 normal;
 in vec2 texturePos;
 
+in vec3 LightIntensity;
+
 out vec4 color;
 
 uniform vec3 viewPos;
@@ -58,7 +60,7 @@ uniform SpotLight spotLight;
 void main() {
 	
 	vec3 result = vec3(texture(t_albedo, texturePos));
-	color = vec4(result, 1.0f);
+	color = vec4(LightIntensity*result, 1.0f);
 
 
 }
