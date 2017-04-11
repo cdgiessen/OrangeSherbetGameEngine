@@ -1,4 +1,4 @@
-#version 330 core
+#version 400 core
 
 struct Material {
     vec3 ambient;
@@ -51,7 +51,9 @@ uniform sampler2D t_diffuse;
 uniform sampler2D t_specular;
 uniform sampler2D t_normal;
 
-uniform PointLight pointLights[12];
+uniform PointLight pointLights[5];
+uniform DirLight dirlight;
+uniform SpotLight spotLight;
 
 void main() {
 	

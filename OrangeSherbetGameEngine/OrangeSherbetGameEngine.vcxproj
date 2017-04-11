@@ -161,6 +161,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GLSLProgram.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\AllocatorPool.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GLSLProgram.h" />
     <ClInclude Include="src\AssetManager.h" />
     <ClInclude Include="src\AllocatorPool.h" />
     <ClInclude Include="src\Camera.h" />

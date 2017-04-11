@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <map>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -49,41 +50,58 @@ public:
 		const GLchar * fShaderCode = fragmentCode.c_str();
 		
 		// 2. Compile shaders
-		GLuint vertex, fragment;
+		GLuint vertexShader, fragmentShader;
 		GLint success;
 		GLchar infoLog[512];
 		
 		// Vertex Shader
-		vertex = glCreateShader(GL_VERTEX_SHADER);
-		
-		glShaderSource(vertex, 1, &vShaderCode, NULL);
-		glCompileShader(vertex);
+		vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		if (0 == vertexShader)
+		{
+			fprintf(stderr, "ERROR::SHADER::VERTEX::CREATION_FAILED\n");
+			exit(1);
+		}
+
+		glShaderSource(vertexShader, 1, &vShaderCode, NULL);
+		glCompileShader(vertexShader);
 		
 		// Print compile errors if any
-		glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
-			glGetShaderInfoLog(vertex, 512, NULL, infoLog);
+			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		}
 		
 		// Fragment Shader
-		fragment = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragment, 1, &fShaderCode, NULL);
-		glCompileShader(fragment);
+		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		if (0 == fragmentShader)
+		{
+			fprintf(stderr, "ERROR::SHADER::FRAGMENT::CREATION_FAILED\n");
+			exit(1);
+		}
+
+		glShaderSource(fragmentShader, 1, &fShaderCode, NULL);
+		glCompileShader(fragmentShader);
 		
 		// Print compile errors if any
-		glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
-			glGetShaderInfoLog(fragment, 512, NULL, infoLog);
+			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 			std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 		}
 		
 		// Shader Program
 		this->Program = glCreateProgram();
-		glAttachShader(this->Program, vertex);
-		glAttachShader(this->Program, fragment);
+		if (0 == this->Program)
+		{
+			fprintf(stderr, "ERROR::SHADER::PROGRAM::CREATION_FAILED.\n");
+			exit(1);
+		}
+
+		glAttachShader(this->Program, vertexShader);
+		glAttachShader(this->Program, fragmentShader);
 		glLinkProgram(this->Program);
 		
 		// Print linking errors if any
@@ -95,8 +113,8 @@ public:
 		}
 		
 		// Delete the shaders as they're linked into our program now and no longer necessery
-		glDeleteShader(vertex);
-		glDeleteShader(fragment);
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
 
 	}
 	// Uses the current shader
@@ -106,4 +124,4 @@ public:
 	}
 };
 
-#endif
+#endif //SHADER_H
