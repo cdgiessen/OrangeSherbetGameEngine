@@ -48,8 +48,20 @@ void Transform::SetLocalRotation(const float angle, const glm::vec3 &axis) {
 	rotation = glm::angleAxis(angle, axis);
 }
 
-void SetLocalRotation(const glm::vec3 &eulerAngles) {
-	//rotation = glm::mat4_cast(glm::orientate4(eulerAngles))
+void Transform::SetLocalRotation(const glm::vec3 &eulerAngles) {
+	glm::quat rotX = glm::angleAxis(eulerAngles.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::quat rotY = glm::angleAxis(eulerAngles.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::quat rotZ = glm::angleAxis(eulerAngles.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	rotation = rotZ * rotY * rotX;
+}
+
+void Transform::SetLocalRotation(const float x, const float y, const float z) {
+	glm::quat rotX = glm::angleAxis(x, glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::quat rotY = glm::angleAxis(y, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::quat rotZ = glm::angleAxis(z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	rotation = rotZ * rotY * rotX;
 }
 
 glm::vec3 Transform::GetLocalScale() {

@@ -47,6 +47,8 @@ public:
 	
 	void SetLocalRotation(const glm::vec3 &eulerAngles);
 
+	void SetLocalRotation(const float x, const float y, const float z);
+
 	glm::vec3 GetLocalScale();
 
 	const glm::vec3& GetLocalScale() const;
