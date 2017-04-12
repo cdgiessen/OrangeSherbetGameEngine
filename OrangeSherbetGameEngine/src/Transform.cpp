@@ -46,6 +46,7 @@ void Transform::SetLocalRotation(const  glm::quat val) {
 
 void Transform::SetLocalRotation(const float angle, const glm::vec3 &axis) {
 	rotation = glm::angleAxis(angle, axis);
+	isDirty = true;
 }
 
 void Transform::SetLocalRotation(const glm::vec3 &eulerAngles) {
@@ -54,6 +55,7 @@ void Transform::SetLocalRotation(const glm::vec3 &eulerAngles) {
 	glm::quat rotZ = glm::angleAxis(eulerAngles.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	rotation = rotZ * rotY * rotX;
+	isDirty = true;
 }
 
 void Transform::SetLocalRotation(const float x, const float y, const float z) {
@@ -62,6 +64,7 @@ void Transform::SetLocalRotation(const float x, const float y, const float z) {
 	glm::quat rotZ = glm::angleAxis(z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	rotation = rotZ * rotY * rotX;
+	isDirty = true;
 }
 
 glm::vec3 Transform::GetLocalScale() {

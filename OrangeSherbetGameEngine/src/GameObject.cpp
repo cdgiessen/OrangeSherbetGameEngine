@@ -24,7 +24,6 @@ void GameObject::Draw(glm::mat4 newViewMatrix) {
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->GetMatrix()));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(transform->GetViewMatrix()));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(transform->GetProjectionMatrix()));
-	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, cml::mat4f::value_ptr(transform->GetViewMatrix()));
 
 	mesh->Draw(*shader);
 }

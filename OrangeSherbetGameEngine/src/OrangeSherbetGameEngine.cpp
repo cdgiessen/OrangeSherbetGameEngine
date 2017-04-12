@@ -12,6 +12,8 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
+#include "MeshPrimitives.h"
+
 //#include "CML\cml.h"
 //#include "CML\mat4.h"
 
@@ -124,38 +126,53 @@ void OrangeSherbetGameEngine::TempRun() {
 		exit(1);
 	}
 
-	for (const auto& shape : cubeShapes) {
-		for (const auto& index : shape.mesh.indices) {
-			Vertex vertex = {};
+	//for (const auto& shape : cubeShapes) {
+	//	for (const auto& index : shape.mesh.indices) {
+	//		Vertex vertex = {};
 
-			vertex.Position = {
-				cubeAttrib.vertices[3 * index.vertex_index + 0],
-				cubeAttrib.vertices[3 * index.vertex_index + 1],
-				cubeAttrib.vertices[3 * index.vertex_index + 2]
-			};
+	//		vertex.Position = {
+	//			cubeAttrib.vertices[3 * index.vertex_index + 0],
+	//			cubeAttrib.vertices[3 * index.vertex_index + 1],
+	//			cubeAttrib.vertices[3 * index.vertex_index + 2]
+	//		};
 
-			vertex.TexCoords = {
-				cubeAttrib.texcoords[2 * index.texcoord_index + 0],
-				1.0f - cubeAttrib.texcoords[2 * index.texcoord_index + 1]
-			};
+	//		vertex.TexCoords = {
+	//			cubeAttrib.texcoords[2 * index.texcoord_index + 0],
+	//			1.0f - cubeAttrib.texcoords[2 * index.texcoord_index + 1]
+	//		};
 
-			vertex.Normal = {
-				cubeAttrib.vertices[3 * index.normal_index + 0],
-				cubeAttrib.vertices[3 * index.normal_index + 1],
-				cubeAttrib.vertices[3 * index.normal_index + 2]
-			};
+	//		vertex.Normal = {
+	//			cubeAttrib.vertices[3 * index.normal_index + 0],
+	//			cubeAttrib.vertices[3 * index.normal_index + 1],
+	//			cubeAttrib.vertices[3 * index.normal_index + 2]
+	//		};
 
-			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
+	//		//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
 
-			cubeVertices.push_back(vertex);
+	//		cubeVertices.push_back(vertex);
 
-			//cubeIndices.push_back(cubeVertices[vertex]);
-		}
+	//		//cubeIndices.push_back(cubeVertices[vertex]);
+	//	}	
+	//}
+	int counter = 0;
+	for (int i = 0; i < 36; i++){
+		Vertex vertex = {};
+		vertex.Position = { MeshPrimitives::cube[counter++],
+			MeshPrimitives::cube[counter++], 
+			MeshPrimitives::cube[counter++] };
 
+		vertex.Normal= { MeshPrimitives::cube[counter++],
+			MeshPrimitives::cube[counter++],
+			MeshPrimitives::cube[counter++] };
 		
+		int num = counter;
+		vertex.TexCoords = { (1.0f-MeshPrimitives::cube[num]),
+			(MeshPrimitives::cube[num + 1])};
+		counter += 2;
+		cubeVertices.push_back(vertex);
 	}
 
-	cubeTexture = new Texture("Assets/Models/cube/default.png", 128, 128, (TextureType)0);
+	cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
 	Material* cMat = new Material(cubeTexture);
 	cubeMesh = new Mesh(cubeVertices, cMat );
 
@@ -167,17 +184,17 @@ void OrangeSherbetGameEngine::TempRun() {
 		Transform(initCameraView, perspectiveProjection),
 		Transform(initCameraView, perspectiveProjection) };
 
-	cubeTransform[0].SetLocalPosition(glm::vec3(0, 0, 0));
+	cubeTransform[0].SetLocalPosition(glm::vec3(3, 0, 0));
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 0.75, 1.5));
 	
-	cubeTransform[1].SetLocalPosition(glm::vec3(0, 1, 1));
+	cubeTransform[1].SetLocalPosition(glm::vec3(0, 0, 3));
 	
-	cubeTransform[2].SetLocalPosition(glm::vec3(0, 2, 0));
-	cubeTransform[3].SetLocalPosition(glm::vec3(0, 4, 0));
+	cubeTransform[2].SetLocalPosition(glm::vec3(0, 3, 0));
+	cubeTransform[3].SetLocalPosition(glm::vec3(0, -3, 0));
 	
-	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, 5));
+	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, -3));
 	
-	cubeTransform[5].SetLocalPosition(glm::vec3(0, 0, -5));
+	cubeTransform[5].SetLocalPosition(glm::vec3(-3, 0, 0));
 
 	//m5.rotate(cml::vec3f(0, 0, 1), 0);
 	//m5.scale(cml::vec3f(1, 2, 1));
@@ -230,10 +247,13 @@ void OrangeSherbetGameEngine::TempRun() {
 				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
 			};
 			
+			
+			vertex.Normal = { vertex.Position.x, vertex.Position.y, vertex.Position.z };
+
 			//vertex.Normal = {
-			//	attrib.vertices[3 * index.normal_index + 0],
-			//	attrib.vertices[3 * index.normal_index + 1],
-			//	attrib.vertices[3 * index.normal_index + 2]
+			//	attrib.normals[3 * index.normal_index + 0],
+			//	attrib.normals[3 * index.normal_index + 1],
+			//	attrib.normals[3 * index.normal_index + 2]
 			//};
 			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
 
@@ -282,12 +302,12 @@ void OrangeSherbetGameEngine::TempRun() {
 			
 			
 			//model.rotate(cml::vec3f((0), (0), (1)), (float)1/10.0f);
-			cubeObject[i].transform->SetLocalRotation(0.1f*i, timeish, 0);
+			cubeObject[i].transform->SetLocalRotation(45, timeish/3, 0);
 			
 
 
 			//cubeObject[i].transform->SetLocalPosition(glm::vec3(i, sin(-timeish), i+1));
-			cubeObject[i].transform->SetLocalScale(glm::vec3(1, sin(timeish) + 1, 1));
+			//cubeObject[i].transform->SetLocalScale(glm::vec3(1, sin(timeish)/2 + 1, 1));
 			cubeObject[i].Draw(view);
 		}
 
