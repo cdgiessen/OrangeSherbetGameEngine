@@ -10,22 +10,13 @@ uniform mat4 projection;
 out vec2 texturePos;
 out vec3 fragmentPos;
 out vec3 normalDir;
-
-out vec3 LightIntensity;
+out vec3 lightPos;
 
 void main()
 {
     gl_Position = projection * view * model * vec4(position, 1.0f); 
-	fragmentPos = vec3(model * vec4(position, 1.0f));
-	normalDir = mat3(transpose(inverse(model))) * normal;
+	fragmentPos = vec3(view * model * vec4(position, 1.0f));
+	normalDir = mat3(transpose(inverse(view * model))) * normal;
 	texturePos = textureCoord;
-
-	vec3 tnorm = normalize( normalDir * normal);
-
-	vec4 eyeCoords = model * vec4(position, 1.0);
-
-	vec3 s = normalize(vec3(vec3(0,5,0) - eyeCoords));
-
-	// The diffuse shading equation
-	LightIntensity = vec3(1,1,1) * vec3(1,1,1) * max( dot( s, tnorm ), 0.0 );
+	lightPos = vec3(view * vec4(0.0f, 0.0f, 0.0f, 1.0)); // Transform world-space light position to view-space light position
 }
