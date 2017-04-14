@@ -80,6 +80,11 @@ void Transform::SetLocalScale(const glm::vec3 val) {
 	isDirty = true;
 }
 
+void Transform::SetLocalScale(const float x, const float y, const float z) {
+	scale = glm::vec3(x,y,z);
+	isDirty = true;
+}
+
 
 glm::mat4 Transform::GetMatrix() {
 	if (isDirty)

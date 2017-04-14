@@ -185,11 +185,13 @@ void OrangeSherbetGameEngine::TempRun() {
 		Transform(initCameraView, perspectiveProjection) };
 
 	cubeTransform[0].SetLocalPosition(glm::vec3(3, 0, 0));
-	cubeTransform[0].SetLocalScale(glm::vec3(1, 0.75, 1.5));
+	cubeTransform[0].SetLocalScale(glm::vec3(1, 1, 1.5));
 	
 	cubeTransform[1].SetLocalPosition(glm::vec3(0, 0, 3));
 	
 	cubeTransform[2].SetLocalPosition(glm::vec3(0, 3, 0));
+	cubeTransform[2].SetLocalScale(glm::vec3(3, 1, 3));
+
 	cubeTransform[3].SetLocalPosition(glm::vec3(0, -3, 0));
 	
 	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, -3));
@@ -277,6 +279,8 @@ void OrangeSherbetGameEngine::TempRun() {
 	// Main Game loop
 	while (!glfwWindowShouldClose(window->getGLFWWindow()))
 	{
+		if (inputManager->GetKey(70)) //speed up time. Literally.
+			timeish += 0.016f * 5;
 		timeish += 0.016f;
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
@@ -297,20 +301,20 @@ void OrangeSherbetGameEngine::TempRun() {
 		glm::mat4 view = camera.GetViewMatrix();
 
 		//RENDER
+		cubeObject[0].transform->SetLocalRotation(45, timeish, 0);
+		cubeObject[1].transform->SetLocalRotation(270, timeish, 45);
+		cubeObject[2].transform->SetLocalRotation(0, timeish/4, 0);
+		cubeObject[2].transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(timeish*1.5f) * 1, 0));
+		cubeObject[3].transform->SetLocalRotation(45, timeish*1.5f, 0);
+		cubeObject[4].transform->SetLocalRotation(timeish*3.0f, timeish*1.667f , 0);
+		cubeObject[5].transform->SetLocalRotation(timeish, timeish *2, timeish/1.5f);
+		
 		for (int i = 0; i < 6; i++) {
-			//cubeObject[i].transform->SetLocalRotation(cml::quatf(0, 0, 1, 0.7));
-			
-			
-			//model.rotate(cml::vec3f((0), (0), (1)), (float)1/10.0f);
-			cubeObject[i].transform->SetLocalRotation(45, timeish/3, 0);
-			
-
-
-			//cubeObject[i].transform->SetLocalPosition(glm::vec3(i, sin(-timeish), i+1));
-			//cubeObject[i].transform->SetLocalScale(glm::vec3(1, sin(timeish)/2 + 1, 1));
 			cubeObject[i].Draw(view);
 		}
 
+		teapot.transform->SetLocalRotation(0, timeish*5, 0);
+		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish*10)/3), 0.01f);
 		//teapot.transform->
 		teapot.Draw(view);
 

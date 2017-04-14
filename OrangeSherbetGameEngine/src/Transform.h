@@ -54,7 +54,7 @@ public:
 	const glm::vec3& GetLocalScale() const;
 
 	void SetLocalScale(const glm::vec3 val);
-
+	void SetLocalScale(const float x, const float y, const float z);
 
 	glm::mat4 GetMatrix();
 

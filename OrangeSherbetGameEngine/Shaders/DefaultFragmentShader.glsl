@@ -62,16 +62,16 @@ void main() {
     vec3 lightDir = normalize(lightPos - fragmentPos);
 	
 	//ambient
-	float ambientStrength = 0.1f;
+	float ambientStrength = 0.05f;
     vec3 ambient = ambientStrength * vec3(1,1,1);
 	
 	//diffuse
-	float diffuseStrength = 1.0f;
+	float diffuseStrength = 0.5f;
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * vec3(1,1,1);
 
 	//specular
-	float specularStrength = 0.0f;
+	float specularStrength = 0.5f;
     vec3 viewDir = normalize(-fragmentPos); // The viewer is at (0,0,0) so viewDir is (0,0,0) - Position => -Position
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);

@@ -1,7 +1,7 @@
 #version 400 core
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 normal;
-layout (location = 2) in vec2 textureCoord;
+layout (location = 0) in vec3 VertexPosition;
+layout (location = 1) in vec3 VertexNormal;
+layout (location = 2) in vec2 VertexTexturePosition;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -12,11 +12,18 @@ out vec3 fragmentPos;
 out vec3 normalDir;
 out vec3 lightPos;
 
+//void getEyeSpace( out vec3 norm, out vec4 position )
+//{
+//	norm = normalize( mat3(transpose(inverse(view * model))) * normal);
+//	position = view * model * vec4(VertexPosition,1.0);
+//}
+
 void main()
 {
-    gl_Position = projection * view * model * vec4(position, 1.0f); 
-	fragmentPos = vec3(view * model * vec4(position, 1.0f));
-	normalDir = mat3(transpose(inverse(view * model))) * normal;
-	texturePos = textureCoord;
-	lightPos = vec3(view * vec4(0.0f, 0.0f, 0.0f, 1.0)); // Transform world-space light position to view-space light position
+    gl_Position = projection * view * model * vec4(VertexPosition, 1.0f); 
+	fragmentPos = vec3(view * model * vec4(VertexPosition, 1.0f));
+	normalDir = mat3(transpose(inverse(view * model))) * VertexNormal;
+	texturePos = VertexTexturePosition;
+
+	lightPos = vec3(view * vec4(0.5f, 1.5f, 0.0f, 1.0)); // Transform world-space light position to view-space light position
 }
