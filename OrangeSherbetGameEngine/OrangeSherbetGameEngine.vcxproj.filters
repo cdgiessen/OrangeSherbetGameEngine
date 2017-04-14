@@ -127,15 +127,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Models\cube\default.mtl" />
+    <None Include="Assets\Models\teapot\default.mtl" />
+    <None Include="Assets\Models\teapot\teapot.max" />
     <None Include="Shaders\DefaultFragmentShader.glsl">
       <Filter>Resource Files\DefaultShaders</Filter>
     </None>
     <None Include="Shaders\DefaultVertexShader.glsl">
       <Filter>Resource Files\DefaultShaders</Filter>
     </None>
-    <None Include="Assets\Models\cube\default.mtl" />
-    <None Include="Assets\Models\teapot\default.mtl" />
-    <None Include="Assets\Models\teapot\teapot.max" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Images\SolidColorCube.png">
