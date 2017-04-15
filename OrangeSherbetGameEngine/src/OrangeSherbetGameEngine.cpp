@@ -125,55 +125,62 @@ void OrangeSherbetGameEngine::TempRun() {
 		exit(1);
 	}
 
-	//for (const auto& shape : cubeShapes) {
-	//	for (const auto& index : shape.mesh.indices) {
-	//		Vertex vertex = {};
+	std::unordered_map<Vertex, int> uniqueCubeVertices = {};
 
-	//		vertex.Position = {
-	//			cubeAttrib.vertices[3 * index.vertex_index + 0],
-	//			cubeAttrib.vertices[3 * index.vertex_index + 1],
-	//			cubeAttrib.vertices[3 * index.vertex_index + 2]
-	//		};
+	for (const auto& shape : cubeShapes) {
+		for (const auto& index : shape.mesh.indices) {
+			Vertex vertex = {};
 
-	//		vertex.TexCoords = {
-	//			cubeAttrib.texcoords[2 * index.texcoord_index + 0],
-	//			1.0f - cubeAttrib.texcoords[2 * index.texcoord_index + 1]
-	//		};
+			vertex.Position = {
+				cubeAttrib.vertices[3 * index.vertex_index + 0],
+				cubeAttrib.vertices[3 * index.vertex_index + 1],
+				cubeAttrib.vertices[3 * index.vertex_index + 2]
+			};
 
-	//		vertex.Normal = {
-	//			cubeAttrib.vertices[3 * index.normal_index + 0],
-	//			cubeAttrib.vertices[3 * index.normal_index + 1],
-	//			cubeAttrib.vertices[3 * index.normal_index + 2]
-	//		};
+			vertex.TexCoords = {
+				cubeAttrib.texcoords[2 * index.texcoord_index + 0],
+				1.0f - cubeAttrib.texcoords[2 * index.texcoord_index + 1]
+			};
 
-	//		//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
+			vertex.Normal = {
+				cubeAttrib.vertices[3 * index.normal_index + 0],
+				cubeAttrib.vertices[3 * index.normal_index + 1],
+				cubeAttrib.vertices[3 * index.normal_index + 2]
+			};
 
-	//		cubeVertices.push_back(vertex);
+			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
 
-	//		//cubeIndices.push_back(cubeVertices[vertex]);
-	//	}	
-	//}
-	int counter = 0;
-	for (int i = 0; i < 36; i++){
-		Vertex vertex = {};
-		vertex.Position = { MeshPrimitives::cube[counter++],
-			MeshPrimitives::cube[counter++], 
-			MeshPrimitives::cube[counter++] };
+			if (uniqueCubeVertices.count(vertex) == 0) {
+				uniqueCubeVertices[vertex] = cubeVertices.size();
+				cubeVertices.push_back(vertex);
+			}
 
-		vertex.Normal= { MeshPrimitives::cube[counter++],
-			MeshPrimitives::cube[counter++],
-			MeshPrimitives::cube[counter++] };
-		
-		int num = counter;
-		vertex.TexCoords = { (1.0f-MeshPrimitives::cube[num]),
-			(MeshPrimitives::cube[num + 1])};
-		counter += 2;
-		cubeVertices.push_back(vertex);
+			cubeIndices.push_back(uniqueCubeVertices[vertex]);
+
+			//cubeIndices.push_back(cubeVertices[vertex]);
+		}	
 	}
+	//int counter = 0;
+	//for (int i = 0; i < 36; i++){
+	//	Vertex vertex = {};
+	//	vertex.Position = { MeshPrimitives::cube[counter++],
+	//		MeshPrimitives::cube[counter++], 
+	//		MeshPrimitives::cube[counter++] };
+	//
+	//	vertex.Normal= { MeshPrimitives::cube[counter++],
+	//		MeshPrimitives::cube[counter++],
+	//		MeshPrimitives::cube[counter++] };
+	//	
+	//	int num = counter;
+	//	vertex.TexCoords = { (1.0f-MeshPrimitives::cube[num]),
+	//		(MeshPrimitives::cube[num + 1])};
+	//	counter += 2;
+	//	cubeVertices.push_back(vertex);
+	//}
 
 	cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
 	Material* cMat = new Material(cubeTexture);
-	cubeMesh = new Mesh(cubeVertices, cMat );
+	cubeMesh = new Mesh(cubeVertices, cubeIndices, cMat );
 
 	Transform cubeTransform[6]{ 
 		Transform(initCameraView, perspectiveProjection),
@@ -233,6 +240,8 @@ void OrangeSherbetGameEngine::TempRun() {
 		exit(1);
 	}
 
+	std::unordered_map<Vertex, int> uniqueVertices = {};
+
 	for (const auto& shape : shapes) {
 		for (const auto& index : shape.mesh.indices) {
 			Vertex vertex = {};
@@ -251,21 +260,21 @@ void OrangeSherbetGameEngine::TempRun() {
 			
 			vertex.Normal = { vertex.Position.x, vertex.Position.y, vertex.Position.z };
 
-			//vertex.Normal = {
-			//	attrib.normals[3 * index.normal_index + 0],
-			//	attrib.normals[3 * index.normal_index + 1],
-			//	attrib.normals[3 * index.normal_index + 2]
-			//};
 			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
 
-			teapotVertices.push_back(vertex);
+			if (uniqueVertices.count(vertex) == 0) {
+				uniqueVertices[vertex] = teapotVertices.size();
+				teapotVertices.push_back(vertex);
+			}
+
+			teapotIndices.push_back(uniqueVertices[vertex]);
 		}
 	}
 
 
 	Texture* teapotTexture = new Texture("Assets/Models/teapot/colorful.png", 128, 128, (TextureType)0);
 	Material* tMat = new Material(teapotTexture);
-	Mesh* teapotMesh = new Mesh(teapotVertices, tMat);
+	Mesh* teapotMesh = new Mesh(teapotVertices,teapotIndices, tMat);
 	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
 	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
 
@@ -312,8 +321,8 @@ void OrangeSherbetGameEngine::TempRun() {
 			cubeObject[i].Draw(view);
 		}
 
-		teapot.transform->SetLocalRotation(0, timeish*5, 0);
-		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish*10)/3), 0.01f);
+		teapot.transform->SetLocalRotation(0, timeish, 0);
+		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish)/3), 0.01f);
 		//teapot.transform->
 		teapot.Draw(view);
 
