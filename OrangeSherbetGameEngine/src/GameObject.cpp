@@ -41,6 +41,7 @@ void GameObject::Draw(glm::mat4 newViewMatrix) {
 	//
 	//glBindBufferBase(GL_UNIFORM_BUFFER, blockIndex, uboHandle);
 
+	/*
 	GLint modelLoc = glGetUniformLocation(shader->getHandle(), "model");
 	GLint viewLoc = glGetUniformLocation(shader->getHandle(), "view");
 	GLint projLoc = glGetUniformLocation(shader->getHandle(), "proj");
@@ -48,7 +49,10 @@ void GameObject::Draw(glm::mat4 newViewMatrix) {
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->GetMatrix()));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(transform->GetViewMatrix()));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(transform->GetProjectionMatrix()));
-
+	*/
+	shader->setUniform("model", (transform->GetMatrix()));
+	shader->setUniform("view", (transform->GetViewMatrix()));
+	shader->setUniform("proj", (transform->GetProjectionMatrix()));
 	mesh->Draw(shader);
 
 }

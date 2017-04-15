@@ -72,12 +72,12 @@ void main() {
     vec3 diffuse = diff * vec3(1,1,1);
 
 	//specular
-	float specularStrength = 0.5f;
+	float specularStrength = 1.0f;
     vec3 viewDir = normalize(-fragmentPos); // The viewer is at (0,0,0) so viewDir is (0,0,0) - Position => -Position
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specularStrength * spec * vec3(1,1,1); 
-
+    vec3 specular = specularStrength * vec3(texture(t_specular, texturePos)) * spec * vec3(1,1,1); 
+	
 	vec3 result = (ambient + diffuse + specular) * albedoColor;
 	color = vec4(result, 1.0f);
 

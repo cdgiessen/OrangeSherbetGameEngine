@@ -13,6 +13,8 @@ class Material
 {
 public:
 	Material(Texture* albedo);
+	Material(Texture* albedo, Texture* specular);
+	Material(Texture* albedo, Texture* specular, Texture* normal, Texture* emissive, Texture* height);
 	~Material();
 
 	Texture* GetAlbedoTexture();

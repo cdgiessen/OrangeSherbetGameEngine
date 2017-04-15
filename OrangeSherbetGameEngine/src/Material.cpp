@@ -1,9 +1,16 @@
 #include "Material.h"
 
-Material::Material(Texture* albedo) : albedoTex(albedo)
+Material::Material(Texture* albedo, Texture* specular, Texture* normal, Texture* emissive, Texture* height) : albedoTex(albedo), specularTex(specular), normalTex(normal), emissiveTex(emissive), heightTex(height)
 {
 }
 
+Material::Material(Texture* albedo, Texture* specular) : albedoTex(albedo), specularTex(specular), normalTex(nullptr), emissiveTex(nullptr), heightTex(nullptr)
+{
+}
+
+Material::Material(Texture* albedo) : albedoTex(albedo), specularTex(nullptr), normalTex(nullptr), emissiveTex(nullptr), heightTex(nullptr)
+{
+}
 
 Material::~Material()
 {

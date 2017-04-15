@@ -113,7 +113,8 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	//cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
 	cubeTexture = new Texture("Assets/Models/Cube/default.png", 128, 128, (TextureType)0);
-	Material* cMat = new Material(cubeTexture);
+	Texture* specCubeTex = new Texture("Assets/Models/Cube/specular.png", 128, 128, (TextureType)1);
+	Material* cMat = new Material(cubeTexture, specCubeTex);
 	cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
 
 	Transform cubeTransform[6]{ 
@@ -251,14 +252,14 @@ void OrangeSherbetGameEngine::TempRun() {
 		cubeObject[4].transform->SetLocalRotation(timeish*3.0f, timeish*1.667f , 0);
 		cubeObject[5].transform->SetLocalRotation(timeish, timeish *2, timeish/1.5f);
 		
-		for (int i = 0; i < 6; i++) {
-			cubeObject[i].Draw(view);
-		}
+		//for (int i = 0; i < 6; i++) {
+		//	cubeObject[i].Draw(view);
+		//}
 
 		teapot.transform->SetLocalRotation(0, timeish, 0);
 		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish)/3), 0.01f);
 		//teapot.transform->
-		teapot.Draw(view);
+		//teapot.Draw(view);
 
 		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
 

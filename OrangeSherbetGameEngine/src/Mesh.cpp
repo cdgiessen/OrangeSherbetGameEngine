@@ -123,31 +123,51 @@ void Mesh::Draw(GLSLProgram* shader)
 	
 		glActiveTexture(GL_TEXTURE0 + 0); // Active proper texture unit before binding
 		// Retrieve texture number (the N in diffuse_textureN)
-		std::stringstream ss;
-		std::string name;
-		TextureType type = material->GetAlbedoTexture()->GetTextureType();
-		switch (type) {
-		case (0) :
-			name = "t_albedo"; break;
-		case (1) :
-			name = "t_diffuse"; break;
-		case (2) :
-			name = "t_specular"; break;
-		case (3) :
-			name = "t_normal"; break;
-		case (4) :
-			name = "t_emmision"; break;
-		default : 
-			std::cout << "ERROR :: Couldn't find appropriate case" << std::endl;
-		}
-		// Now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader->getHandle(), (name).c_str()), 0);
-		// And finally bind the texture
-		glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
+		//std::stringstream ss;
+		//std::string name;
+		//TextureType type = material->GetAlbedoTexture()->GetTextureType();
+		//switch (type) {
+		//case (0) :
+		//	name = "t_albedo"; break;
+		//case (1) :
+		//	name = "t_diffuse"; break;
+		//case (2) :
+		//	name = "t_specular"; break;
+		//case (3) :
+		//	name = "t_normal"; break;
+		//case (4) :
+		//	name = "t_emmision"; break;
+		//default : 
+		//	std::cout << "ERROR :: Couldn't find appropriate case" << std::endl;
+		//}
+		//// Now set the sampler to the correct texture unit
+		//glUniform1i(glGetUniformLocation(shader->getHandle(), (name).c_str()), 0);
+		//// And finally bind the texture
+		//glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
 	
-
+	if (material->GetAlbedoTexture() != nullptr) {
+		glActiveTexture(GL_TEXTURE0 + 0);
+		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_albedo"), 0);
+		glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
+	}
+	if (material->GetSpecularTexture() != nullptr) {
+		glActiveTexture(GL_TEXTURE0 + 1);
+		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_specular"), 1);
+		glBindTexture(GL_TEXTURE_2D, material->GetSpecularTexture()->GetTextureID());
+	}
+	if (material->GetNormalTexture() != nullptr) {
+		glActiveTexture(GL_TEXTURE0 + 2);
+		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_normal"), 2);
+		glBindTexture(GL_TEXTURE_2D, material->GetNormalTexture()->GetTextureID());
+	}
+	if (material->GetEmissiveTexture() != nullptr) {
+		glActiveTexture(GL_TEXTURE0 + 3);
+		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_emmision"), 3);
+		glBindTexture(GL_TEXTURE_2D, material->GetEmissiveTexture()->GetTextureID());
+	}
 	//Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
-	glUniform1f(glGetUniformLocation(shader->getHandle(), "material.shininess"), 16.0f);
+	shader->setUniform("material.shinyness", 16.0f);
+	//glUniform1f(glGetUniformLocation(shader->getHandle(), "material.shininess"), 16.0f);
 	
 	// Draw mesh
 	glBindVertexArray(this->VAO);
