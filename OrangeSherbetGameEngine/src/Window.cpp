@@ -35,24 +35,25 @@ Window::Window(int width, int height, bool fullscreen, char *title) : width(widt
 
 	glfwSetCursorPos(window, 0, 0); // Set mouse position to center
 
-	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
-	glewExperimental = GL_TRUE;
-
 	glfwSwapInterval(1);
-
-	// Initialize GLEW to setup the OpenGL Function pointers
-	GLenum err = glewInit();
-	if (GLEW_OK != err) {
-		fprintf(stderr, "Error initializing GLEW: %s\n", glewGetErrorString(err));
-	}
 
 	// Define the viewport dimensions
 	if (window == NULL) {
 		std::cout << "SHITS ON FIRE YO" << std::endl;
 	}
 	glfwGetFramebufferSize(window, &width, &height);
+	
+	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
+	glewExperimental = GL_TRUE;
 
+	// Initialize GLEW to setup the OpenGL Function pointers
+	GLenum err = glewInit();
+	if (GLEW_OK != err) {
+		fprintf(stderr, "Error initializing GLEW: %s\n", glewGetErrorString(err));
+	}
+	
 	glViewport(0, 0, width, height);
+
 	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_CULL_FACE);

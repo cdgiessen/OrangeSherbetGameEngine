@@ -35,13 +35,6 @@ struct SpotLight {
     vec3 color;       
 }; 
 
-in vec3 fragmentPos;
-in vec3 normalDir;
-in vec2 texturePos;
-in vec3 lightPos;
-
-out vec4 color;
-
 uniform vec3 viewPos;
 uniform Material material;
 
@@ -53,6 +46,14 @@ uniform sampler2D t_normal;
 uniform PointLight pointLights[5];
 uniform DirLight dirlight[5];
 uniform SpotLight spotLights[5];
+
+in vec3 fragmentPos;
+in vec3 normalDir;
+in vec2 texturePos;
+in vec3 lightPos;
+
+out vec4 color;
+
 
 void main() {
 	

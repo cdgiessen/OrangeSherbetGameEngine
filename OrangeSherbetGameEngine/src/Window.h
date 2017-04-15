@@ -22,6 +22,7 @@ public:
 	void close();
 
 private:
+
 	int height;                     // Height of window
 	int width;                      // Width of window
 	bool fullscreen;                // Is window fullscreen?

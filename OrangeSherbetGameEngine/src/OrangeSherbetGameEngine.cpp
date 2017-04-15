@@ -36,6 +36,14 @@ Texture* cubeTexture;
 Mesh* cubeMesh;
 Mesh* quadMesh;
 
+
+OrangeSherbetGameEngine::OrangeSherbetGameEngine() {
+	StartUp();
+}
+
+
+OrangeSherbetGameEngine::~OrangeSherbetGameEngine() {}
+
 // Is called whenever a key is pressed/released via GLFW
 void OrangeSherbetGameEngine::TempKeyboardInput()
 {
@@ -71,23 +79,14 @@ void OrangeSherbetGameEngine::TempMouseButton() { //GLFWwindow* window, int glfw
 
 
 
-OrangeSherbetGameEngine::OrangeSherbetGameEngine()
-{
-	std::cout << "Starting up the Orange Sherbet Game Engine, Version idgaf" << std::endl;
-}
-
-
-OrangeSherbetGameEngine::~OrangeSherbetGameEngine()
-{
-}
-
-
 int OrangeSherbetGameEngine::StartUp() {
+	std::cout << "Starting up the Orange Sherbet Game Engine" << std::endl;
+	
 	window = new Window(WIDTH, HEIGHT, false, "OGSE");
 
 	inputManager = new InputManager(window->getGLFWWindow());
 
-
+	TempRun();
 
 	return 0;
 }
@@ -324,5 +323,5 @@ void OrangeSherbetGameEngine::TempRun() {
 		glfwSwapBuffers(window->getGLFWWindow());
 	}
 
-	
+	ShutDown();
 }
