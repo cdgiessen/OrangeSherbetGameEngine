@@ -2,7 +2,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-GameObject::GameObject(Transform *transform, Mesh *mesh, Shader *shader) : transform(transform), mesh(mesh), shader(shader)
+GameObject::GameObject(Transform *transform, Mesh *mesh, GLSLProgram *shader) : transform(transform), mesh(mesh), shader(shader)
 {
 }
 
@@ -13,7 +13,7 @@ GameObject::~GameObject()
 
 void GameObject::Draw(glm::mat4 newViewMatrix) {
 
-	shader->Use();
+	shader->use();
 
 	transform->SetViewMatrix(newViewMatrix);
 	
@@ -41,14 +41,14 @@ void GameObject::Draw(glm::mat4 newViewMatrix) {
 	//
 	//glBindBufferBase(GL_UNIFORM_BUFFER, blockIndex, uboHandle);
 
-	GLint modelLoc = glGetUniformLocation(shader->Program, "model");
-	GLint viewLoc = glGetUniformLocation(shader->Program, "view");
-	GLint projLoc = glGetUniformLocation(shader->Program, "proj");
+	GLint modelLoc = glGetUniformLocation(shader->getHandle(), "model");
+	GLint viewLoc = glGetUniformLocation(shader->getHandle(), "view");
+	GLint projLoc = glGetUniformLocation(shader->getHandle(), "proj");
 	
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->GetMatrix()));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(transform->GetViewMatrix()));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(transform->GetProjectionMatrix()));
 
-	mesh->Draw(*shader);
+	mesh->Draw(shader);
 
 }

@@ -32,6 +32,7 @@ Camera camera(glm::vec3(-3, 0, 0));
 glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f);
 
 Shader* defaultShader;
+GLSLProgram* shader;
 Texture* cubeTexture;
 Mesh* cubeMesh;
 Mesh* quadMesh;
@@ -103,10 +104,15 @@ int OrangeSherbetGameEngine::ShutDown() {
 
 void OrangeSherbetGameEngine::TempRun() {
 	defaultShader = new Shader("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
+	shader = new GLSLProgram();
+	shader->compileShader("Shaders/DefaultVertexShader.glsl", GLSLShader::VERTEX);
+	shader->compileShader("Shaders/DefaultFragmentShader.glsl", GLSLShader::FRAGMENT);
+	shader->link();
 	glm::mat4 initCameraView(camera.GetViewMatrix());
 	glm::mat4 perspectiveProjection(glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
 
-	cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
+	//cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
+	cubeTexture = new Texture("Assets/Models/Cube/default.png", 128, 128, (TextureType)0);
 	Material* cMat = new Material(cubeTexture);
 	cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
 
@@ -141,12 +147,12 @@ void OrangeSherbetGameEngine::TempRun() {
 	//m6.scale(cml::vec3f(1, 2, 1));
 	//m6.translate(cml::vec3f(-1, 0, 0));	
 
-	GameObject cubeObject[6]{ GameObject(&cubeTransform[0], cubeMesh, defaultShader),
-		GameObject(&cubeTransform[1], cubeMesh, defaultShader),
-		GameObject(&cubeTransform[2], cubeMesh, defaultShader),
-		GameObject(&cubeTransform[3], cubeMesh, defaultShader),
-		GameObject(&cubeTransform[4], cubeMesh, defaultShader),
-		GameObject(&cubeTransform[5], cubeMesh, defaultShader)
+	GameObject cubeObject[6]{ GameObject(&cubeTransform[0], cubeMesh, shader),
+		GameObject(&cubeTransform[1], cubeMesh, shader),
+		GameObject(&cubeTransform[2], cubeMesh, shader),
+		GameObject(&cubeTransform[3], cubeMesh, shader),
+		GameObject(&cubeTransform[4], cubeMesh, shader),
+		GameObject(&cubeTransform[5], cubeMesh, shader)
 	};
 
 	std::vector<Vertex> teapotVertices;
@@ -202,9 +208,9 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	Texture* teapotTexture = new Texture("Assets/Models/teapot/colorful.png", 128, 128, (TextureType)0);
 	Material* tMat = new Material(teapotTexture);
-	Mesh* teapotMesh = new Mesh(teapotVertices,teapotIndices, tMat);
+	Mesh* teapotMesh = new Mesh(teapotVertices, teapotIndices, tMat);
 	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
-	GameObject teapot(teapotTransform, teapotMesh, defaultShader);
+	GameObject teapot(teapotTransform, teapotMesh, shader);
 
 	//cml::mat4f model;
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));

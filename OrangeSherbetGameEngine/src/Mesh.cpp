@@ -118,7 +118,7 @@ void Mesh::setupMesh()
 
 
 // Render the mesh
-void Mesh::Draw(Shader shader)
+void Mesh::Draw(GLSLProgram* shader)
 {
 	
 		glActiveTexture(GL_TEXTURE0 + 0); // Active proper texture unit before binding
@@ -141,13 +141,13 @@ void Mesh::Draw(Shader shader)
 			std::cout << "ERROR :: Couldn't find appropriate case" << std::endl;
 		}
 		// Now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader.Program, (name).c_str()), 0);
+		glUniform1i(glGetUniformLocation(shader->getHandle(), (name).c_str()), 0);
 		// And finally bind the texture
 		glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
 	
 
 	//Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
-	glUniform1f(glGetUniformLocation(shader.Program, "material.shininess"), 16.0f);
+	glUniform1f(glGetUniformLocation(shader->getHandle(), "material.shininess"), 16.0f);
 	
 	// Draw mesh
 	glBindVertexArray(this->VAO);

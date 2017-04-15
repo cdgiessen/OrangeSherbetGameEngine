@@ -11,18 +11,19 @@
 #include "Transform.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include "GLSLProgram.h"
 
 class GameObject
 {
 public:
-	GameObject(Transform *transform, Mesh *mesh, Shader *shader);
+	GameObject(Transform *transform, Mesh *mesh, GLSLProgram *shader);
 	~GameObject();
 
 	void Draw(glm::mat4 newViewMatrix);
 
 	Transform* transform;
 private:
-	Shader* shader;
+	GLSLProgram* shader;
 	Mesh* mesh;
 };
 

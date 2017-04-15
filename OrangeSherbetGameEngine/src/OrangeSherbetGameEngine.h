@@ -14,6 +14,7 @@
 #include "Window.h"
 #include "InputManager.h"
 #include "Shader.h"
+#include "GLSLProgram.h"
 #include "Camera.h"
 #include "Mesh.h"
 

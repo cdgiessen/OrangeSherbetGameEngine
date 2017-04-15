@@ -17,6 +17,7 @@
 //#include <CML\cml.h>
 
 #include "Shader.h"
+#include "GLSLProgram.h"
 #include "Material.h"
 
 //#define TINYOBJLOADER_IMPLEMENTATION
@@ -69,7 +70,7 @@ public:
 	//Constructor for meshes with only a vertex array
 	Mesh(std::vector<Vertex> vertices, Material* materials);
 
-	void Draw(Shader shader); // Render the mesh
+	void Draw(GLSLProgram* shader); // Render the mesh
 
 	void setupMesh(); // Initializes all the buffer objects/arrays
 
