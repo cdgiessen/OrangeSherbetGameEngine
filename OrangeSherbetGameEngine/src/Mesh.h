@@ -11,6 +11,8 @@
 #include <GL\glew.h>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+
+#include <glm/gtx/hash.hpp>
 //#include <CML\cml.h>
 
 #include "Shader.h"
@@ -31,7 +33,22 @@ struct Vertex {
 	}
 
 	Vertex() : Position(glm::vec3(0.0f,0.0f,0.0f)), Normal(glm::vec3(0.0f, 0.0f, 0.0f)), TexCoords(glm::vec2(0.0f, 0.0f)) {}
+
+	bool operator==(const Vertex& other) const {
+		return Position == other.Position && Normal == other.Normal && TexCoords == other.TexCoords;
+	}
 };
+
+//Hash function for indicy uniqueness in model loading.
+namespace std {
+	template<> struct hash<Vertex> {
+		size_t operator()(Vertex const& vertex) const {
+			return ((hash<glm::vec3>()(vertex.Position) ^
+				(hash<glm::vec3>()(vertex.Normal) << 1)) >> 1) ^
+				(hash<glm::vec2>()(vertex.TexCoords) << 1);
+		}
+	};
+}
 
 class Mesh {
 public:
