@@ -106,81 +106,9 @@ void OrangeSherbetGameEngine::TempRun() {
 	glm::mat4 initCameraView(camera.GetViewMatrix());
 	glm::mat4 perspectiveProjection(glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
 
-	std::vector<Vertex> cubeVertices;
-	std::vector<GLuint> cubeIndices;
-
-	std::string cubeinputfile = "Assets/Models/cube/cube.obj";
-	tinyobj::attrib_t cubeAttrib;
-	std::vector<tinyobj::shape_t> cubeShapes;
-	std::vector<tinyobj::material_t> cubeMaterials;
-
-	std::string cerr;
-	bool cret = tinyobj::LoadObj(&cubeAttrib, &cubeShapes, &cubeMaterials, &cerr, cubeinputfile.c_str());
-
-	if (!cerr.empty()) { // `err` may contain warning message.
-		std::cerr << cerr << std::endl;
-	}
-
-	if (!cret) {
-		exit(1);
-	}
-
-	std::unordered_map<Vertex, int> uniqueCubeVertices = {};
-
-	for (const auto& shape : cubeShapes) {
-		for (const auto& index : shape.mesh.indices) {
-			Vertex vertex = {};
-
-			vertex.Position = {
-				cubeAttrib.vertices[3 * index.vertex_index + 0],
-				cubeAttrib.vertices[3 * index.vertex_index + 1],
-				cubeAttrib.vertices[3 * index.vertex_index + 2]
-			};
-
-			vertex.TexCoords = {
-				cubeAttrib.texcoords[2 * index.texcoord_index + 0],
-				1.0f - cubeAttrib.texcoords[2 * index.texcoord_index + 1]
-			};
-
-			vertex.Normal = {
-				cubeAttrib.vertices[3 * index.normal_index + 0],
-				cubeAttrib.vertices[3 * index.normal_index + 1],
-				cubeAttrib.vertices[3 * index.normal_index + 2]
-			};
-
-			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
-
-			if (uniqueCubeVertices.count(vertex) == 0) {
-				uniqueCubeVertices[vertex] = cubeVertices.size();
-				cubeVertices.push_back(vertex);
-			}
-
-			cubeIndices.push_back(uniqueCubeVertices[vertex]);
-
-			//cubeIndices.push_back(cubeVertices[vertex]);
-		}	
-	}
-	//int counter = 0;
-	//for (int i = 0; i < 36; i++){
-	//	Vertex vertex = {};
-	//	vertex.Position = { MeshPrimitives::cube[counter++],
-	//		MeshPrimitives::cube[counter++], 
-	//		MeshPrimitives::cube[counter++] };
-	//
-	//	vertex.Normal= { MeshPrimitives::cube[counter++],
-	//		MeshPrimitives::cube[counter++],
-	//		MeshPrimitives::cube[counter++] };
-	//	
-	//	int num = counter;
-	//	vertex.TexCoords = { (1.0f-MeshPrimitives::cube[num]),
-	//		(MeshPrimitives::cube[num + 1])};
-	//	counter += 2;
-	//	cubeVertices.push_back(vertex);
-	//}
-
 	cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
 	Material* cMat = new Material(cubeTexture);
-	cubeMesh = new Mesh(cubeVertices, cubeIndices, cMat );
+	cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
 
 	Transform cubeTransform[6]{ 
 		Transform(initCameraView, perspectiveProjection),

@@ -1,5 +1,61 @@
 #include "Mesh.h"
 
+Mesh* LoadMesh(std::string inputfile, Material* mat) {
+
+
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+
+	std::string cerr;
+	bool cret = tinyobj::LoadObj(&attrib, &shapes, &materials, &cerr, inputfile.c_str());
+
+	if (!cerr.empty()) { // `err` may contain warning message.
+		std::cerr << cerr << std::endl;
+	}
+
+	if (!cret) {
+		exit(1);
+	}
+
+	std::unordered_map<Vertex, int> uniqueVertices = {};
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+
+	for (const auto& shape : shapes) {
+		for (const auto& index : shape.mesh.indices) {
+			Vertex vertex = {};
+
+			vertex.Position = {
+				attrib.vertices[3 * index.vertex_index + 0],
+				attrib.vertices[3 * index.vertex_index + 1],
+				attrib.vertices[3 * index.vertex_index + 2]
+			};
+
+			vertex.TexCoords = {
+				attrib.texcoords[2 * index.texcoord_index + 0],
+				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+			};
+
+			vertex.Normal = {
+				attrib.vertices[3 * index.normal_index + 0],
+				attrib.vertices[3 * index.normal_index + 1],
+				attrib.vertices[3 * index.normal_index + 2]
+			};
+
+			if (uniqueVertices.count(vertex) == 0) {
+				uniqueVertices[vertex] = vertices.size();
+				vertices.push_back(vertex);
+			}
+
+			indices.push_back(uniqueVertices[vertex]);
+		}
+	}
+	
+	return new Mesh(vertices, indices, mat);
+}
+
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, Material* material)
 {
 	this->vertices = vertices;

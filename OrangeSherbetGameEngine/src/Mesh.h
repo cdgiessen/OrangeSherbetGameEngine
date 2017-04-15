@@ -8,10 +8,11 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <unordered_map>
+
 #include <GL\glew.h>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
-
 #include <glm/gtx/hash.hpp>
 //#include <CML\cml.h>
 
@@ -49,6 +50,9 @@ namespace std {
 		}
 	};
 }
+class Mesh;
+
+Mesh* LoadMesh(std::string inputfile, Material *mat);
 
 class Mesh {
 public:
