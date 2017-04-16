@@ -8,6 +8,8 @@ Window::Window(int width, int height, bool fullscreen, char *title) : width(widt
 	std::cout << "Creating window..." << std::endl;
 	std::cout << "Starting GLFW context, OpenGL 4.0" << std::endl; //for now use a version thats going to work regardless
 
+	w = this;
+
 	if (!glfwInit())    // Init GLFW
 		exit(EXIT_FAILURE);
 	// Set all the required options for GLFW
@@ -99,10 +101,12 @@ void Window::close()
 	shouldClose = true;
 }
 
-void Window::window_size_callback(GLFWwindow *window, int newWidth, int newHeight)
+void window_size_callback(GLFWwindow *window, int newWidth, int newHeight)
 {
-	glViewport(0, 0, newWidth, newHeight); 	// Change glViewport to new window size
-
-	//myWindow->projectionMatrix = cml::mat4f::createPerspective(90.0f, float(newWidth / newHeight), 0.001f, 1000.0f);
+	w->WindowResizeCallBack(window, newWidth, newHeight);
 }
 
+void Window::WindowResizeCallBack(GLFWwindow *window, int newWidth, int newHeight) {
+	glViewport(0, 0, newWidth, newHeight); 	// Change glViewport to new window size
+	windowSizeChanged = true;
+}

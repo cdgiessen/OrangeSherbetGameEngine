@@ -22,6 +22,7 @@ public:
 	void Draw(glm::mat4 newViewMatrix);
 
 	Transform* transform;
+	
 private:
 	GLSLProgram* shader;
 	Mesh* mesh;

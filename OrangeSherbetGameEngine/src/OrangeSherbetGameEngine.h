@@ -13,6 +13,7 @@
 
 #include "Window.h"
 #include "InputManager.h"
+#include "Scene.h"
 #include "Shader.h"
 #include "GLSLProgram.h"
 #include "Camera.h"
@@ -42,6 +43,7 @@ class OrangeSherbetGameEngine
 
 		Window *window;
 		InputManager *inputManager;
+		Scene *scene;
 	
 		//All the subsystems
 		//Memory Manager (pool, stack, etc)

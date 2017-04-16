@@ -8,12 +8,9 @@ struct Material {
 };
 
 struct PointLight {
-    vec3 position;
+    vec4 position;
 	vec3 color;
-    
-    float constant;
-    float linear;
-    float quadratic;
+	float intensity;
 };
 
 struct DirLight {
@@ -54,6 +51,14 @@ in vec3 lightPos;
 
 out vec4 color;
 
+//vec3 ads( int lightIndex, vec4 position, vec3 norm ) 
+//{  
+//	vec3 s = normalize( vec3(pointLights[lightIndex].position – position) );  
+//	vec3 v = normalize(vec3(-position));  
+//	vec3 r = reflect( -s, norm );  
+//	vec3 I = pointLights[lightIndex].color * pointLights[lightIndex].intensity;  
+//	return I * ( material.ambient + material.diffuse* max( dot(s, norm), 0.0 ) + Ks * pow( max( dot(r,v), 0.0 ), material.shininess ) ); 
+//}
 
 void main() {
 	
@@ -78,6 +83,11 @@ void main() {
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * vec3(texture(t_specular, texturePos)) * spec * vec3(1,1,1); 
 	
+	//vec3 Color = vec3(0.0);    
+	//for( int i = 0; i < 5; i++ ) {       
+	//	Color += ads( i, eyePosition, norm );
+	//}
+
 	vec3 result = (ambient + diffuse + specular) * albedoColor;
 	color = vec4(result, 1.0f);
 

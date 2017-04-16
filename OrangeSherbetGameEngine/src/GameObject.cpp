@@ -53,6 +53,8 @@ void GameObject::Draw(glm::mat4 newViewMatrix) {
 	shader->setUniform("model", (transform->GetMatrix()));
 	shader->setUniform("view", (transform->GetViewMatrix()));
 	shader->setUniform("proj", (transform->GetProjectionMatrix()));
+
+	
 	mesh->Draw(shader);
 
 }

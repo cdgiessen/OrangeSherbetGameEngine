@@ -87,6 +87,8 @@ int OrangeSherbetGameEngine::StartUp() {
 
 	inputManager = new InputManager(window->getGLFWWindow());
 
+	scene = new Scene();
+
 	TempRun();
 
 	return 0;
@@ -127,34 +129,27 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	cubeTransform[0].SetLocalPosition(glm::vec3(3, 0, 0));
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 1, 1.5));
-	
 	cubeTransform[1].SetLocalPosition(glm::vec3(0, 0, 3));
-	
 	cubeTransform[2].SetLocalPosition(glm::vec3(0, 3, 0));
 	cubeTransform[2].SetLocalScale(glm::vec3(3, 1, 3));
-
 	cubeTransform[3].SetLocalPosition(glm::vec3(0, -3, 0));
-	
-	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, -3));
-	
+	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, -3));	
 	cubeTransform[5].SetLocalPosition(glm::vec3(-3, 0, 0));
 
-	//m5.rotate(cml::vec3f(0, 0, 1), 0);
-	//m5.scale(cml::vec3f(1, 2, 1));
-	//m5.translate(cml::vec3f(-4, 0, 0));
-	//cubeTransform[4].SetModelMatrix(m5);
 
-	//m6.rotate(cml::vec3f(0, 0, 1), 3.14f/2.0f);
-	//m6.scale(cml::vec3f(1, 2, 1));
-	//m6.translate(cml::vec3f(-1, 0, 0));	
-
-	GameObject cubeObject[6]{ GameObject(&cubeTransform[0], cubeMesh, shader),
-		GameObject(&cubeTransform[1], cubeMesh, shader),
-		GameObject(&cubeTransform[2], cubeMesh, shader),
-		GameObject(&cubeTransform[3], cubeMesh, shader),
-		GameObject(&cubeTransform[4], cubeMesh, shader),
-		GameObject(&cubeTransform[5], cubeMesh, shader)
-	};
+	GameObject cubeObject0(&cubeTransform[0], cubeMesh, shader);
+	GameObject cubeObject1(&cubeTransform[1], cubeMesh, shader);
+	GameObject cubeObject2(&cubeTransform[2], cubeMesh, shader);
+	GameObject cubeObject3(&cubeTransform[3], cubeMesh, shader);
+	GameObject cubeObject4(&cubeTransform[4], cubeMesh, shader);
+	GameObject cubeObject5(&cubeTransform[5], cubeMesh, shader);
+	
+	scene->AddGameObject(&cubeObject0);
+	scene->AddGameObject(&cubeObject1);
+	scene->AddGameObject(&cubeObject2);
+	scene->AddGameObject(&cubeObject3);
+	scene->AddGameObject(&cubeObject4);
+	scene->AddGameObject(&cubeObject5);
 
 	std::vector<Vertex> teapotVertices;
 	std::vector<GLuint> teapotIndices;
@@ -213,6 +208,8 @@ void OrangeSherbetGameEngine::TempRun() {
 	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
 	GameObject teapot(teapotTransform, teapotMesh, shader);
 
+	scene->AddGameObject(&teapot);
+
 	//cml::mat4f model;
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
@@ -227,6 +224,12 @@ void OrangeSherbetGameEngine::TempRun() {
 		timeish += 0.016f;
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
+
+		if (window->windowSizeChanged) {
+			perspectiveProjection = glm::perspective(glm::radians(camera.Zoom), (float)window->getWidth() / (float)window->getHeight(), 0.01f, 1000.0f);
+			scene->UpdateProjectionMatrix(perspectiveProjection);
+			window->windowSizeChanged = false;
+		}
 
 		TempKeyboardInput();
 		TempMouseMove();
@@ -244,13 +247,13 @@ void OrangeSherbetGameEngine::TempRun() {
 		glm::mat4 view = camera.GetViewMatrix();
 
 		//RENDER
-		cubeObject[0].transform->SetLocalRotation(45, timeish, 0);
-		cubeObject[1].transform->SetLocalRotation(270, timeish, 45);
-		cubeObject[2].transform->SetLocalRotation(0, timeish/4, 0);
-		cubeObject[2].transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(timeish*1.5f) * 1, 0));
-		cubeObject[3].transform->SetLocalRotation(45, timeish*1.5f, 0);
-		cubeObject[4].transform->SetLocalRotation(timeish*3.0f, timeish*1.667f , 0);
-		cubeObject[5].transform->SetLocalRotation(timeish, timeish *2, timeish/1.5f);
+		cubeObject0.transform->SetLocalRotation(45, timeish, 0);
+		cubeObject1.transform->SetLocalRotation(270, timeish, 45);
+		cubeObject2.transform->SetLocalRotation(0, timeish/4, 0);
+		cubeObject2.transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(timeish*1.5f) * 1, 0));
+		cubeObject3.transform->SetLocalRotation(45, timeish*1.5f, 0);
+		cubeObject4.transform->SetLocalRotation(timeish*3.0f, timeish*1.667f , 0);
+		cubeObject5.transform->SetLocalRotation(timeish, timeish *2, timeish/1.5f);
 		
 		//for (int i = 0; i < 6; i++) {
 		//	cubeObject[i].Draw(view);
@@ -260,6 +263,8 @@ void OrangeSherbetGameEngine::TempRun() {
 		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish)/3), 0.01f);
 		//teapot.transform->
 		//teapot.Draw(view);
+
+		scene->DrawScene(view);
 
 		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;
 
