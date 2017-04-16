@@ -219,6 +219,8 @@ void OrangeSherbetGameEngine::TempRun() {
 	Light l3(Color(1.0f, 1.0f, 0.0f), glm::vec3(3.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light l4(Color(0.0f, 1.0f, 0.0f), glm::vec3(-3.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	
+
+
 	scene->AddLight(&l0);
 	scene->AddLight(&l1);
 	scene->AddLight(&l2);
