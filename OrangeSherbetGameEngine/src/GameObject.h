@@ -3,6 +3,8 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
+#include <vector>
+
 #include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -12,6 +14,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "GLSLProgram.h"
+#include "Light.h"
 
 class GameObject
 {
@@ -19,7 +22,7 @@ public:
 	GameObject(Transform *transform, Mesh *mesh, GLSLProgram *shader);
 	~GameObject();
 
-	void Draw(glm::mat4 newViewMatrix);
+	void Draw(glm::mat4 newViewMatrix, std::vector<Light>* listOfLights);
 
 	Transform* transform;
 	

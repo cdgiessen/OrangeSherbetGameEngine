@@ -1,4 +1,4 @@
-#version 400 core
+#version 410 core
 layout (location = 0) in vec3 VertexPosition;
 layout (location = 1) in vec3 VertexNormal;
 layout (location = 2) in vec2 VertexTexturePosition;
@@ -17,6 +17,7 @@ out vec2 texturePos;
 out vec3 fragmentPos;
 out vec3 normalDir;
 out vec3 lightPos;
+out mat4 eyeMat;
 
 //void getEyeSpace( out vec3 norm, out vec4 position )
 //{
@@ -30,6 +31,6 @@ void main()
 	fragmentPos = vec3(view * model * vec4(VertexPosition, 1.0f));
 	normalDir = mat3(transpose(inverse(view * model))) * VertexNormal;
 	texturePos = VertexTexturePosition;
-
-	lightPos = vec3(view * vec4(0.5f, 1.5f, 0.0f, 1.0)); // Transform world-space light position to view-space light position
+	
+	lightPos = vec3(view * vec4(0.0f, 0.0f, 0.0f, 1.0)); // Transform world-space light position to view-space light position
 }

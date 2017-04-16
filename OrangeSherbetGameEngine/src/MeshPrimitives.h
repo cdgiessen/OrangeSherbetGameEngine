@@ -1,10 +1,9 @@
 #pragma once
-#include <gl\glew.h>
 
 namespace MeshPrimitives {
 
 	//Cube, doesn't use indicy buffers so the normals are accurate
-	GLfloat cube[] = {
+	float cube[] = {
 		//Verticies-------------Normals-------------Texture Coordinates
 		//Left face
 		0.5f, -0.5f, -0.5f,		0.0f, 0.0f, -1.0f,	0.333f,	1.0f,
@@ -57,7 +56,7 @@ namespace MeshPrimitives {
 
 
 	//Two Triangles. Simpler than having to deal with indicy buffers
-	GLfloat quad[] = {
+	float quad[] = {
 		0.0f,  0.5f,  0.5f,		1.0f, 0.0f, 0.0f,	0.0f, 0.0f,
 		0.0f,  0.5f, -0.5f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f,
 		0.0f, -0.5f, -0.5f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f,

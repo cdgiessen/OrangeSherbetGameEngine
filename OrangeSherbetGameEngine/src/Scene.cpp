@@ -21,7 +21,7 @@ void Scene::AddLight(Light *light) {
 
 void Scene::DrawScene(glm::mat4 view) {
 	for(GameObject &obj : gameObjectsInScene) {
-		obj.Draw(view);
+		obj.Draw(view, &lightsInScene);
 	}
 }
 

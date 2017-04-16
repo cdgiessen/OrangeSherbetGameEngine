@@ -1,4 +1,8 @@
 #pragma once
+
+#include <glm\vec3.hpp>
+#include <glm\vec4.hpp>
+
 class Color
 {
 public:
@@ -10,5 +14,11 @@ public:
 	Color(float r, float g, float b);
 	~Color();
 
+	glm::vec4 ToVec4();
+
+	glm::vec3 ToVec3();
+
+
 };
+
 

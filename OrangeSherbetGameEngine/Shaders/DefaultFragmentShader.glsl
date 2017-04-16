@@ -1,11 +1,11 @@
-#version 400 core
+#version 410 core
 
-struct Material {
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
-};
+//struct Material {
+uniform    vec3 m_ambient;
+uniform    vec3 m_diffuse;
+uniform    vec3 m_specular;
+uniform    float m_shininess;
+//};
 
 struct PointLight {
     vec4 position;
@@ -33,7 +33,7 @@ struct SpotLight {
 }; 
 
 uniform vec3 viewPos;
-uniform Material material;
+//uniform Material material;
 
 uniform sampler2D t_albedo;
 uniform sampler2D t_diffuse;
@@ -41,7 +41,7 @@ uniform sampler2D t_specular;
 uniform sampler2D t_normal;
 
 uniform PointLight pointLights[5];
-uniform DirLight dirlight[5];
+uniform DirLight dirlights[5];
 uniform SpotLight spotLights[5];
 
 in vec3 fragmentPos;
@@ -51,14 +51,19 @@ in vec3 lightPos;
 
 out vec4 color;
 
-//vec3 ads( int lightIndex, vec4 position, vec3 norm ) 
-//{  
-//	vec3 s = normalize( vec3(pointLights[lightIndex].position – position) );  
-//	vec3 v = normalize(vec3(-position));  
-//	vec3 r = reflect( -s, norm );  
-//	vec3 I = pointLights[lightIndex].color * pointLights[lightIndex].intensity;  
-//	return I * ( material.ambient + material.diffuse* max( dot(s, norm), 0.0 ) + Ks * pow( max( dot(r,v), 0.0 ), material.shininess ) ); 
-//}
+vec3 ads( int lightIndex, vec3 position ,vec3 norm )
+{
+    vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - position );
+    vec3 lightReflected = reflect( -lightSource, norm );
+    vec3 viewer = normalize(vec3(-position));
+	vec3 lightColor = pointLights[lightIndex].color;
+    float brightness = pointLights[lightIndex].intensity;
+
+	float distance = length( vec3(pointLights[lightIndex].position) - position);
+	float attenuation = 1.0f/(1.0f + 0.07*distance + 0.017*distance*distance);
+    
+	return lightColor * brightness * ( m_ambient* attenuation + m_diffuse* attenuation * max( dot(lightSource, norm), 0.0 ) + m_specular * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess )* attenuation );
+}
 
 void main() {
 	
@@ -83,13 +88,14 @@ void main() {
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * vec3(texture(t_specular, texturePos)) * spec * vec3(1,1,1); 
 	
-	//vec3 Color = vec3(0.0);    
-	//for( int i = 0; i < 5; i++ ) {       
-	//	Color += ads( i, eyePosition, norm );
-	//}
+	vec3 Color = vec3(0.0);    
+	for( int i = 0; i < 5; i++ ) {       
+		Color += ads( i, fragmentPos, norm );
+	}
 
 	vec3 result = (ambient + diffuse + specular) * albedoColor;
-	color = vec4(result, 1.0f);
+	
+	color = vec4(Color, 1.0f);
 
 
 }

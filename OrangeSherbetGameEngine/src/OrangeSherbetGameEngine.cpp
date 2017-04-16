@@ -10,9 +10,8 @@
 #include <stb_image.h>
 
 #define TINYOBJLOADER_IMPLEMENTATION
+//#include <tinyobj_loader_opt.h>
 #include <tiny_obj_loader.h>
-
-#include "MeshPrimitives.h"
 
 //#include "CML\cml.h"
 //#include "CML\mat4.h"
@@ -117,8 +116,8 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeTexture = new Texture("Assets/Models/Cube/default.png", 128, 128, (TextureType)0);
 	Texture* specCubeTex = new Texture("Assets/Models/Cube/specular.png", 128, 128, (TextureType)1);
 	Material* cMat = new Material(cubeTexture, specCubeTex);
-	cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
-
+	//cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
+	cubeMesh = LoadCubeMesh(cMat);
 	Transform cubeTransform[6]{ 
 		Transform(initCameraView, perspectiveProjection),
 		Transform(initCameraView, perspectiveProjection),
@@ -130,9 +129,9 @@ void OrangeSherbetGameEngine::TempRun() {
 	cubeTransform[0].SetLocalPosition(glm::vec3(3, 0, 0));
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 1, 1.5));
 	cubeTransform[1].SetLocalPosition(glm::vec3(0, 0, 3));
-	cubeTransform[2].SetLocalPosition(glm::vec3(0, 3, 0));
-	cubeTransform[2].SetLocalScale(glm::vec3(3, 1, 3));
-	cubeTransform[3].SetLocalPosition(glm::vec3(0, -3, 0));
+	cubeTransform[2].SetLocalPosition(glm::vec3(0, -3, 0));
+	cubeTransform[2].SetLocalScale(glm::vec3(15, 1, 15));
+	cubeTransform[3].SetLocalPosition(glm::vec3(0, 3, 0));
 	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, -3));	
 	cubeTransform[5].SetLocalPosition(glm::vec3(-3, 0, 0));
 
@@ -214,6 +213,18 @@ void OrangeSherbetGameEngine::TempRun() {
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
 
+	Light l0(Color(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.7f, Light::LightType::Point);
+	Light l1(Color(1.0f, 0.0f, 0.0f), glm::vec3(3.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	Light l2(Color(0.0f, 0.0f, 1.0f), glm::vec3(-3.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	Light l3(Color(1.0f, 1.0f, 0.0f), glm::vec3(3.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	Light l4(Color(0.0f, 1.0f, 0.0f), glm::vec3(-3.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	
+	scene->AddLight(&l0);
+	scene->AddLight(&l1);
+	scene->AddLight(&l2);
+	scene->AddLight(&l3);
+	scene->AddLight(&l4);
+
 	float timeish = 0;
 
 	// Main Game loop
@@ -247,10 +258,10 @@ void OrangeSherbetGameEngine::TempRun() {
 		glm::mat4 view = camera.GetViewMatrix();
 
 		//RENDER
-		cubeObject0.transform->SetLocalRotation(45, timeish, 0);
+		cubeObject0.transform->SetLocalRotation(0, timeish, 0);
 		cubeObject1.transform->SetLocalRotation(270, timeish, 45);
-		cubeObject2.transform->SetLocalRotation(0, timeish/4, 0);
-		cubeObject2.transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(timeish*1.5f) * 1, 0));
+		//cubeObject2.transform->SetLocalRotation(0, timeish/8, 0);
+		//cubeObject2.transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(timeish*1.5f) * 1, 0));
 		cubeObject3.transform->SetLocalRotation(45, timeish*1.5f, 0);
 		cubeObject4.transform->SetLocalRotation(timeish*3.0f, timeish*1.667f , 0);
 		cubeObject5.transform->SetLocalRotation(timeish, timeish *2, timeish/1.5f);

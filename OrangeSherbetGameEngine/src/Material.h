@@ -17,6 +17,12 @@ public:
 	Material(Texture* albedo, Texture* specular, Texture* normal, Texture* emissive, Texture* height);
 	~Material();
 
+	glm::vec3 GetAmbient();
+	glm::vec3 GetDiffuse();
+	glm::vec3 GetSpecular();
+	glm::vec3 GetTransmittance();
+	glm::vec3 GetEmission();
+
 	Texture* GetAlbedoTexture();
 	void SetAlbedoTexture(Texture * albedo);
 

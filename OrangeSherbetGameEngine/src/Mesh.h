@@ -23,6 +23,7 @@
 //#define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
+
 struct Vertex {
 	glm::vec3 Position; // Position
 	glm::vec3 Normal; // Normal
@@ -54,6 +55,7 @@ namespace std {
 class Mesh;
 
 Mesh* LoadMesh(std::string inputfile, Material *mat);
+Mesh* LoadCubeMesh(Material *mat);
 
 class Mesh {
 public:

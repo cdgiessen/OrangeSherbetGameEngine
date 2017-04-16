@@ -1,7 +1,10 @@
 #pragma once
 
+
 #include <glm\vec3.hpp>
+#include <glm\vec4.hpp>
 #include "Color.h"
+#include "GLSLProgram.h"
 
 class Light
 {
@@ -12,10 +15,12 @@ public:
 		Dir
 	};
 
-	Light::LightType type;
+	Light(Color col, glm::vec3 pos, glm::vec3 dir, float intense, LightType type);
 
 	Light();
 	~Light();
+
+	LightType GetLightType();
 
 	Color GetColor();
 	void SetColor(Color color);
@@ -26,7 +31,11 @@ public:
 	glm::vec3 GetDirection();
 	void SetDirection(glm::vec3 dir);
 
+	void FillUniform(GLSLProgram *shader, int place, glm::mat4 eyeSpace);
+
 private:
+	Light::LightType lightType = LightType::Point;
+
 	float intensity;
 	Color lightColor;
 

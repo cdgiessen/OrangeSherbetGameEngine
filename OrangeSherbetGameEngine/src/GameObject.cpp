@@ -11,7 +11,7 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Draw(glm::mat4 newViewMatrix) {
+void GameObject::Draw(glm::mat4 newViewMatrix, std::vector<Light> *listOfLights) {
 
 	shader->use();
 
@@ -54,6 +54,27 @@ void GameObject::Draw(glm::mat4 newViewMatrix) {
 	shader->setUniform("view", (transform->GetViewMatrix()));
 	shader->setUniform("proj", (transform->GetProjectionMatrix()));
 
+	//for (int i = 0; i < listOfLights->size(); i++) {
+	//	(*listOfLights)[i].FillUniform(shader, i, eyespace);
+	//}
+
+	shader->setUniform("pointLights[0].position", transform->GetViewMatrix() * glm::vec4((*listOfLights)[0].GetPosition(), 1.0f));
+	shader->setUniform("pointLights[1].position", transform->GetViewMatrix() * glm::vec4((*listOfLights)[1].GetPosition(), 1.0f));
+	shader->setUniform("pointLights[2].position", transform->GetViewMatrix() * glm::vec4((*listOfLights)[2].GetPosition(), 1.0f));
+	shader->setUniform("pointLights[3].position", transform->GetViewMatrix() * glm::vec4((*listOfLights)[3].GetPosition(), 1.0f));
+	shader->setUniform("pointLights[4].position", transform->GetViewMatrix() * glm::vec4((*listOfLights)[4].GetPosition(), 1.0f));
+
+	shader->setUniform("pointLights[0].color", (*listOfLights)[0].GetColor().ToVec3());
+	shader->setUniform("pointLights[1].color", (*listOfLights)[1].GetColor().ToVec3());
+	shader->setUniform("pointLights[2].color", (*listOfLights)[2].GetColor().ToVec3());
+	shader->setUniform("pointLights[3].color", (*listOfLights)[3].GetColor().ToVec3());
+	shader->setUniform("pointLights[4].color", (*listOfLights)[4].GetColor().ToVec3());
+
+	shader->setUniform("pointLights[0].intensity", 1.0f);
+	shader->setUniform("pointLights[1].intensity", 1.0f);
+	shader->setUniform("pointLights[2].intensity", 1.0f);
+	shader->setUniform("pointLights[3].intensity", 1.0f);
+	shader->setUniform("pointLights[4].intensity", 1.0f);
 	
 	mesh->Draw(shader);
 

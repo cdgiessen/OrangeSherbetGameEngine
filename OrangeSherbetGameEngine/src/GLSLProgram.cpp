@@ -162,7 +162,7 @@ void GLSLProgram::compileShader(const std::string & source,
 
 		throw GLSLProgramException(msg);
 
-	}
+		}
 	else {
 		// Compile succeeded, attach shader
 		glAttachShader(handle, shaderHandle);
