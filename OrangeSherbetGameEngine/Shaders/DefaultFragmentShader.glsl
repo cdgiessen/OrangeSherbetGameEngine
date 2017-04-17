@@ -58,11 +58,18 @@ vec3 ads( int lightIndex, vec3 position ,vec3 norm )
     vec3 viewer = normalize(vec3(-position));
 	vec3 lightColor = pointLights[lightIndex].color;
     float brightness = pointLights[lightIndex].intensity;
-
+	
 	float distance = length( vec3(pointLights[lightIndex].position) - position);
-	float attenuation = 1.0f/(1.0f + 0.07*distance + 0.017*distance*distance);
-    
-	return lightColor * brightness *  ( m_ambient* attenuation + m_diffuse* attenuation * max( dot(lightSource, norm), 0.0 ) + m_specular * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess )* attenuation  );
+
+	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
+	
+	vec3 amb = m_ambient * attenuation;
+	vec3 dif = m_diffuse * attenuation * max( dot(lightSource, norm), 0.0f);
+	vec3 spec = m_specular * attenuation * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess );
+
+	return lightColor * brightness * (amb + dif + spec);
+
+	//return lightColor * brightness *  ( m_ambient* attenuation + m_diffuse* attenuation * max( dot(lightSource, norm), 0.0 ) + m_specular * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess )* attenuation  );
 }
 
 void main() {

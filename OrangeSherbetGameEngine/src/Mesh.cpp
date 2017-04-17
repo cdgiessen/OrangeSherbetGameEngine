@@ -225,7 +225,7 @@ void Mesh::Draw(GLSLProgram* shader)
 	shader->setUniform("m_specular", glm::vec3(0.1f, 0.1f, 0.1f));
 
 	//Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
-	shader->setUniform("material.shinyness", 16.0f);
+	shader->setUniform("m_shininess", 16.0f);
 	//glUniform1f(glGetUniformLocation(shader->getHandle(), "material.shininess"), 16.0f);
 	
 	// Draw mesh
