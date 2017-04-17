@@ -11,6 +11,10 @@ Scene::~Scene()
 {
 }
 
+std::vector<Light> Scene::GetListOfLights() {
+	return lightsInScene;
+}
+
 void Scene::AddGameObject(GameObject *obj) {
 	gameObjectsInScene.push_back(*obj);
 }

@@ -62,7 +62,7 @@ vec3 ads( int lightIndex, vec3 position ,vec3 norm )
 	float distance = length( vec3(pointLights[lightIndex].position) - position);
 	float attenuation = 1.0f/(1.0f + 0.07*distance + 0.017*distance*distance);
     
-	return lightColor * brightness * ( m_ambient* attenuation + m_diffuse* attenuation * max( dot(lightSource, norm), 0.0 ) + m_specular * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess )* attenuation );
+	return lightColor * brightness *  ( m_ambient* attenuation + m_diffuse* attenuation * max( dot(lightSource, norm), 0.0 ) + m_specular * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess )* attenuation  );
 }
 
 void main() {
@@ -93,7 +93,7 @@ void main() {
 		Color += ads( i, fragmentPos, norm );
 	}
 
-	vec3 result = (ambient + diffuse + specular) * albedoColor;
+	vec3 result = (ambient + diffuse +  specular) * albedoColor;
 	
 	color = vec4(Color, 1.0f);
 

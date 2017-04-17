@@ -277,6 +277,12 @@ void OrangeSherbetGameEngine::TempRun() {
 		//teapot.transform->
 		//teapot.Draw(view);
 
+		l1.SetPosition(glm::vec3(3.0f, 0.0f, sin(timeish*3.0f)*3.0f));		
+		
+		//(scene->GetListOfLights())[1]->SetPosition(glm::vec3(-3, 0, cos(timeish*3.0f)*.0f));
+		//(scene->GetListOfLights())[2]->SetPosition(glm::vec3(sin(timeish*3.0f) * 3.0f, 0, 3.0f));
+		//(scene->GetListOfLights())[3]->SetPosition(glm::vec3(sin(timeish*3.0f) * 3.0f, 0, -3.0f));
+		
 		scene->DrawScene(view);
 
 		//std::cout << "Camera position = " << camera.Position << "Camera Lookint at position = " << camera.Front <<std::endl;

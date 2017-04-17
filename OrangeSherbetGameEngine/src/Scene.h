@@ -15,6 +15,8 @@ public:
 	Scene();
 	~Scene();
 
+	std::vector<Light> GetListOfLights();
+
 	void AddGameObject(GameObject* obj);
 	void AddLight(Light *light);
 	
