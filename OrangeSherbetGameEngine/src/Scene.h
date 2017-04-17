@@ -15,7 +15,7 @@ public:
 	Scene();
 	~Scene();
 
-	std::vector<Light> GetListOfLights();
+	std::vector<Light *> GetListOfLights();
 
 	void AddGameObject(GameObject* obj);
 	void AddLight(Light *light);
@@ -25,7 +25,7 @@ public:
 	void UpdateProjectionMatrix(glm::mat4 proj);
 
 private:
-	std::vector<Light> lightsInScene;
+	std::vector<Light *> lightsInScene;
 	std::vector<GameObject> gameObjectsInScene;
 
 };

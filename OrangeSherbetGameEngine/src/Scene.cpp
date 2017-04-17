@@ -11,7 +11,7 @@ Scene::~Scene()
 {
 }
 
-std::vector<Light> Scene::GetListOfLights() {
+std::vector<Light *> Scene::GetListOfLights() {
 	return lightsInScene;
 }
 
@@ -20,7 +20,7 @@ void Scene::AddGameObject(GameObject *obj) {
 }
 
 void Scene::AddLight(Light *light) {
-	lightsInScene.push_back(*light);
+	lightsInScene.push_back(light);
 }
 
 void Scene::DrawScene(glm::mat4 view) {

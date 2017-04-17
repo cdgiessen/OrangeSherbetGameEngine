@@ -213,19 +213,19 @@ void OrangeSherbetGameEngine::TempRun() {
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
 
-	Light l0(Color(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.7f, Light::LightType::Point);
-	Light l1(Color(1.0f, 0.0f, 0.0f), glm::vec3(3.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
-	Light l2(Color(0.0f, 0.0f, 1.0f), glm::vec3(-3.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
-	Light l3(Color(1.0f, 1.0f, 0.0f), glm::vec3(3.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
-	Light l4(Color(0.0f, 1.0f, 0.0f), glm::vec3(-3.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	Light* l0 = new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.7f, Light::LightType::Point);
+	Light* l1 = new Light(Color(1.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	Light* l2 = new Light(Color(0.0f, 0.0f, 1.0f), glm::vec3(-3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	Light* l3 = new Light(Color(1.0f, 1.0f, 0.0f), glm::vec3(3.0f, 3.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
+	Light* l4 = new Light(Color(0.0f, 1.0f, 0.0f), glm::vec3(-3.0f, 3.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	
 
 
-	scene->AddLight(&l0);
-	scene->AddLight(&l1);
-	scene->AddLight(&l2);
-	scene->AddLight(&l3);
-	scene->AddLight(&l4);
+	scene->AddLight(l0);
+	scene->AddLight(l1);
+	scene->AddLight(l2);
+	scene->AddLight(l3);
+	scene->AddLight(l4);
 
 	float timeish = 0;
 
@@ -267,6 +267,13 @@ void OrangeSherbetGameEngine::TempRun() {
 		cubeObject3.transform->SetLocalRotation(45, timeish*1.5f, 0);
 		cubeObject4.transform->SetLocalRotation(timeish*3.0f, timeish*1.667f , 0);
 		cubeObject5.transform->SetLocalRotation(timeish, timeish *2, timeish/1.5f);
+
+		cubeObject0.transform->SetLocalPosition(glm::vec3(4 + sin(timeish * 3 + 0.5) * 2, 0, - 2 + sin(timeish + 0.2) * 0.5f));
+		cubeObject1.transform->SetLocalPosition(glm::vec3(-3, 0, 4 + sin(timeish * 2 + 1.54) * 3));
+		//cubeObject2.transform->SetLocalPosition(glm::vec3(0, -3 + sin(timeish * 3) * 3, 0));
+		cubeObject3.transform->SetLocalPosition(glm::vec3(-2, 4 + sin(timeish * 3) * 2, 1));
+		cubeObject4.transform->SetLocalPosition(glm::vec3(2 + sin(timeish*5) * 2, 0, -4 + sin(timeish * 2 + 2) * 3));
+		cubeObject5.transform->SetLocalPosition(glm::vec3(-4 + sin(timeish*3 + 1) * 2, 0, -2));
 		
 		//for (int i = 0; i < 6; i++) {
 		//	cubeObject[i].Draw(view);
@@ -276,9 +283,12 @@ void OrangeSherbetGameEngine::TempRun() {
 		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish)/3), 0.01f);
 		//teapot.transform->
 		//teapot.Draw(view);
+		l0->SetPosition(glm::vec3(sin(timeish)*5, 0, cos(timeish)*5));
+		l1->SetPosition(glm::vec3(4.0f + sin(timeish*3.0f)*3.0f,	3.0f, 4.0f + cos(timeish*3.0f)*3.0f));
+		l2->SetPosition(glm::vec3(-4.0f + sin(timeish*3.0f)*3.0f,	3.0f, 4.0f + cos(-timeish*3.0f)*3.0f));
+		l3->SetPosition(glm::vec3(4.0f + sin(-timeish*3.0f)*3.0f,	3.0f, -4.0f + cos(timeish*3.0f)*3.0f));
+		l4->SetPosition(glm::vec3(-4.0f + sin(-timeish*3.0f)*3.0f,	 3.0f, -4.0f + cos(-timeish*3.0f)*3.0f));
 
-		l1.SetPosition(glm::vec3(3.0f, 0.0f, sin(timeish*3.0f)*3.0f));		
-		
 		//(scene->GetListOfLights())[1]->SetPosition(glm::vec3(-3, 0, cos(timeish*3.0f)*.0f));
 		//(scene->GetListOfLights())[2]->SetPosition(glm::vec3(sin(timeish*3.0f) * 3.0f, 0, 3.0f));
 		//(scene->GetListOfLights())[3]->SetPosition(glm::vec3(sin(timeish*3.0f) * 3.0f, 0, -3.0f));

@@ -22,7 +22,7 @@ public:
 	GameObject(Transform *transform, Mesh *mesh, GLSLProgram *shader);
 	~GameObject();
 
-	void Draw(glm::mat4 newViewMatrix, std::vector<Light>* listOfLights);
+	void Draw(glm::mat4 newViewMatrix, std::vector<Light* > *listOfLights);
 
 	Transform* transform;
 	
