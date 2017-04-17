@@ -51,25 +51,19 @@ in vec3 lightPos;
 
 out vec4 color;
 
-vec3 ads( int lightIndex, vec3 position ,vec3 norm )
+vec3 PointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir)
 {
-    vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - position );
+    vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - fragPos );
     vec3 lightReflected = reflect( -lightSource, norm );
-    vec3 viewer = normalize(vec3(-position));
-	vec3 lightColor = pointLights[lightIndex].color;
-    float brightness = pointLights[lightIndex].intensity;
 	
-	float distance = length( vec3(pointLights[lightIndex].position) - position);
-
+	float distance = length( vec3(pointLights[lightIndex].position) - fragPos);
 	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
 	
-	vec3 amb = m_ambient * attenuation;
-	vec3 dif = m_diffuse * attenuation * max( dot(lightSource, norm), 0.0f);
-	vec3 spec = m_specular * attenuation * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess );
-
-	return lightColor * brightness * (amb + dif + spec);
-
-	//return lightColor * brightness *  ( m_ambient* attenuation + m_diffuse* attenuation * max( dot(lightSource, norm), 0.0 ) + m_specular * pow( max( dot(lightReflected,viewer), 0.0 ), m_shininess )* attenuation  );
+	return pointLights[lightIndex].color * pointLights[lightIndex].intensity * 
+		(m_ambient * attenuation + 
+		m_diffuse * attenuation * max( dot(lightSource, norm), 0.0f) + 
+		m_specular * attenuation * vec3(texture(t_specular, texturePos)) * 
+			pow( max( dot(lightReflected, viewDir), 0.0 ), m_shininess ));
 }
 
 void main() {
@@ -77,32 +71,16 @@ void main() {
 	vec3 albedoColor = vec3(texture(t_albedo, texturePos));
 
 	vec3 norm = normalize(normalDir);
-    vec3 lightDir = normalize(lightPos - fragmentPos);
-	
-	//ambient
-	float ambientStrength = 0.05f;
-    vec3 ambient = ambientStrength * vec3(1,1,1);
-	
-	//diffuse
-	float diffuseStrength = 0.5f;
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * vec3(1,1,1);
+	vec3 viewDir = normalize(vec3(-fragmentPos));
 
-	//specular
-	float specularStrength = 1.0f;
-    vec3 viewDir = normalize(-fragmentPos); // The viewer is at (0,0,0) so viewDir is (0,0,0) - Position => -Position
-    vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specularStrength * vec3(texture(t_specular, texturePos)) * spec * vec3(1,1,1); 
-	
-	vec3 Color = vec3(0.0);    
+	vec3 result = vec3(0.0);    
 	for( int i = 0; i < 5; i++ ) {       
-		Color += ads( i, fragmentPos, norm );
+		result += PointLightADS( i, fragmentPos, norm, viewDir);
 	}
-
-	vec3 result = (ambient + diffuse +  specular) * albedoColor;
 	
-	color = vec4(Color, 1.0f);
+	result *= albedoColor;
+
+	color = vec4(result, 1.0f);
 
 
 }
