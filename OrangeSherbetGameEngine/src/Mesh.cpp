@@ -58,52 +58,52 @@ Mesh* LoadMesh(std::string inputfile, Material* mat) {
 Mesh* LoadCubeMesh(Material* mat) {
 	std::vector<Vertex> vertices;
 
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2( 0.333f, 1.0f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2( 0.667f, 1.0f)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2( 0.333f, 0.5f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2( 0.667f, 0.5f)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2( 0.333f, 0.5f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2( 0.667f, 1.0f)));
-																											  				 
-	//Right face																							  				  
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2 (0.667f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2 (0.333f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2 (0.667f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2 (0.667f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2 (0.333f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2 (0.333f, 0.5f	)));
-																											  				  
-	//Back face																								  				  
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2( 0.0f, 1.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2( 0.333f, 1.0f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2( 0.333f, 0.5f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2( 0.333f, 0.5f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2( 0.0f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2( 0.0f, 1.0f	)));
-																															  
-	//Front face																											  
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2( 0.334f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2( 0.0f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2( 0.334f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2( 0.0f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2( 0.334f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2( 0.0f, 0.0f	)));
-																															  
-	//Bottom face																											  
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2( 0.667f, 0.5f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2( 1.0f, 1.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2( 0.667f, 1.0f)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2( 0.667f, 0.5f)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2( 1.0f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2( 1.0f, 1.0f	)));
-																															  
-	//Top face																												  
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2( 1.0f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2( 0.667f, 0.5f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2( 1.0f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2( 0.667f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2( 1.0f, 0.0f	)));
-	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2( 0.667f, 0.5f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f),	glm::vec2( 0.0f, 1.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f),	glm::vec2( 1.0f, 1.0f)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f),	glm::vec2( 0.0f, 0.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f),	glm::vec2( 1.0f, 0.0f)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f),	glm::vec2( 0.0f, 0.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, 0.0f, -1.0f),	glm::vec2( 1.0f, 1.0f)));
+																												  				 
+	//Right face																								  				  
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f),		glm::vec2 (1.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f),		glm::vec2 (0.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f),		glm::vec2 (1.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f),		glm::vec2 (1.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f),		glm::vec2 (0.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, 0.0f, 1.0f),		glm::vec2 (0.0f, 1.0f	)));
+																												  				  
+	//Back face																									  				  
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f),	glm::vec2( 0.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f),	glm::vec2( 1.0f, 1.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f),	glm::vec2( 1.0f, 0.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f),	glm::vec2( 1.0f, 0.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f),	glm::vec2( 0.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(-1.0f, 0.0f, 0.0f),	glm::vec2( 0.0f, 1.0f	)));
+																																  
+	//Front face																												  
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(1.0f, 0.0f, 0.0f),		glm::vec2( 1.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(1.0f, 0.0f, 0.0f),		glm::vec2( 0.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(1.0f, 0.0f, 0.0f),		glm::vec2( 1.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(1.0f, 0.0f, 0.0f),		glm::vec2( 0.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(1.0f, 0.0f, 0.0f),		glm::vec2( 1.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(1.0f, 0.0f, 0.0f),		glm::vec2( 0.0f, 0.0f	)));
+																																  
+	//Bottom face																												  
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, -1.0f, 0.0f),	glm::vec2( 0.0f, 0.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, -1.0f, 0.0f),	glm::vec2( 1.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, -1.0f, 0.0f),	glm::vec2( 0.0f, 1.0f)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, -1.0f, 0.0f),	glm::vec2( 0.0f, 0.0f)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, 0.5f		), glm::vec3(0.0f, -1.0f, 0.0f),	glm::vec2( 1.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, -0.5f, -0.5f		), glm::vec3(0.0f, -1.0f, 0.0f),	glm::vec2( 1.0f, 1.0f	)));
+																																  
+	//Top face																													  
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 1.0f, 0.0f),		glm::vec2( 1.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 1.0f, 0.0f),		glm::vec2( 0.0f, 1.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 1.0f, 0.0f),		glm::vec2( 1.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 1.0f, 0.0f),		glm::vec2( 0.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	0.5f, 0.5f, 0.5f		), glm::vec3(0.0f, 1.0f, 0.0f),		glm::vec2( 1.0f, 0.0f	)));
+	vertices.push_back(Vertex(glm::vec3(	-0.5f, 0.5f, -0.5f		), glm::vec3(0.0f, 1.0f, 0.0f),		glm::vec2( 0.0f, 1.0f	)));
 
 	
 	return new Mesh(vertices, mat);
@@ -199,6 +199,11 @@ void Mesh::Draw(GLSLProgram* shader)
 		//// And finally bind the texture
 		//glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
 	
+	GLuint adsIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "PointLightADS");
+	GLuint adsNoSpecTexIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "PointLightADSNoSpecTexture");
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &adsNoSpecTexIndex);
+
 	if (material->GetAlbedoTexture() != nullptr) {
 		glActiveTexture(GL_TEXTURE0 + 0);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_albedo"), 0);
@@ -208,6 +213,8 @@ void Mesh::Draw(GLSLProgram* shader)
 		glActiveTexture(GL_TEXTURE0 + 1);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_specular"), 1);
 		glBindTexture(GL_TEXTURE_2D, material->GetSpecularTexture()->GetTextureID());
+
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &adsIndex);
 	}
 	if (material->GetNormalTexture() != nullptr) {
 		glActiveTexture(GL_TEXTURE0 + 2);
@@ -220,13 +227,10 @@ void Mesh::Draw(GLSLProgram* shader)
 		glBindTexture(GL_TEXTURE_2D, material->GetEmissiveTexture()->GetTextureID());
 	}
 
-	shader->setUniform("m_ambient", glm::vec3(0.0f, 0.0f, 0.0f));
-	shader->setUniform("m_diffuse", glm::vec3(0.9f, 0.9f, 0.9f));
-	shader->setUniform("m_specular", glm::vec3(0.1f, 0.1f, 0.1f));
-
-	//Also set each mesh's shininess property to a default value (if you want you could extend this to another mesh property and possibly change this value)
-	shader->setUniform("m_shininess", 16.0f);
-	//glUniform1f(glGetUniformLocation(shader->getHandle(), "material.shininess"), 16.0f);
+	shader->setUniform("material.ambient", material->GetAmbient());
+	shader->setUniform("material.diffuse", material->GetDiffuse());
+	shader->setUniform("material.specular", material->GetSpecular());
+	shader->setUniform("material.shininess", material->GetShininess());
 	
 	// Draw mesh
 	glBindVertexArray(this->VAO);

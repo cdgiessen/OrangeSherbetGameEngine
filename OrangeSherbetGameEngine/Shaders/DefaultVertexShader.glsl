@@ -1,37 +1,28 @@
 #version 410 core
-layout (location = 0) in vec3 VertexPosition;
+layout (location = 0) in vec3 VertexPos;
 layout (location = 1) in vec3 VertexNormal;
-layout (location = 2) in vec2 VertexTexturePosition;
+layout (location = 2) in vec2 VertexTexturePos;
 
-uniform MVPUniform {
+uniform MatrixBlob {
     mat4 model;
     mat4 view;
     mat4 proj;
-} mvp;
+	mat4 normal;
+} matrices;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
-uniform mat4 normalMat;
+uniform mat3 normalMat;
 
 out vec2 texturePos;
 out vec3 fragmentPos;
 out vec3 normalDir;
-out vec3 lightPos;
-out mat4 eyeMat;
-
-//void getEyeSpace( out vec3 norm, out vec4 position )
-//{
-//	norm = normalize( normalMat * normal);
-//	position = view * model * vec4(VertexPosition,1.0);
-//}
 
 void main()
 {
-    gl_Position = proj * view * model * vec4(VertexPosition, 1.0f); 
-	fragmentPos = vec3(view * model * vec4(VertexPosition, 1.0f));
-	normalDir = mat3(transpose(inverse(view * model))) * VertexNormal;
-	texturePos = VertexTexturePosition;
-	
-	lightPos = vec3(view * vec4(0.0f, 0.0f, 0.0f, 1.0)); // Transform world-space light position to view-space light position
+    gl_Position = proj * view * model * vec4(VertexPos, 1.0f); 
+	fragmentPos = vec3(view * model * vec4(VertexPos, 1.0f)); // fragment position in camera space
+	normalDir = normalMat * VertexNormal;
+	texturePos = VertexTexturePos;
 }

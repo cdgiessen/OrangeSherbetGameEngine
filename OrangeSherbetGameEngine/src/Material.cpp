@@ -2,23 +2,24 @@
 
 Material::Material(Texture* albedo, Texture* specularT, Texture* normal, Texture* emissive, Texture* height) : albedoTex(albedo), specularTex(specularT), normalTex(normal), emissiveTex(emissive), heightTex(height)
 {
-	ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	diffuse = glm::vec3(0.9f, 0.9f, 0.9f);
-	specular = glm::vec3(0.2f, 0.2f, 0.2f);
+	SetPropertiesToDefault();
 }
 
 Material::Material(Texture* albedo, Texture* specularT) : albedoTex(albedo), specularTex(specularT), normalTex(nullptr), emissiveTex(nullptr), heightTex(nullptr)
 {
-	ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	diffuse = glm::vec3(0.9f, 0.9f, 0.9f);
-	specular = glm::vec3(0.2f, 0.2f, 0.2f);
+	SetPropertiesToDefault();
 }
 
 Material::Material(Texture* albedo) : albedoTex(albedo), specularTex(nullptr), normalTex(nullptr), emissiveTex(nullptr), heightTex(nullptr)
 {
+	SetPropertiesToDefault();
+}
+
+void Material::SetPropertiesToDefault() {
 	ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 	diffuse = glm::vec3(0.9f, 0.9f, 0.9f);
-	specular = glm::vec3(0.2f, 0.2f, 0.2f);
+	specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	shininess = 256.0f;
 }
 
 Material::~Material()
@@ -48,6 +49,10 @@ glm::vec3 Material::GetTransmittance()
 glm::vec3 Material::GetEmission()
 {
 	return emission;
+}
+
+float Material::GetShininess() {
+	return shininess;
 }
 
 Texture* Material::GetAlbedoTexture() {

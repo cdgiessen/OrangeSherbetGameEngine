@@ -22,6 +22,7 @@ public:
 	glm::vec3 GetSpecular();
 	glm::vec3 GetTransmittance();
 	glm::vec3 GetEmission();
+	float GetShininess();
 
 	Texture* GetAlbedoTexture();
 	void SetAlbedoTexture(Texture * albedo);
@@ -41,6 +42,8 @@ public:
 	Shader* GetShader();
 
 private:
+	void SetPropertiesToDefault();
+
 	Shader* shader;
 
 	Texture *albedoTex;

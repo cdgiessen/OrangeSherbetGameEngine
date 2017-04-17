@@ -1,11 +1,11 @@
 #version 410 core
 
-//struct Material {
-uniform    vec3 m_ambient;
-uniform    vec3 m_diffuse;
-uniform    vec3 m_specular;
-uniform    float m_shininess;
-//};
+struct Material {
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
 
 struct PointLight {
     vec4 position;
@@ -32,8 +32,10 @@ struct SpotLight {
     vec3 color;       
 }; 
 
-uniform vec3 viewPos;
-//uniform Material material;
+subroutine vec3 PointLightTextureMode( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir);
+subroutine uniform PointLightTextureMode pointLightTexMode;
+
+uniform Material material;
 
 uniform sampler2D t_albedo;
 uniform sampler2D t_diffuse;
@@ -51,6 +53,7 @@ in vec3 lightPos;
 
 out vec4 color;
 
+subroutine(PointLightTextureMode)
 vec3 PointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir)
 {
     vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - fragPos );
@@ -60,25 +63,44 @@ vec3 PointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir)
 	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
 	
 	return pointLights[lightIndex].color * pointLights[lightIndex].intensity * 
-		(m_ambient * attenuation + 
-		m_diffuse * attenuation * max( dot(lightSource, norm), 0.0f) + 
-		m_specular * attenuation * vec3(texture(t_specular, texturePos)) * 
-			pow( max( dot(lightReflected, viewDir), 0.0 ), m_shininess ));
+		(material.ambient * attenuation + 
+		material.diffuse * attenuation * max( dot(lightSource, norm), 0.0f) + 
+		material.specular * attenuation * vec3(texture(t_specular, texturePos)) * 
+			pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess ));
+}
+
+subroutine(PointLightTextureMode)
+vec3 PointLightADSNoSpecTexture( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir)
+{
+    vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - fragPos );
+    vec3 lightReflected = reflect( -lightSource, norm );
+	
+	float distance = length( vec3(pointLights[lightIndex].position) - fragPos);
+	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
+	
+	return pointLights[lightIndex].color * pointLights[lightIndex].intensity * 
+		(material.ambient * attenuation + 
+		material.diffuse * attenuation * max( dot(lightSource, norm), 0.0f) + 
+		material.specular * attenuation * //vec3(texture(t_specular, texturePos)) * 
+			pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess ));
 }
 
 void main() {
 	
-	vec3 albedoColor = vec3(texture(t_albedo, texturePos));
+	vec3 albedoTexColor = vec3(texture(t_albedo, texturePos));
+	vec3 diffuseTexColor = vec3(texture(t_diffuse, texturePos));
+	vec3 specularTexColor = vec3(texture(t_specular, texturePos));
+
 
 	vec3 norm = normalize(normalDir);
 	vec3 viewDir = normalize(vec3(-fragmentPos));
 
 	vec3 result = vec3(0.0);    
 	for( int i = 0; i < 5; i++ ) {       
-		result += PointLightADS( i, fragmentPos, norm, viewDir);
+		result += pointLightTexMode( i, fragmentPos, norm, viewDir);
 	}
 	
-	result *= albedoColor;
+	result *= albedoTexColor;
 
 	color = vec4(result, 1.0f);
 

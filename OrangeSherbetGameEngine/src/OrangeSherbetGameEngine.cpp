@@ -201,7 +201,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	}
 
 
-	Texture* teapotTexture = new Texture("Assets/Models/teapot/colorful.png", 128, 128, (TextureType)0);
+	Texture* teapotTexture = new Texture("Assets/Models/teapot/default.png", 128, 128, (TextureType)0);
 	Material* tMat = new Material(teapotTexture);
 	Mesh* teapotMesh = new Mesh(teapotVertices, teapotIndices, tMat);
 	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
