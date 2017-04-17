@@ -12,6 +12,7 @@ uniform MVPUniform {
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
+uniform mat4 normalMat;
 
 out vec2 texturePos;
 out vec3 fragmentPos;
@@ -21,7 +22,7 @@ out mat4 eyeMat;
 
 //void getEyeSpace( out vec3 norm, out vec4 position )
 //{
-//	norm = normalize( mat3(transpose(inverse(view * model))) * normal);
+//	norm = normalize( normalMat * normal);
 //	position = view * model * vec4(VertexPosition,1.0);
 //}
 

@@ -54,6 +54,8 @@ void GameObject::Draw(glm::mat4 newViewMatrix, std::vector<Light* > *listOfLight
 	shader->setUniform("view", (transform->GetViewMatrix()));
 	shader->setUniform("proj", (transform->GetProjectionMatrix()));
 
+	shader->setUniform("normalMat", glm::transpose(glm::inverse(glm::mat3(transform->GetViewMatrix()*transform->GetMatrix()))));
+
 	//for (int i = 0; i < listOfLights->size(); i++) {
 	//	(*listOfLights)[i].FillUniform(shader, i, eyespace);
 	//}
