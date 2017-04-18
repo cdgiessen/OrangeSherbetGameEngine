@@ -32,7 +32,6 @@ glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH 
 
 Shader* defaultShader;
 GLSLProgram* shader;
-Texture* cubeTexture;
 Mesh* cubeMesh;
 Mesh* quadMesh;
 
@@ -98,7 +97,7 @@ int OrangeSherbetGameEngine::ShutDown() {
 
 	delete(window);
 
-	std::cout << "Bye bye!" << std::endl; //y u ! werk?
+	std::cout << "Bye bye!" << std::endl;
 	return 0;
 }
 
@@ -113,7 +112,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	glm::mat4 perspectiveProjection(glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
 
 	//cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
-	cubeTexture = new Texture("Assets/Models/Cube/default.png", 128, 128, (TextureType)0);
+	Texture* cubeTexture = new Texture("Assets/Models/Cube/default.png", 128, 128, (TextureType)0);
 	Texture* specCubeTex = new Texture("Assets/Models/Cube/specular.png", 128, 128, (TextureType)1);
 	Material* cMat = new Material(cubeTexture, specCubeTex);
 	//cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
@@ -126,15 +125,9 @@ void OrangeSherbetGameEngine::TempRun() {
 		Transform(initCameraView, perspectiveProjection),
 		Transform(initCameraView, perspectiveProjection) };
 
-	cubeTransform[0].SetLocalPosition(glm::vec3(3, 0, 0));
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 1, 1.5));
-	cubeTransform[1].SetLocalPosition(glm::vec3(0, 0, 3));
-	cubeTransform[2].SetLocalPosition(glm::vec3(0, -3, 0));
 	cubeTransform[2].SetLocalScale(glm::vec3(15, 1, 15));
-	cubeTransform[3].SetLocalPosition(glm::vec3(0, 3, 0));
-	cubeTransform[4].SetLocalPosition(glm::vec3(0, 0, -3));	
-	cubeTransform[5].SetLocalPosition(glm::vec3(-3, 0, 0));
-
+	cubeTransform[2].SetLocalPosition(glm::vec3(0, -2, 0));
 
 	GameObject cubeObject0(&cubeTransform[0], cubeMesh, shader);
 	GameObject cubeObject1(&cubeTransform[1], cubeMesh, shader);
@@ -203,8 +196,10 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	Texture* teapotTexture = new Texture("Assets/Models/teapot/default.png", 128, 128, (TextureType)0);
 	Material* tMat = new Material(teapotTexture);
+	//Mesh* teapotMesh = LoadMesh("Assets/Models/teapot/teapot.obj", cMat);
 	Mesh* teapotMesh = new Mesh(teapotVertices, teapotIndices, tMat);
 	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
+	
 	GameObject teapot(teapotTransform, teapotMesh, shader);
 
 	scene->AddGameObject(&teapot);
