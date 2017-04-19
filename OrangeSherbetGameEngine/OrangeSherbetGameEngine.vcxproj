@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\GLSLProgram.cpp" />
     <ClCompile Include="src\Shader.cpp" />
@@ -179,8 +180,10 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\AssetManager.h" />
     <ClInclude Include="src\AllocatorPool.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Models\cube\default.mtl" />
