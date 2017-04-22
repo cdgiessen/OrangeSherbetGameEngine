@@ -78,6 +78,9 @@
     <ClCompile Include="src\Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Window.h">
@@ -143,15 +146,18 @@
     <ClInclude Include="src\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CAMERA.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Models\cube\default.mtl" />
     <None Include="Assets\Models\teapot\default.mtl" />
     <None Include="Assets\Models\teapot\teapot.max" />
-    <None Include="Shaders\DefaultFragmentShader.glsl">
+    <None Include="Shaders\DefaultShader.vert">
       <Filter>Resource Files\DefaultShaders</Filter>
     </None>
-    <None Include="Shaders\DefaultVertexShader.glsl">
+    <None Include="Shaders\DefaultShader.frag">
       <Filter>Resource Files\DefaultShaders</Filter>
     </None>
   </ItemGroup>

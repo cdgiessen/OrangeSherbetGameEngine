@@ -27,6 +27,7 @@ GLFWwindow *window;
 //GLuint triangleVBO, triangleVAO;
 
 Camera camera(glm::vec3(-3, 0, 0));
+Time myTime;
 
 glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f);
 
@@ -103,27 +104,28 @@ int OrangeSherbetGameEngine::ShutDown() {
 
 
 void OrangeSherbetGameEngine::TempRun() {
-	defaultShader = new Shader("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
+	defaultShader = new Shader("Shaders/DefaultShader.vert", "Shaders/DefaultShader.frag");
 	shader = new GLSLProgram();
-	shader->compileShader("Shaders/DefaultVertexShader.glsl", GLSLShader::VERTEX);
-	shader->compileShader("Shaders/DefaultFragmentShader.glsl", GLSLShader::FRAGMENT);
+	shader->compileShader("Shaders/DefaultShader.vert", GLSLShader::VERTEX);
+	shader->compileShader("Shaders/DefaultShader.frag", GLSLShader::FRAGMENT);
 	shader->link();
-	glm::mat4 initCameraView(camera.GetViewMatrix());
-	glm::mat4 perspectiveProjection(glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
+
+	camera.SetProjMatrix(projection);
 
 	//cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
-	Texture* cubeTexture = new Texture("Assets/Models/Cube/default.png", 128, 128, (TextureType)0);
+	Texture* cubeTexture = new Texture("Assets/Models/Cube/albedo.png", 128, 128, (TextureType)0);
 	Texture* specCubeTex = new Texture("Assets/Models/Cube/specular.png", 128, 128, (TextureType)1);
+
 	Material* cMat = new Material(cubeTexture, specCubeTex);
 	//cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
 	cubeMesh = LoadCubeMesh(cMat);
 	Transform cubeTransform[6]{ 
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection) };
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()) };
 
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 1, 1.5));
 	cubeTransform[2].SetLocalScale(glm::vec3(15, 1, 15));
@@ -194,11 +196,11 @@ void OrangeSherbetGameEngine::TempRun() {
 	}
 
 
-	Texture* teapotTexture = new Texture("Assets/Models/teapot/default.png", 128, 128, (TextureType)0);
+	Texture* teapotTexture = new Texture("Assets/Models/teapot/albedo.png", 128, 128, (TextureType)0);
 	Material* tMat = new Material(teapotTexture);
 	//Mesh* teapotMesh = LoadMesh("Assets/Models/teapot/teapot.obj", cMat);
 	Mesh* teapotMesh = new Mesh(teapotVertices, teapotIndices, tMat);
-	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
+	Transform* teapotTransform = new Transform(camera.GetViewMatrix(), camera.GetProjMatrix());
 	
 	GameObject teapot(teapotTransform, teapotMesh, shader);
 
@@ -214,8 +216,6 @@ void OrangeSherbetGameEngine::TempRun() {
 	Light* l3 = new Light(Color(1.0f, 1.0f, 0.0f), glm::vec3(3.0f, 3.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light* l4 = new Light(Color(0.0f, 1.0f, 0.0f), glm::vec3(-3.0f, 3.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	
-
-
 	scene->AddLight(l0);
 	scene->AddLight(l1);
 	scene->AddLight(l2);
@@ -230,12 +230,17 @@ void OrangeSherbetGameEngine::TempRun() {
 		if (inputManager->GetKey(70)) //speed up time. Literally.
 			timeish += 0.016f * 5;
 		timeish += 0.016f;
+
+		myTime.TickClock();
+		double deltaTime = myTime.GetDeltaTime();
+		std::cout << deltaTime << std::endl;
+
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
 		if (window->windowSizeChanged) {
-			perspectiveProjection = glm::perspective(glm::radians(camera.Zoom), (float)window->getWidth() / (float)window->getHeight(), 0.01f, 1000.0f);
-			scene->UpdateProjectionMatrix(perspectiveProjection);
+			camera.SetProjMatrix(glm::perspective(glm::radians(camera.Zoom), (float)window->getWidth() / (float)window->getHeight(), 0.01f, 1000.0f));
+			scene->UpdateProjectionMatrix(camera.GetProjMatrix());
 			window->windowSizeChanged = false;
 		}
 
@@ -255,7 +260,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		glm::mat4 view = camera.GetViewMatrix();
 
 		//RENDER
-		cubeObject0.transform->SetLocalRotation(0, timeish, 0);
+		cubeObject0.transform->SetLocalRotation(0, myTime.GetCurrentTime(), 0);
 		cubeObject1.transform->SetLocalRotation(270, timeish, 45);
 		//cubeObject2.transform->SetLocalRotation(0, timeish/8, 0);
 		//cubeObject2.transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(timeish*1.5f) * 1, 0));
@@ -274,7 +279,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		//	cubeObject[i].Draw(view);
 		//}
 
-		teapot.transform->SetLocalRotation(0, timeish, 0);
+		teapot.transform->SetLocalRotation(0, myTime.GetCurrentTime(), 0);
 		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish)/3), 0.01f);
 		//teapot.transform->
 		//teapot.Draw(view);

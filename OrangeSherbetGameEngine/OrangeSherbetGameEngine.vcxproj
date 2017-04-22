@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\GLSLProgram.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="src\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CAMERA.H" />
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\AssetManager.h" />
@@ -209,8 +211,8 @@
     <None Include="Assets\Models\cube\default.mtl" />
     <None Include="Assets\Models\teapot\default.mtl" />
     <None Include="Assets\Models\teapot\teapot.max" />
-    <None Include="Shaders\DefaultFragmentShader.glsl" />
-    <None Include="Shaders\DefaultVertexShader.glsl" />
+    <None Include="Shaders\DefaultShader.frag" />
+    <None Include="Shaders\DefaultShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Images\SolidColorCube.png" />
