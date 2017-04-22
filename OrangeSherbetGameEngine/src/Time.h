@@ -2,8 +2,11 @@
 
 #include <chrono>
 
-typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::steady_clock Clock;
 
+typedef std::chrono::duration<double, std::nano> dur_double_nano;
+typedef std::chrono::duration<double, std::milli> dur_double_millis;
+typedef std::chrono::duration<double> dur_double_second;
 class Time
 {
 public:
@@ -20,8 +23,14 @@ public:
 	double GetDeltaTimeInMillis();
 	double GetDeltaTimeInNano();
 
+	bool isPaused();
+	void Pause();
+	void UnPause();
+
 private:	
-	std::chrono::time_point< std::chrono::high_resolution_clock> creationTime, currentTime, previousTime;
-	std::chrono::nanoseconds deltaTime;
+	bool paused = false;
+
+	std::chrono::time_point< std::chrono::steady_clock, dur_double_nano> creationTime, currentTime, previousTime, pauseTime;
+	dur_double_nano deltaTime;
 };
 
