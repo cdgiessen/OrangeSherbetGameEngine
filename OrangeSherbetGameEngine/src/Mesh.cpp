@@ -1,5 +1,14 @@
 #include "Mesh.h"
 
+struct faceDetail {
+	glm::vec3 norm;
+	int v1;
+	int v2;
+	int v3;
+
+	faceDetail(glm::vec3 n, int i1, int i2, int i3) : norm(n), v1(i1), v2(i2), v3(i3) {}
+};
+
 Mesh* LoadMesh(std::string inputfile, Material* mat) {
 
 
@@ -52,6 +61,89 @@ Mesh* LoadMesh(std::string inputfile, Material* mat) {
 		}
 	}
 	
+	return new Mesh(vertices, indices, mat);
+}
+
+Mesh* LoadMeshNoNormals(std::string inputfile, Material* mat) {
+
+
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+
+	std::string cerr;
+	bool cret = tinyobj::LoadObj(&attrib, &shapes, &materials, &cerr, inputfile.c_str());
+
+	if (!cerr.empty()) { // `err` may contain warning message.
+		std::cerr << cerr << std::endl;
+	}
+
+	if (!cret) {
+		exit(1);
+	}
+
+	std::unordered_map<Vertex, int> uniqueVertices = {};
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+
+	for (const auto& shape : shapes) {
+		for (const auto& index : shape.mesh.indices) {
+			Vertex vertex = {};
+
+			vertex.Position = {
+				attrib.vertices[3 * index.vertex_index + 0],
+				attrib.vertices[3 * index.vertex_index + 1],
+				attrib.vertices[3 * index.vertex_index + 2]
+			};
+
+			vertex.TexCoords = {
+				attrib.texcoords[2 * index.texcoord_index + 0],
+				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+			};
+
+			vertex.Normal = { 0, 0, 0 };
+
+			if (uniqueVertices.count(vertex) == 0) {
+				uniqueVertices[vertex] = vertices.size();
+				vertices.push_back(vertex);
+			}
+
+			indices.push_back(uniqueVertices[vertex]);
+		}
+	}
+
+	int counter = 0;
+	std::vector<faceDetail> surfaces;
+	while (counter < indices.size()) {
+		glm::vec3 p1 = vertices[indices[counter]].Position;
+		glm::vec3 p2 = vertices[indices[counter+1]].Position;
+		glm::vec3 p3 = vertices[indices[counter+2]].Position;
+
+		glm::vec3 t1 = p2 - p1;
+		glm::vec3 t2 = p3 - p1;
+
+		glm::vec3 normal(glm::cross(t1, t2));
+		surfaces.push_back(faceDetail(normal, indices[counter], indices[counter + 1], indices[counter + 2]));
+
+		//vertices[indices[counter]].Normal = normal;
+		//vertices[indices[counter + 1]].Normal = normal;
+		//vertices[indices[counter + 2]].Normal = normal;
+		counter += 3;
+	}
+
+	for (int i = 0; i < vertices.size(); i++) {
+		glm::vec3 sum;
+		for (int j = 0; j < surfaces.size(); j++) {
+			if (surfaces[j].v1 == i)
+				sum += surfaces[j].norm;
+			else if (surfaces[j].v2 == i)
+				sum += surfaces[j].norm;
+			else if (surfaces[j].v3 == i)
+				sum += surfaces[j].norm;
+		}
+		vertices[i].Normal = glm::normalize(sum);
+	}
+
 	return new Mesh(vertices, indices, mat);
 }
 

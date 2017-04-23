@@ -1,16 +1,16 @@
 #include "Material.h"
 
-Material::Material(Texture* albedo, Texture* specularT, Texture* normal, Texture* emissive, Texture* height) : albedoTex(albedo), specularTex(specularT), normalTex(normal), emissiveTex(emissive), heightTex(height)
+Material::Material(Texture* albedo, Texture* specularT, Texture* normal, Texture* emissive, Texture* height) : t_albedo(albedo), t_specular(specularT), t_normal(normal), t_emissive(emissive), t_height(height)
 {
 	SetPropertiesToDefault();
 }
 
-Material::Material(Texture* albedo, Texture* specularT) : albedoTex(albedo), specularTex(specularT), normalTex(nullptr), emissiveTex(nullptr), heightTex(nullptr)
+Material::Material(Texture* albedo, Texture* specularT) : t_albedo(albedo), t_specular(specularT), t_normal(nullptr), t_emissive(nullptr), t_height(nullptr)
 {
 	SetPropertiesToDefault();
 }
 
-Material::Material(Texture* albedo) : albedoTex(albedo), specularTex(nullptr), normalTex(nullptr), emissiveTex(nullptr), heightTex(nullptr)
+Material::Material(Texture* albedo) : t_albedo(albedo), t_specular(nullptr), t_normal(nullptr), t_emissive(nullptr), t_height(nullptr)
 {
 	SetPropertiesToDefault();
 }
@@ -56,48 +56,48 @@ float Material::GetShininess() {
 }
 
 Texture* Material::GetAlbedoTexture() {
-	return albedoTex;
+	return t_albedo;
 }
 
 void Material::SetAlbedoTexture(Texture * albedo)
 {
-	albedoTex = albedo;
+	albedo = albedo;
 }
 
 Texture* Material::GetSpecularTexture() {
-	return specularTex;
+	return t_specular;
 }
 
 void Material::SetSpecularTexture(Texture * specular)
 {
-	specularTex = specular;
+	specular = specular;
 }
 
 Texture* Material::GetNormalTexture() {
-	return normalTex;
+	return t_normal;
 }
 
 void Material::SetNormalTexture(Texture * normal)
 {
-	normalTex = normal;
+	normal = normal;
 }
 
 Texture* Material::GetEmissiveTexture() {
-	return emissiveTex;
+	return t_emissive;
 }
 
 void Material::SetEmissiveTexture(Texture * emissive)
 {
-	emissiveTex = emissive;
+	emissive = emissive;
 }
 
 Texture * Material::GetHeightTexture()
 {
-	return heightTex;
+	return t_height;
 }
 
 void Material::SetHeightTexture(Texture * height) {
-	heightTex = height;
+	height = height;
 }
 
 Shader* Material::GetShader() {

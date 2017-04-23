@@ -10,8 +10,9 @@
 #include <stb_image.h>
 
 #define TINYOBJLOADER_IMPLEMENTATION
-//#include <tinyobj_loader_opt.h>
 #include <tiny_obj_loader.h>
+
+#include <noise/noise.h>
 
 //#include "CML\cml.h"
 //#include "CML\mat4.h"
@@ -27,6 +28,7 @@ GLFWwindow *window;
 //GLuint triangleVBO, triangleVAO;
 
 Camera camera(glm::vec3(-3, 0, 0));
+Time myTime;
 
 glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 10000.0f);
 
@@ -46,7 +48,7 @@ OrangeSherbetGameEngine::~OrangeSherbetGameEngine() {}
 // Is called whenever a key is pressed/released via GLFW
 void OrangeSherbetGameEngine::TempKeyboardInput()
 {
-	float deltaTime = 0.05f;
+	float deltaTime = myTime.GetDeltaTime();
 
 	// Camera controls
 	if (inputManager->GetKey(GLFW_KEY_W))
@@ -103,27 +105,28 @@ int OrangeSherbetGameEngine::ShutDown() {
 
 
 void OrangeSherbetGameEngine::TempRun() {
-	defaultShader = new Shader("Shaders/DefaultVertexShader.glsl", "Shaders/DefaultFragmentShader.glsl");
+	defaultShader = new Shader("Shaders/DefaultShader.vert", "Shaders/DefaultShader.frag");
 	shader = new GLSLProgram();
-	shader->compileShader("Shaders/DefaultVertexShader.glsl", GLSLShader::VERTEX);
-	shader->compileShader("Shaders/DefaultFragmentShader.glsl", GLSLShader::FRAGMENT);
+	shader->compileShader("Shaders/DefaultShader.vert", GLSLShader::VERTEX);
+	shader->compileShader("Shaders/DefaultShader.frag", GLSLShader::FRAGMENT);
 	shader->link();
-	glm::mat4 initCameraView(camera.GetViewMatrix());
-	glm::mat4 perspectiveProjection(glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.01f, 100.0f));
+
+	camera.SetProjMatrix(projection);
 
 	//cubeTexture = new Texture("Assets/Images/SolidColorCube.png", 96, 64, (TextureType)0);
-	Texture* cubeTexture = new Texture("Assets/Models/Cube/default.png", 128, 128, (TextureType)0);
+	Texture* cubeTexture = new Texture("Assets/Models/Cube/albedo.png", 128, 128, (TextureType)0);
 	Texture* specCubeTex = new Texture("Assets/Models/Cube/specular.png", 128, 128, (TextureType)1);
+
 	Material* cMat = new Material(cubeTexture, specCubeTex);
 	//cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
 	cubeMesh = LoadCubeMesh(cMat);
 	Transform cubeTransform[6]{ 
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection),
-		Transform(initCameraView, perspectiveProjection) };
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()),
+		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()) };
 
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 1, 1.5));
 	cubeTransform[2].SetLocalScale(glm::vec3(15, 1, 15));
@@ -143,62 +146,11 @@ void OrangeSherbetGameEngine::TempRun() {
 	scene->AddGameObject(&cubeObject4);
 	scene->AddGameObject(&cubeObject5);
 
-	std::vector<Vertex> teapotVertices;
-	std::vector<GLuint> teapotIndices;
-
-	std::string inputfile = "Assets/Models/teapot/teapot.obj";
-	tinyobj::attrib_t attrib;
-	std::vector<tinyobj::shape_t> shapes;
-	std::vector<tinyobj::material_t> materials;
-
-	std::string err;
-	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str());
-
-	if (!err.empty()) { // `err` may contain warning message.
-		std::cerr << err << std::endl;
-	}
-
-	if (!ret) {
-		exit(1);
-	}
-
-	std::unordered_map<Vertex, int> uniqueVertices = {};
-
-	for (const auto& shape : shapes) {
-		for (const auto& index : shape.mesh.indices) {
-			Vertex vertex = {};
-
-			vertex.Position = {
-				attrib.vertices[3 * index.vertex_index + 0],
-				attrib.vertices[3 * index.vertex_index + 1],
-				attrib.vertices[3 * index.vertex_index + 2]
-			};
-
-			vertex.TexCoords = {
-				attrib.texcoords[2 * index.texcoord_index + 0],
-				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
-			};
-			
-			
-			vertex.Normal = { vertex.Position.x, vertex.Position.y, vertex.Position.z };
-
-			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
-
-			if (uniqueVertices.count(vertex) == 0) {
-				uniqueVertices[vertex] = teapotVertices.size();
-				teapotVertices.push_back(vertex);
-			}
-
-			teapotIndices.push_back(uniqueVertices[vertex]);
-		}
-	}
-
-
-	Texture* teapotTexture = new Texture("Assets/Models/teapot/default.png", 128, 128, (TextureType)0);
+	Texture* teapotTexture = new Texture("Assets/Models/teapot/albedo.png", 128, 128, (TextureType)0);
 	Material* tMat = new Material(teapotTexture);
 	//Mesh* teapotMesh = LoadMesh("Assets/Models/teapot/teapot.obj", cMat);
-	Mesh* teapotMesh = new Mesh(teapotVertices, teapotIndices, tMat);
-	Transform* teapotTransform = new Transform(initCameraView, perspectiveProjection);
+	Mesh* teapotMesh = LoadMeshNoNormals("Assets/Models/teapot/teapot.obj", tMat);
+	Transform* teapotTransform = new Transform(camera.GetViewMatrix(), camera.GetProjMatrix());
 	
 	GameObject teapot(teapotTransform, teapotMesh, shader);
 
@@ -208,34 +160,40 @@ void OrangeSherbetGameEngine::TempRun() {
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
 
+
+
 	Light* l0 = new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.7f, Light::LightType::Point);
 	Light* l1 = new Light(Color(1.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light* l2 = new Light(Color(0.0f, 0.0f, 1.0f), glm::vec3(-3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light* l3 = new Light(Color(1.0f, 1.0f, 0.0f), glm::vec3(3.0f, 3.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light* l4 = new Light(Color(0.0f, 1.0f, 0.0f), glm::vec3(-3.0f, 3.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	
-
-
 	scene->AddLight(l0);
 	scene->AddLight(l1);
 	scene->AddLight(l2);
 	scene->AddLight(l3);
 	scene->AddLight(l4);
 
-	float timeish = 0;
-
 	// Main Game loop
 	while (!glfwWindowShouldClose(window->getGLFWWindow()))
 	{
 		if (inputManager->GetKey(70)) //speed up time. Literally.
-			timeish += 0.016f * 5;
-		timeish += 0.016f;
+		{
+			myTime.Pause();	
+		}
+		else {
+			myTime.UnPause();
+		}
+
+		myTime.TickClock();
+		//myTime.PrintCurrentTime();
+
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
 		if (window->windowSizeChanged) {
-			perspectiveProjection = glm::perspective(glm::radians(camera.Zoom), (float)window->getWidth() / (float)window->getHeight(), 0.01f, 1000.0f);
-			scene->UpdateProjectionMatrix(perspectiveProjection);
+			camera.SetProjMatrix(glm::perspective(glm::radians(camera.Zoom), (float)window->getWidth() / (float)window->getHeight(), 0.01f, 1000.0f));
+			scene->UpdateProjectionMatrix(camera.GetProjMatrix());
 			window->windowSizeChanged = false;
 		}
 
@@ -245,7 +203,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		// Render
 		// Clear the colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
-		//glClearColor(sin(timeish), 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
+		//glClearColor(sin(myTime.GetCurrentTime()), 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the colorbuffer
 
 
@@ -255,38 +213,38 @@ void OrangeSherbetGameEngine::TempRun() {
 		glm::mat4 view = camera.GetViewMatrix();
 
 		//RENDER
-		cubeObject0.transform->SetLocalRotation(0, timeish, 0);
-		cubeObject1.transform->SetLocalRotation(270, timeish, 45);
-		//cubeObject2.transform->SetLocalRotation(0, timeish/8, 0);
-		//cubeObject2.transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(timeish*1.5f) * 1, 0));
-		cubeObject3.transform->SetLocalRotation(45, timeish*1.5f, 0);
-		cubeObject4.transform->SetLocalRotation(timeish*3.0f, timeish*1.667f , 0);
-		cubeObject5.transform->SetLocalRotation(timeish, timeish *2, timeish/1.5f);
+		cubeObject0.transform->SetLocalRotation(0, myTime.GetCurrentTime(), 0);
+		cubeObject1.transform->SetLocalRotation(270, myTime.GetCurrentTime(), 45);
+		//cubeObject2.transform->SetLocalRotation(0, myTime.GetCurrentTime()/8, 0);
+		//cubeObject2.transform->SetLocalPosition(glm::vec3(0.0f, 3.0f + sin(myTime.GetCurrentTime()*1.5f) * 1, 0));
+		cubeObject3.transform->SetLocalRotation(45, myTime.GetCurrentTime()*1.5f, 0);
+		cubeObject4.transform->SetLocalRotation(myTime.GetCurrentTime()*3.0f, myTime.GetCurrentTime()*1.667f , 0);
+		cubeObject5.transform->SetLocalRotation(myTime.GetCurrentTime(), myTime.GetCurrentTime() *2, myTime.GetCurrentTime() /1.5f);
 
-		cubeObject0.transform->SetLocalPosition(glm::vec3(4 + sin(timeish * 3 + 0.5) * 2, 0, - 2 + sin(timeish + 0.2) * 0.5f));
-		cubeObject1.transform->SetLocalPosition(glm::vec3(-3, 0, 4 + sin(timeish * 2 + 1.54) * 3));
-		//cubeObject2.transform->SetLocalPosition(glm::vec3(0, -3 + sin(timeish * 3) * 3, 0));
-		cubeObject3.transform->SetLocalPosition(glm::vec3(-2, 4 + sin(timeish * 3) * 2, 1));
-		cubeObject4.transform->SetLocalPosition(glm::vec3(2 + sin(timeish*5) * 2, 0, -4 + sin(timeish * 2 + 2) * 3));
-		cubeObject5.transform->SetLocalPosition(glm::vec3(-4 + sin(timeish*3 + 1) * 2, 0, -2));
+		cubeObject0.transform->SetLocalPosition(glm::vec3(4 + sin(myTime.GetCurrentTime() * 3 + 0.5) * 2, 0, - 2 + sin(myTime.GetCurrentTime() + 0.2) * 0.5f));
+		cubeObject1.transform->SetLocalPosition(glm::vec3(-3, 0, 4 + sin(myTime.GetCurrentTime() * 2 + 1.54) * 3));
+		//cubeObject2.transform->SetLocalPosition(glm::vec3(0, -3 + sin(myTime.GetCurrentTime() * 3) * 3, 0));
+		cubeObject3.transform->SetLocalPosition(glm::vec3(-2, 4 + sin(myTime.GetCurrentTime() * 3) * 2, 1));
+		cubeObject4.transform->SetLocalPosition(glm::vec3(2 + sin(myTime.GetCurrentTime()*5) * 2, 0, -4 + sin(myTime.GetCurrentTime() * 2 + 2) * 3));
+		cubeObject5.transform->SetLocalPosition(glm::vec3(-4 + sin(myTime.GetCurrentTime()*3 + 1) * 2, 0, -2));
 		
 		//for (int i = 0; i < 6; i++) {
 		//	cubeObject[i].Draw(view);
 		//}
 
-		teapot.transform->SetLocalRotation(0, timeish, 0);
-		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(timeish)/3), 0.01f);
+		teapot.transform->SetLocalRotation(0, myTime.GetCurrentTime()/4, 0);
+		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(myTime.GetCurrentTime())/3), 0.01f);
 		//teapot.transform->
 		//teapot.Draw(view);
-		l0->SetPosition(glm::vec3(sin(timeish)*5, 0, cos(timeish)*5));
-		l1->SetPosition(glm::vec3(4.0f + sin(timeish*3.0f)*3.0f,	3.0f, 4.0f + cos(timeish*3.0f)*3.0f));
-		l2->SetPosition(glm::vec3(-4.0f + sin(timeish*3.0f)*3.0f,	3.0f, 4.0f + cos(-timeish*3.0f)*3.0f));
-		l3->SetPosition(glm::vec3(4.0f + sin(-timeish*3.0f)*3.0f,	3.0f, -4.0f + cos(timeish*3.0f)*3.0f));
-		l4->SetPosition(glm::vec3(-4.0f + sin(-timeish*3.0f)*3.0f,	 3.0f, -4.0f + cos(-timeish*3.0f)*3.0f));
+		l0->SetPosition(glm::vec3(sin(myTime.GetCurrentTime())*5, 0, cos(myTime.GetCurrentTime())*5));
+		l1->SetPosition(glm::vec3(4.0f + sin(myTime.GetCurrentTime()*3.0f)*3.0f,	3.0f, 4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
+		l2->SetPosition(glm::vec3(-4.0f + sin(myTime.GetCurrentTime()*3.0f)*3.0f,	3.0f, 4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
+		l3->SetPosition(glm::vec3(4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f,	3.0f, -4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
+		l4->SetPosition(glm::vec3(-4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f,	 3.0f, -4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
 
-		//(scene->GetListOfLights())[1]->SetPosition(glm::vec3(-3, 0, cos(timeish*3.0f)*.0f));
-		//(scene->GetListOfLights())[2]->SetPosition(glm::vec3(sin(timeish*3.0f) * 3.0f, 0, 3.0f));
-		//(scene->GetListOfLights())[3]->SetPosition(glm::vec3(sin(timeish*3.0f) * 3.0f, 0, -3.0f));
+		//(scene->GetListOfLights())[1]->SetPosition(glm::vec3(-3, 0, cos(myTime.GetCurrentTime()*3.0f)*.0f));
+		//(scene->GetListOfLights())[2]->SetPosition(glm::vec3(sin(myTime.GetCurrentTime()*3.0f) * 3.0f, 0, 3.0f));
+		//(scene->GetListOfLights())[3]->SetPosition(glm::vec3(sin(myTime.GetCurrentTime()*3.0f) * 3.0f, 0, -3.0f));
 		
 		scene->DrawScene(view);
 

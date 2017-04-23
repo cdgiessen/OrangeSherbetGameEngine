@@ -55,6 +55,7 @@ namespace std {
 class Mesh;
 
 Mesh* LoadMesh(std::string inputfile, Material *mat);
+Mesh* LoadMeshNoNormals(std::string inputfile, Material *mat);
 Mesh* LoadCubeMesh(Material *mat);
 
 class Mesh {

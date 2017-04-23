@@ -46,11 +46,11 @@ private:
 
 	Shader* shader;
 
-	Texture *albedoTex;
-	Texture *specularTex;
-	Texture *normalTex;
-	Texture *emissiveTex;
-	Texture *heightTex;
+	Texture *t_albedo;
+	Texture *t_specular;
+	Texture *t_normal;
+	Texture *t_emissive;
+	Texture *t_height;
 
 	glm::vec3 ambient;
 	glm::vec3 diffuse;

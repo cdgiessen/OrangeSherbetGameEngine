@@ -41,6 +41,8 @@ uniform sampler2D t_albedo;
 uniform sampler2D t_diffuse;
 uniform sampler2D t_specular;
 uniform sampler2D t_normal;
+uniform sampler2D t_emissive;
+uniform sampler2D t_height;
 
 uniform PointLight pointLights[5];
 uniform DirLight dirlights[5];
@@ -52,6 +54,8 @@ in vec2 texturePos;
 in vec3 lightPos;
 
 out vec4 color;
+
+//add switches for each texture. If they have don't have it and if they do
 
 subroutine(PointLightTextureMode)
 vec3 PointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir)
