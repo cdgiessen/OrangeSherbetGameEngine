@@ -27,6 +27,8 @@ public:
 	void Pause();
 	void UnPause();
 
+	void PrintCurrentTime(); //prints current times in s, m, and n in the console. 
+
 private:	
 	bool paused = false;
 

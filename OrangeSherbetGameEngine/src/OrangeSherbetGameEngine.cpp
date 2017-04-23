@@ -10,8 +10,9 @@
 #include <stb_image.h>
 
 #define TINYOBJLOADER_IMPLEMENTATION
-//#include <tinyobj_loader_opt.h>
 #include <tiny_obj_loader.h>
+
+#include <noise/noise.h>
 
 //#include "CML\cml.h"
 //#include "CML\mat4.h"
@@ -47,7 +48,7 @@ OrangeSherbetGameEngine::~OrangeSherbetGameEngine() {}
 // Is called whenever a key is pressed/released via GLFW
 void OrangeSherbetGameEngine::TempKeyboardInput()
 {
-	float deltaTime = 0.05f;
+	float deltaTime = myTime.GetDeltaTime();
 
 	// Camera controls
 	if (inputManager->GetKey(GLFW_KEY_W))
@@ -145,61 +146,10 @@ void OrangeSherbetGameEngine::TempRun() {
 	scene->AddGameObject(&cubeObject4);
 	scene->AddGameObject(&cubeObject5);
 
-	std::vector<Vertex> teapotVertices;
-	std::vector<GLuint> teapotIndices;
-
-	std::string inputfile = "Assets/Models/teapot/teapot.obj";
-	tinyobj::attrib_t attrib;
-	std::vector<tinyobj::shape_t> shapes;
-	std::vector<tinyobj::material_t> materials;
-
-	std::string err;
-	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str());
-
-	if (!err.empty()) { // `err` may contain warning message.
-		std::cerr << err << std::endl;
-	}
-
-	if (!ret) {
-		exit(1);
-	}
-
-	std::unordered_map<Vertex, int> uniqueVertices = {};
-
-	for (const auto& shape : shapes) {
-		for (const auto& index : shape.mesh.indices) {
-			Vertex vertex = {};
-
-			vertex.Position = {
-				attrib.vertices[3 * index.vertex_index + 0],
-				attrib.vertices[3 * index.vertex_index + 1],
-				attrib.vertices[3 * index.vertex_index + 2]
-			};
-
-			vertex.TexCoords = {
-				attrib.texcoords[2 * index.texcoord_index + 0],
-				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
-			};
-			
-			
-			vertex.Normal = { vertex.Position.x, vertex.Position.y, vertex.Position.z };
-
-			//std::cout << vertex.Position.x << vertex.Position.y << vertex.Position.z << std::endl;
-
-			if (uniqueVertices.count(vertex) == 0) {
-				uniqueVertices[vertex] = teapotVertices.size();
-				teapotVertices.push_back(vertex);
-			}
-
-			teapotIndices.push_back(uniqueVertices[vertex]);
-		}
-	}
-
-
 	Texture* teapotTexture = new Texture("Assets/Models/teapot/albedo.png", 128, 128, (TextureType)0);
 	Material* tMat = new Material(teapotTexture);
 	//Mesh* teapotMesh = LoadMesh("Assets/Models/teapot/teapot.obj", cMat);
-	Mesh* teapotMesh = new Mesh(teapotVertices, teapotIndices, tMat);
+	Mesh* teapotMesh = LoadMeshNoNormals("Assets/Models/teapot/teapot.obj", tMat);
 	Transform* teapotTransform = new Transform(camera.GetViewMatrix(), camera.GetProjMatrix());
 	
 	GameObject teapot(teapotTransform, teapotMesh, shader);
@@ -209,6 +159,8 @@ void OrangeSherbetGameEngine::TempRun() {
 	//cml::mat4f model;
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
+
+
 
 	Light* l0 = new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.7f, Light::LightType::Point);
 	Light* l1 = new Light(Color(1.0f, 0.0f, 0.0f), glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
@@ -234,11 +186,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		}
 
 		myTime.TickClock();
-		double deltaTime = myTime.GetDeltaTime();
-		double currentTime = myTime.GetCurrentTime();
-		//double currentTimeM = myTime.GetCurrentTimeInMillis();
-		//double currentTimeN = myTime.GetCurrentTimeInNano();
-		//std::cout << "deltaT " << deltaTime << "    currentT in s " << currentTime << "    currentT in m " << currentTimeM << "    currentT in n " << currentTimeN << std::endl;
+		//myTime.PrintCurrentTime();
 
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
@@ -284,7 +232,7 @@ void OrangeSherbetGameEngine::TempRun() {
 		//	cubeObject[i].Draw(view);
 		//}
 
-		teapot.transform->SetLocalRotation(0, myTime.GetCurrentTime(), 0);
+		teapot.transform->SetLocalRotation(0, myTime.GetCurrentTime()/4, 0);
 		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(myTime.GetCurrentTime())/3), 0.01f);
 		//teapot.transform->
 		//teapot.Draw(view);

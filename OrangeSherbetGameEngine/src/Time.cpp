@@ -60,3 +60,8 @@ void Time::UnPause() {
 	paused = false;
 	previousTime += (Clock::now() - pauseTime);
 }
+
+void Time::PrintCurrentTime() {
+	std::cout << "Current Time in seconds: " << GetCurrentTime() << "	in milli: " << GetCurrentTimeInMillis() << "	In nano: " << GetCurrentTimeInNano() << std::endl;
+
+}
