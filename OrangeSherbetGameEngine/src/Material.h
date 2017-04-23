@@ -18,11 +18,17 @@ public:
 	~Material();
 
 	glm::vec3 GetAmbient();
+	void SetAmbient(glm::vec3 am);
 	glm::vec3 GetDiffuse();
+	void SetDiffuse(glm::vec3 diff);
 	glm::vec3 GetSpecular();
+	void SetSpecular(glm::vec3 spec);
 	glm::vec3 GetTransmittance();
+	void SetTransmittance(glm::vec3 tr);
 	glm::vec3 GetEmission();
+	void SetEmission(glm::vec3 em);
 	float GetShininess();
+	void SetShininess(float shine);
 
 	Texture* GetAlbedoTexture();
 	void SetAlbedoTexture(Texture * albedo);
