@@ -15,6 +15,11 @@ Material::Material(Texture* albedo) : t_albedo(albedo), t_specular(nullptr), t_n
 	SetPropertiesToDefault();
 }
 
+Material::Material() : t_albedo(nullptr), t_specular(nullptr), t_normal(nullptr), t_emissive(nullptr), t_height(nullptr)
+{
+	SetPropertiesToDefault();
+}
+
 void Material::SetPropertiesToDefault() {
 	ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 	diffuse = glm::vec3(0.9f, 0.9f, 0.9f);

@@ -291,22 +291,28 @@ void Mesh::Draw(GLSLProgram* shader)
 		//// And finally bind the texture
 		//glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
 	
-	GLuint adsIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "PointLightADS");
-	GLuint adsNoSpecTexIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "PointLightADSNoSpecTexture");
+	GLuint albedoEnabledIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "AlbedoTexEnabled");
+	GLuint albedoDisabledIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "AlbedoTexDisabled");
 
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &adsNoSpecTexIndex);
+	GLuint specularEnabledIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "SpecularTexEnabled");
+	GLuint specularDisabledIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "SpecularTexDisabled");
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &albedoDisabledIndex);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &specularDisabledIndex);
 
 	if (material->GetAlbedoTexture() != nullptr) {
 		glActiveTexture(GL_TEXTURE0 + 0);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_albedo"), 0);
 		glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
+
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &albedoEnabledIndex);
 	}
 	if (material->GetSpecularTexture() != nullptr) {
 		glActiveTexture(GL_TEXTURE1);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_specular"), 1);
 		glBindTexture(GL_TEXTURE_2D, material->GetSpecularTexture()->GetTextureID());
 
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &adsIndex);
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &specularEnabledIndex);
 	}
 	if (material->GetNormalTexture() != nullptr) {
 		glActiveTexture(GL_TEXTURE2);
@@ -336,7 +342,13 @@ void Mesh::Draw(GLSLProgram* shader)
 
 	// Always good practice to set everything back to defaults once configured.
 	
-		glActiveTexture(GL_TEXTURE0 + 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	
 }
