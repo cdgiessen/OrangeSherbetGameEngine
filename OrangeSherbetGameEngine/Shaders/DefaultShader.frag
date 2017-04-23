@@ -62,6 +62,7 @@ vec3 PointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir)
 {
     vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - fragPos );
     vec3 lightReflected = reflect( -lightSource, norm );
+	vec3 halfway = normalize(viewDir + lightSource);
 	
 	float distance = length( vec3(pointLights[lightIndex].position) - fragPos);
 	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
@@ -70,7 +71,7 @@ vec3 PointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir)
 		(material.ambient * attenuation + 
 		material.diffuse * attenuation * max( dot(lightSource, norm), 0.0f) + 
 		material.specular * attenuation * vec3(texture(t_specular, texturePos)) * 
-			pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess ));
+			pow( max( dot(norm, halfway), 0.0 ), material.shininess ));
 }
 
 subroutine(PointLightTextureMode)
@@ -78,6 +79,7 @@ vec3 PointLightADSNoSpecTexture( int lightIndex, vec3 fragPos, vec3 norm, vec3 v
 {
     vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - fragPos );
     vec3 lightReflected = reflect( -lightSource, norm );
+	vec3 halfway = normalize(viewDir + lightSource);
 	
 	float distance = length( vec3(pointLights[lightIndex].position) - fragPos);
 	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
@@ -86,7 +88,7 @@ vec3 PointLightADSNoSpecTexture( int lightIndex, vec3 fragPos, vec3 norm, vec3 v
 		(material.ambient * attenuation + 
 		material.diffuse * attenuation * max( dot(lightSource, norm), 0.0f) + 
 		material.specular * attenuation * //vec3(texture(t_specular, texturePos)) * 
-			pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess ));
+			pow( max( dot(norm, halfway), 0.0 ), material.shininess ));
 }
 
 void main() {

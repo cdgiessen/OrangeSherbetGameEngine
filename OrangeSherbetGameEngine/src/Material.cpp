@@ -18,41 +18,61 @@ Material::Material(Texture* albedo) : t_albedo(albedo), t_specular(nullptr), t_n
 void Material::SetPropertiesToDefault() {
 	ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 	diffuse = glm::vec3(0.9f, 0.9f, 0.9f);
-	specular = glm::vec3(0.5f, 0.5f, 0.5f);
-	shininess = 256.0f;
+	specular = glm::vec3(0.3f, 0.3f, 0.3f);
+	shininess = 16.0f;
 }
 
 Material::~Material()
 {
 }
 
-glm::vec3 Material::GetAmbient()
-{
+glm::vec3 Material::GetAmbient() {
 	return ambient;
 }
 
-glm::vec3 Material::GetDiffuse()
-{
+void Material::SetAmbient(glm::vec3 am) {
+	ambient = am;
+}
+
+glm::vec3 Material::GetDiffuse() {
 	return diffuse;
 }
 
-glm::vec3 Material::GetSpecular()
-{
+void Material::SetDiffuse(glm::vec3 diff) {
+	diffuse = diff;
+}
+
+glm::vec3 Material::GetSpecular() {
 	return specular;
 }
 
-glm::vec3 Material::GetTransmittance()
-{
+void Material::SetSpecular(glm::vec3 spec) {
+	specular = spec;
+}
+
+glm::vec3 Material::GetTransmittance() {
 	return transmittance;
 }
 
-glm::vec3 Material::GetEmission()
-{
+void Material::SetTransmittance(glm::vec3 trans) {
+	transmittance = trans;
+}
+
+glm::vec3 Material::GetEmission() {
 	return emission;
+}
+
+void Material::SetEmission(glm::vec3 em) {
+	emission = em;
 }
 
 float Material::GetShininess() {
 	return shininess;
+}
+
+void Material::SetShininess(float shine)
+{
+	shininess = shine;
 }
 
 Texture* Material::GetAlbedoTexture() {
