@@ -119,6 +119,7 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	Material* cMat = new Material(cubeTexture, specCubeTex);
 	cMat->SetAmbient(glm::vec3(0.1, 0.1, 0.1));
+	cMat->SetSpecular(glm::vec3(0.8, 0.8, 0.8));
 	//cubeMesh = LoadMesh("Assets/Models/cube/cube.obj", cMat);
 	cubeMesh = LoadCubeMesh(cMat);
 	Transform cubeTransform[6]{ 
@@ -159,7 +160,8 @@ void OrangeSherbetGameEngine::TempRun() {
 
 	Texture* sibenikTexture = new Texture("Assets/Models/sibenik/kamen.png", 512, 512, (TextureType)0);
 	Material* sMat = new Material(sibenikTexture);
-	sMat->SetAmbient(glm::vec3(1, 1, 1));
+	sMat->SetAmbient(glm::vec3(0.5, 0.5, 0.5));
+	sMat->SetShininess(128.0f);
 	Mesh* sibenikMesh = LoadMesh("Assets/Models/sibenik/sibenik.obj", sMat);
 	Transform* sibenikTransform = new Transform(camera.GetViewMatrix(), camera.GetProjMatrix());
 	GameObject sibenik(sibenikTransform, sibenikMesh, shader);
@@ -170,7 +172,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
 
-	Light* l0 = new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.7f, Light::LightType::Point);
+	Light* l0 = new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light* l1 = new Light(Color(1.0f, 0.0f, 0.0f), glm::vec3(4.0f, 2.0f, 4.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light* l2 = new Light(Color(0.0f, 0.0f, 1.0f), glm::vec3(-4.0f, 2.0f, 4.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
 	Light* l3 = new Light(Color(1.0f, 1.0f, 0.0f), glm::vec3(4.0f, 2.0f, -4.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, Light::LightType::Point);
@@ -251,6 +253,7 @@ void OrangeSherbetGameEngine::TempRun() {
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window->getGLFWWindow());
+
 	}
 
 	ShutDown();

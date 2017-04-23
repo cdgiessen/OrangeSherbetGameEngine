@@ -302,19 +302,19 @@ void Mesh::Draw(GLSLProgram* shader)
 		glBindTexture(GL_TEXTURE_2D, material->GetAlbedoTexture()->GetTextureID());
 	}
 	if (material->GetSpecularTexture() != nullptr) {
-		glActiveTexture(GL_TEXTURE0 + 1);
+		glActiveTexture(GL_TEXTURE1);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_specular"), 1);
 		glBindTexture(GL_TEXTURE_2D, material->GetSpecularTexture()->GetTextureID());
 
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &adsIndex);
 	}
 	if (material->GetNormalTexture() != nullptr) {
-		glActiveTexture(GL_TEXTURE0 + 2);
+		glActiveTexture(GL_TEXTURE2);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_normal"), 2);
 		glBindTexture(GL_TEXTURE_2D, material->GetNormalTexture()->GetTextureID());
 	}
 	if (material->GetEmissiveTexture() != nullptr) {
-		glActiveTexture(GL_TEXTURE0 + 3);
+		glActiveTexture(GL_TEXTURE3 );
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_emmision"), 3);
 		glBindTexture(GL_TEXTURE_2D, material->GetEmissiveTexture()->GetTextureID());
 	}

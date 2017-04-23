@@ -106,7 +106,7 @@ void main() {
 		result += pointLightTexMode( i, fragmentPos, norm, viewDir);
 	}
 	
-	//result *= albedoTexColor;
+	result *= albedoTexColor;
 
 	color = vec4(result, 1.0f);
 
