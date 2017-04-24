@@ -156,18 +156,20 @@ void OrangeSherbetGameEngine::TempRun() {
 	Transform* teapotTransform = new Transform(camera.GetViewMatrix(), camera.GetProjMatrix());
 	GameObject teapot(teapotTransform, teapotMesh, shader);
 
+
 	scene->AddGameObject(&teapot);
 
 	Texture* sibenikTexture = new Texture("Assets/Models/sibenik/kamen.png", 512, 512, (TextureType)0);
-	Material* sMat = new Material(sibenikTexture);
-	sMat->SetAmbient(glm::vec3(0.5, 0.5, 0.5));
+	Texture* sibenikSpecTexture = new Texture("Assets/Models/sibenik/mramor6x6.png", 512, 512, (TextureType)0);
+	Material* sMat = new Material(sibenikTexture, sibenikSpecTexture);
+	sMat->SetAmbient(glm::vec3(0.05, 0.05, 0.05));
 	sMat->SetShininess(128.0f);
-	Mesh* sibenikMesh = LoadMesh("Assets/Models/sibenik/sibenik.obj", sMat);
+	Mesh* sibenikMesh = LoadMeshNoNormals("Assets/Models/sibenik/sibenik.obj", sMat);
 	Transform* sibenikTransform = new Transform(camera.GetViewMatrix(), camera.GetProjMatrix());
 	GameObject sibenik(sibenikTransform, sibenikMesh, shader);
 
 	scene->AddGameObject(&sibenik);
-
+	
 	//cml::mat4f model;
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.01f, 0.01f));
 	//setup_vao();
@@ -241,11 +243,11 @@ void OrangeSherbetGameEngine::TempRun() {
 		teapot.transform->SetLocalRotation(0, myTime.GetCurrentTime()/4, 0);
 		teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(myTime.GetCurrentTime())/3), 0.01f);
 
-		//l0->SetPosition(glm::vec3(sin(myTime.GetCurrentTime())*5, 1, cos(myTime.GetCurrentTime())*5));
-		//l1->SetPosition(glm::vec3(4.0f + sin(myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, 4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
-		//l2->SetPosition(glm::vec3(-4.0f + sin(myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, 4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
-		//l3->SetPosition(glm::vec3(4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, -4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
-		//l4->SetPosition(glm::vec3(-4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, -4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
+		l0->SetPosition(glm::vec3(sin(myTime.GetCurrentTime())*5, 1, cos(myTime.GetCurrentTime())*5));
+		l1->SetPosition(glm::vec3(4.0f + sin(myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, 4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
+		l2->SetPosition(glm::vec3(-4.0f + sin(myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, 4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
+		l3->SetPosition(glm::vec3(4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, -4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
+		l4->SetPosition(glm::vec3(-4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f,	2.0f, -4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
 		
 		scene->DrawScene(view);
 

@@ -125,23 +125,14 @@ Mesh* LoadMeshNoNormals(std::string inputfile, Material* mat) {
 		glm::vec3 normal(glm::cross(t1, t2));
 		surfaces.push_back(faceDetail(normal, indices[counter], indices[counter + 1], indices[counter + 2]));
 
-		//vertices[indices[counter]].Normal = normal;
-		//vertices[indices[counter + 1]].Normal = normal;
-		//vertices[indices[counter + 2]].Normal = normal;
+		vertices[indices[counter]].Normal += normal;
+		vertices[indices[counter + 1]].Normal += normal;
+		vertices[indices[counter + 2]].Normal += normal;
 		counter += 3;
 	}
 
 	for (int i = 0; i < vertices.size(); i++) {
-		glm::vec3 sum;
-		for (int j = 0; j < surfaces.size(); j++) {
-			if (surfaces[j].v1 == i)
-				sum += surfaces[j].norm;
-			else if (surfaces[j].v2 == i)
-				sum += surfaces[j].norm;
-			else if (surfaces[j].v3 == i)
-				sum += surfaces[j].norm;
-		}
-		vertices[i].Normal = glm::normalize(sum);
+		vertices[i].Normal = glm::normalize(vertices[i].Normal);
 	}
 
 	return new Mesh(vertices, indices, mat);
@@ -308,19 +299,19 @@ void Mesh::Draw(GLSLProgram* shader)
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &albedoEnabledIndex);
 	}
 	if (material->GetSpecularTexture() != nullptr) {
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE0 + 1);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_specular"), 1);
 		glBindTexture(GL_TEXTURE_2D, material->GetSpecularTexture()->GetTextureID());
 
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &specularEnabledIndex);
 	}
 	if (material->GetNormalTexture() != nullptr) {
-		glActiveTexture(GL_TEXTURE2);
+		glActiveTexture(GL_TEXTURE0 + 2);
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_normal"), 2);
 		glBindTexture(GL_TEXTURE_2D, material->GetNormalTexture()->GetTextureID());
 	}
 	if (material->GetEmissiveTexture() != nullptr) {
-		glActiveTexture(GL_TEXTURE3 );
+		glActiveTexture(GL_TEXTURE0 + 3 );
 		glUniform1i(glGetUniformLocation(shader->getHandle(), "t_emmision"), 3);
 		glBindTexture(GL_TEXTURE_2D, material->GetEmissiveTexture()->GetTextureID());
 	}
@@ -342,14 +333,14 @@ void Mesh::Draw(GLSLProgram* shader)
 
 	// Always good practice to set everything back to defaults once configured.
 	
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE0 + 1);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glActiveTexture(GL_TEXTURE2);
+		glActiveTexture(GL_TEXTURE0 + 2);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE0 + 3);
+		glBindTexture(GL_TEXTURE_2D , 0);
 	
 }
 

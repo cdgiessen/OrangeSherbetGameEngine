@@ -89,10 +89,11 @@ vec3 BlinnPhongPointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 view
 	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
 	
 	vec3 lightContribution = pointLights[lightIndex].color * pointLights[lightIndex].intensity;
-	
+		
 	return lightContribution * (attenuation * (material.ambient + 
 		material.diffuse * max( dot(lightSource, norm), 0.0f) + 
-		material.specular * specTexMode() * pow( max( dot(norm, halfway), 0.0 ), material.shininess )));
+		material.specular * specTexMode() * pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess )));
+	//dot(norm, halfway) -- for blinn phong style lighting.
 }
 
 void main() {
