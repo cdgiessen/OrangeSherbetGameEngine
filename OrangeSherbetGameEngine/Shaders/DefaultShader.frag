@@ -20,16 +20,13 @@ struct DirLight {
 };
 
 struct SpotLight {
-    vec3 position;
+    vec4 position;
     vec3 direction;
-    float cutOff;
+    vec3 color;     
+	  
+	float intensity;
+	float cutOff;
 	float outerCutOff;
-    
-    float constant;
-    float linear;
-    float quadratic;
-    
-    vec3 color;       
 }; 
 
 subroutine vec3 AlbedoTextureMode();
@@ -49,7 +46,7 @@ uniform sampler2D t_height;
 
 uniform PointLight pointLights[5];
 uniform DirLight dirlights[1];
-uniform SpotLight spotLights[5];
+uniform SpotLight spotLights[1];
 
 in vec3 fragmentPos;
 in vec3 normalDir;
@@ -92,19 +89,40 @@ vec3 BlinnPhongPointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 view
 		
 	return lightContribution * (attenuation * (material.ambient + 
 		material.diffuse * max( dot(lightSource, norm), 0.0f) + 
-		material.specular * specTexMode() * pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess )));
+		material.specular * specTexMode() * pow( max( dot(norm, halfway), 0.0 ), material.shininess )));
 	//dot(norm, halfway) -- for blinn phong style lighting.
 }
 
 vec3 DirectionalLightADS(int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir) {
 	vec3 lightDir = normalize(-dirlights[lightIndex].direction); 
-    vec3 lightReflected = reflect( lightDir, norm );
+    vec3 lightReflected = reflect(-lightDir, norm );
+	vec3 halfway = normalize(viewDir + lightDir);
 
 	vec3 lightContribution = dirlights[lightIndex].color * dirlights[lightIndex].intensity;
 
 	return lightContribution * (material.ambient +
 		material.diffuse * max(dot(norm, lightDir), 0.0) +
-		material.specular * specTexMode() * pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess ));
+		material.specular * specTexMode() * pow( max( dot(norm, halfway), 0.0 ), material.shininess ));
+}
+
+vec3 SpotLightADS(int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir) {
+	vec3 lightSource = normalize( vec3(spotLights[lightIndex].position) - fragPos );
+	vec3 lightDir = normalize(-spotLights[lightIndex].direction); 
+    vec3 lightReflected = reflect(-lightSource, norm );
+	vec3 halfway = normalize(viewDir + lightDir);
+
+	float distance = length( vec3(spotLights[lightIndex].position) - fragPos);
+	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
+
+	vec3 lightContribution = spotLights[lightIndex].color * spotLights[lightIndex].intensity;
+
+	float theta = dot(lightDir, normalize(-spotLights[lightIndex].direction)); 
+    float epsilon = (spotLights[lightIndex].cutOff - spotLights[lightIndex].outerCutOff);
+    float spotIntensity = clamp((theta - spotLights[lightIndex].outerCutOff) / epsilon, 0.0, 1.0);
+
+	return spotIntensity * lightContribution * (attenuation * (material.ambient + 
+		material.diffuse * max( dot(lightSource, norm), 0.0f) + 
+		material.specular * specTexMode() * pow( max( dot(norm, halfway), 0.0 ), material.shininess )));
 }
 
 void main() {
@@ -119,6 +137,10 @@ void main() {
 
 	for(int i = 0; i < 1; i++) {
 		result += DirectionalLightADS(i, fragmentPos, norm, viewDir);
+	}
+
+	for(int i = 0; i < 1; i++){
+		result += SpotLightADS(i, fragmentPos, norm, viewDir);
 	}
 	
 	result *= albedoTexMode();

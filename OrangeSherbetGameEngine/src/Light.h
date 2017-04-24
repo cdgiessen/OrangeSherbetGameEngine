@@ -16,6 +16,8 @@ public:
 	};
 
 	Light(Color col, glm::vec3 pos, glm::vec3 dir, float intense, LightType type);
+	Light(Color col, glm::vec3 pos, glm::vec3 dir, float intense, float cut, float outCut, Light::LightType type);
+
 
 	Light();
 	~Light();
@@ -34,6 +36,12 @@ public:
 	float GetIntensity();
 	void SetIntensity(float intense);
 
+	float GetCutOff();
+	void SetCutOff(float val);
+
+	float GetOuterCutOff();
+	void SetOuterCutOff(float val);
+
 	void FillUniform(GLSLProgram *shader, int place, glm::mat4 eyeSpace);
 
 private:
@@ -44,5 +52,9 @@ private:
 
 	glm::vec3 position;
 	glm::vec3 direction;
+
+	//For spotlights
+	float cutOff;
+	float outerCutOff;
 };
 

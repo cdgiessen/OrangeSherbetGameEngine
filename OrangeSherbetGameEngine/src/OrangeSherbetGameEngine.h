@@ -41,6 +41,7 @@ class OrangeSherbetGameEngine
 		void TempMouseButton();
 		
 		void ProcessInputs();
+		void UpdateStuff();
 
 		Window *window;
 		InputManager *inputManager;
