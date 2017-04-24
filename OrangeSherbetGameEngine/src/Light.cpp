@@ -48,6 +48,16 @@ void Light::SetDirection(glm::vec3 dir)
 	direction = dir;
 }
 
+float Light::GetIntensity()
+{
+	return intensity;
+}
+
+void Light::SetIntensity(float intense)
+{
+	intensity = intense;
+}
+
 //Fills this light into the appropriate uniform buffers at place i in the lights array
 void Light::FillUniform(GLSLProgram *shader, int i, glm::mat4 eyeSpace) {
 	std::stringstream name;

@@ -31,6 +31,9 @@ public:
 	glm::vec3 GetDirection();
 	void SetDirection(glm::vec3 dir);
 
+	float GetIntensity();
+	void SetIntensity(float intense);
+
 	void FillUniform(GLSLProgram *shader, int place, glm::mat4 eyeSpace);
 
 private:

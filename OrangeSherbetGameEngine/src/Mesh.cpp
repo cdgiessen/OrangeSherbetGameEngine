@@ -289,7 +289,7 @@ void Mesh::Draw(GLSLProgram* shader)
 	GLuint specularDisabledIndex = glGetSubroutineIndex(shader->getHandle(), GL_FRAGMENT_SHADER, "SpecularTexDisabled");
 
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &albedoDisabledIndex);
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &specularDisabledIndex);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &specularEnabledIndex);
 
 	if (material->GetAlbedoTexture() != nullptr) {
 		glActiveTexture(GL_TEXTURE0 + 0);

@@ -48,7 +48,7 @@ uniform sampler2D t_emissive;
 uniform sampler2D t_height;
 
 uniform PointLight pointLights[5];
-uniform DirLight dirlights[5];
+uniform DirLight dirlights[1];
 uniform SpotLight spotLights[5];
 
 in vec3 fragmentPos;
@@ -82,7 +82,7 @@ vec3 SpecularTexDisabled(){
 
 vec3 BlinnPhongPointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir) {
 	vec3 lightSource = normalize( vec3(pointLights[lightIndex].position) - fragPos );
-    vec3 lightReflected = reflect( -lightSource, norm );
+    vec3 lightReflected = reflect(-lightSource, norm );
 	vec3 halfway = normalize(viewDir + lightSource);
 	
 	float distance = length( vec3(pointLights[lightIndex].position) - fragPos);
@@ -96,6 +96,17 @@ vec3 BlinnPhongPointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 view
 	//dot(norm, halfway) -- for blinn phong style lighting.
 }
 
+vec3 DirectionalLightADS(int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir) {
+	vec3 lightDir = normalize(-dirlights[lightIndex].direction); 
+    vec3 lightReflected = reflect( lightDir, norm );
+
+	vec3 lightContribution = dirlights[lightIndex].color * dirlights[lightIndex].intensity;
+
+	return lightContribution * (material.ambient +
+		material.diffuse * max(dot(norm, lightDir), 0.0) +
+		material.specular * specTexMode() * pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess ));
+}
+
 void main() {
 	
 	vec3 norm = normalize(normalDir);
@@ -105,10 +116,21 @@ void main() {
 	for( int i = 0; i < 5; i++ ) {       
 		result += BlinnPhongPointLightADS( i, fragmentPos, norm, viewDir);
 	}
+
+	for(int i = 0; i < 1; i++) {
+		result += DirectionalLightADS(i, fragmentPos, norm, viewDir);
+	}
 	
 	result *= albedoTexMode();
 
 	color = vec4(result, 1.0f);
+}
 
-
+vec4 depthTestLinearized(float zCoord){
+	float near = 1.0; 
+	float far  = 100.0; 
+	
+	float z = zCoord * 2.0 - 1.0; // Back to NDC 
+	float depth = (2.0 * near * far) / (far + near - z * (far - near))/ far;	
+	return 	vec4(vec3(depth),1.0f);
 }

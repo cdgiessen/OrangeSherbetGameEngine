@@ -37,6 +37,11 @@ void Camera::SetProjMatrix(glm::mat4 proj) {
 	this->ProjMat = proj;
 }
 
+void Camera::SetSpeed(float val)
+{
+	MovementSpeed = val;
+}
+
 // Processes input received from any keyboard-like input system. 
 //Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 void Camera::ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)

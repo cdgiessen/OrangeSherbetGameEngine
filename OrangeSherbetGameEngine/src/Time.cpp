@@ -21,6 +21,10 @@ void Time::TickClock() {
 		deltaTime = std::chrono::duration_cast<dur_double_nano>(currentTime - previousTime);
 		//std::cout << "Delta t2-t1: " << std::chrono::duration_cast<std::chrono::nanoseconds>(deltaTime).count() << " nanoseconds" << std::endl;
 	}
+	else {
+		
+	}
+
 }
 
 //TODO: Make time not dumb?

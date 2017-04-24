@@ -17,7 +17,7 @@ void GameObject::Draw(glm::mat4 newViewMatrix, std::vector<Light* > *listOfLight
 	shader->use();
 
 	transform->SetViewMatrix(newViewMatrix);
-	
+	//Attempt at filling in blobs in the shader. Unsuccessful atm
 	//GLuint blockIndex = glGetUniformBlockIndex(shader->Program, "MVPUniform");
 	//
 	//GLint blockSize;
@@ -42,15 +42,6 @@ void GameObject::Draw(glm::mat4 newViewMatrix, std::vector<Light* > *listOfLight
 	//
 	//glBindBufferBase(GL_UNIFORM_BUFFER, blockIndex, uboHandle);
 
-	/*
-	GLint modelLoc = glGetUniformLocation(shader->getHandle(), "model");
-	GLint viewLoc = glGetUniformLocation(shader->getHandle(), "view");
-	GLint projLoc = glGetUniformLocation(shader->getHandle(), "proj");
-	
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->GetMatrix()));
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(transform->GetViewMatrix()));
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(transform->GetProjectionMatrix()));
-	*/
 	shader->setUniform("model", (transform->GetMatrix()));
 	shader->setUniform("view", (transform->GetViewMatrix()));
 	shader->setUniform("proj", (transform->GetProjectionMatrix()));
@@ -73,11 +64,16 @@ void GameObject::Draw(glm::mat4 newViewMatrix, std::vector<Light* > *listOfLight
 	shader->setUniform("pointLights[3].color", (*listOfLights)[3]->GetColor().ToVec3());
 	shader->setUniform("pointLights[4].color", (*listOfLights)[4]->GetColor().ToVec3());
 
-	shader->setUniform("pointLights[0].intensity", 1.0f);
-	shader->setUniform("pointLights[1].intensity", 1.0f);
-	shader->setUniform("pointLights[2].intensity", 1.0f);
-	shader->setUniform("pointLights[3].intensity", 1.0f);
-	shader->setUniform("pointLights[4].intensity", 1.0f);
+	shader->setUniform("pointLights[0].intensity", (*listOfLights)[0]->GetIntensity());
+	shader->setUniform("pointLights[1].intensity", (*listOfLights)[1]->GetIntensity());
+	shader->setUniform("pointLights[2].intensity", (*listOfLights)[2]->GetIntensity());
+	shader->setUniform("pointLights[3].intensity", (*listOfLights)[3]->GetIntensity());
+	shader->setUniform("pointLights[4].intensity", (*listOfLights)[4]->GetIntensity());
+
+	//Direction light
+	shader->setUniform("dirlights[0].direction", glm::vec3(transform->GetViewMatrix() * glm::vec4((*listOfLights)[5]->GetDirection(), 1.0f)));
+	shader->setUniform("dirlights[0].color", (*listOfLights)[5]->GetColor().ToVec3());
+	shader->setUniform("dirlights[0].intensity", (*listOfLights)[5]->GetIntensity());
 	
 	mesh->Draw(shader);
 
