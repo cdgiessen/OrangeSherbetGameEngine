@@ -24,6 +24,7 @@ Mesh* LoadMesh(std::string inputfile, Material* mat) {
 	}
 
 	if (!cret) {
+		std::cerr << "Failed to load model" << std::endl;
 		exit(1);
 	}
 
@@ -79,6 +80,7 @@ Mesh* LoadMeshNoNormals(std::string inputfile, Material* mat) {
 	}
 
 	if (!cret) {
+		std::cerr << "Failed to load model"<< std::endl;
 		exit(1);
 	}
 
@@ -113,7 +115,6 @@ Mesh* LoadMeshNoNormals(std::string inputfile, Material* mat) {
 	}
 
 	int counter = 0;
-	std::vector<faceDetail> surfaces;
 	while (counter < indices.size()) {
 		glm::vec3 p1 = vertices[indices[counter]].Position;
 		glm::vec3 p2 = vertices[indices[counter+1]].Position;
@@ -123,8 +124,7 @@ Mesh* LoadMeshNoNormals(std::string inputfile, Material* mat) {
 		glm::vec3 t2 = p3 - p1;
 
 		glm::vec3 normal(glm::cross(t1, t2));
-		surfaces.push_back(faceDetail(normal, indices[counter], indices[counter + 1], indices[counter + 2]));
-
+		
 		vertices[indices[counter]].Normal += normal;
 		vertices[indices[counter + 1]].Normal += normal;
 		vertices[indices[counter + 2]].Normal += normal;

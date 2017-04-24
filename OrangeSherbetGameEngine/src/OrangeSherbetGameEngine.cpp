@@ -131,8 +131,8 @@ void OrangeSherbetGameEngine::TempRun() {
 		Transform(camera.GetViewMatrix(), camera.GetProjMatrix()) };
 
 	cubeTransform[0].SetLocalScale(glm::vec3(1, 1, 1.5));
-	cubeTransform[2].SetLocalScale(glm::vec3(15, 1, 15));
-	cubeTransform[2].SetLocalPosition(glm::vec3(0, -2, 0));
+	cubeTransform[2].SetLocalScale(glm::vec3(5, 1, 5));
+	cubeTransform[2].SetLocalPosition(glm::vec3(0, -3, 0));
 
 	GameObject cubeObject0(&cubeTransform[0], cubeMesh, shader);
 	GameObject cubeObject1(&cubeTransform[1], cubeMesh, shader);
