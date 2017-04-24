@@ -139,6 +139,8 @@ void OrangeSherbetGameEngine::UpdateStuff() {
 	scene->GetListOfLights()[3]->SetPosition(glm::vec3(4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f, 2.0f, -4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
 	scene->GetListOfLights()[4]->SetPosition(glm::vec3(-4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f, 2.0f, -4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
 
+	scene->GetListOfLights()[6]->SetDirection(camera.Front);
+	scene->GetListOfLights()[6]->SetPosition(camera.Position);
 }
 
 void OrangeSherbetGameEngine::TempRun() {
@@ -222,8 +224,8 @@ void OrangeSherbetGameEngine::TempRun() {
 	Light* l3 = new Light(Color(1.0f, 1.0f, 0.0f), glm::vec3(4.0f, 2.0f, -4.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.6f, Light::LightType::Point);
 	Light* l4 = new Light(Color(0.0f, 1.0f, 0.0f), glm::vec3(-4.0f, 2.0f, -4.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.6f, Light::LightType::Point);
 	
-	Light* dir = new Light(Color(1.0f, 0.95f, 0.6f), glm::vec3(0, 0, 0), glm::vec3(0, 40, 0), 1.0f, Light::LightType::Dir);
-	Light* spot = new Light(Color(1.0f, 0.95f, 0.6f), glm::vec3(0, 5, 0), glm::vec3(0, -90, 0), 0.6f, 12.5f, (17.5f), Light::LightType::Spot);
+	Light* dir = new Light(Color(1.0f, 0.95f, 0.6f), glm::vec3(0, 0, 0), glm::vec3(0, -15, 0), 0.5f, Light::LightType::Dir);
+	Light* spot = new Light(Color(1.0f, 0.95f, 0.6f), glm::vec3(0, 10, 0), glm::vec3(0, 90, 0), 1.0f, glm::radians(8.5f), glm::radians(15.5f), Light::LightType::Spot);
 
 	scene->AddLight(l0);
 	scene->AddLight(l1);
@@ -275,6 +277,15 @@ void OrangeSherbetGameEngine::TempRun() {
 		//teapot.transform->SetLocalScale(0.01f, 0.01f*(1.5f + sin(myTime.GetCurrentTime())/3), 0.01f);
 
 		UpdateStuff();
+
+		glm::vec3 angle = dir->GetDirection();
+		if (inputManager->GetKey(84)) {			
+			angle.y += 1;
+		} else if (inputManager->GetKey(71)) {
+			angle.y -= 1;
+		}
+		dir->SetDirection(angle);
+		std::cout << dir->GetDirection().y << std::endl;
 
 		scene->DrawScene(view);
 

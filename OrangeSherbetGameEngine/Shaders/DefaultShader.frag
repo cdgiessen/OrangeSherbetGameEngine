@@ -14,14 +14,14 @@ struct PointLight {
 };
 
 struct DirLight {
-    vec3 direction;
+    vec4 direction;
 	vec3 color;
 	float intensity;
 };
 
 struct SpotLight {
     vec4 position;
-    vec3 direction;
+    vec4 direction;
     vec3 color;     
 	  
 	float intensity;
@@ -94,35 +94,36 @@ vec3 BlinnPhongPointLightADS( int lightIndex, vec3 fragPos, vec3 norm, vec3 view
 }
 
 vec3 DirectionalLightADS(int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir) {
-	vec3 lightDir = normalize(-dirlights[lightIndex].direction); 
-    vec3 lightReflected = reflect(-lightDir, norm );
-	vec3 halfway = normalize(viewDir + lightDir);
-
-	vec3 lightContribution = dirlights[lightIndex].color * dirlights[lightIndex].intensity;
-
-	return lightContribution * (material.ambient +
-		material.diffuse * max(dot(norm, lightDir), 0.0) +
-		material.specular * specTexMode() * pow( max( dot(norm, halfway), 0.0 ), material.shininess ));
+	vec3 lightDir = normalize( vec3(-dirlights[lightIndex].direction));
+    vec3 lightReflected = reflect(lightDir, norm );
+	
+	vec3 lightContribution = pointLights[lightIndex].color * pointLights[lightIndex].intensity;
+		
+	return lightContribution * (material.ambient + 
+		material.diffuse * max( dot(lightDir, norm), 0.0f) + 
+		material.specular * specTexMode() * pow( max( dot(lightReflected, viewDir), 0.0 ), material.shininess ));
 }
 
 vec3 SpotLightADS(int lightIndex, vec3 fragPos, vec3 norm, vec3 viewDir) {
 	vec3 lightSource = normalize( vec3(spotLights[lightIndex].position) - fragPos );
-	vec3 lightDir = normalize(-spotLights[lightIndex].direction); 
+	vec3 lightDir = normalize(vec3(-spotLights[lightIndex].direction)); 
     vec3 lightReflected = reflect(-lightSource, norm );
-	vec3 halfway = normalize(viewDir + lightDir);
+	vec3 halfway = normalize(viewDir + lightSource);
 
 	float distance = length( vec3(spotLights[lightIndex].position) - fragPos);
 	float attenuation = 1.0f/(1.0f + 0.07f*distance + 0.017f*distance*distance);
 
 	vec3 lightContribution = spotLights[lightIndex].color * spotLights[lightIndex].intensity;
 
-	float theta = dot(lightDir, normalize(-spotLights[lightIndex].direction)); 
+	float theta = acos(  dot(lightSource, lightDir)); 
     float epsilon = (spotLights[lightIndex].cutOff - spotLights[lightIndex].outerCutOff);
     float spotIntensity = clamp((theta - spotLights[lightIndex].outerCutOff) / epsilon, 0.0, 1.0);
 
-	return spotIntensity * lightContribution * (attenuation * (material.ambient + 
-		material.diffuse * max( dot(lightSource, norm), 0.0f) + 
-		material.specular * specTexMode() * pow( max( dot(norm, halfway), 0.0 ), material.shininess )));
+	return lightContribution * (spotIntensity * attenuation * (material.ambient + 
+			material.diffuse * max( dot(lightSource, norm), 0.0f) + 
+			material.specular * specTexMode() * pow( max( dot(norm, halfway), 0.0 ), material.shininess )));
+		
+	
 }
 
 void main() {
@@ -148,6 +149,7 @@ void main() {
 	color = vec4(result, 1.0f);
 }
 
+//gets the depth of each pixel, reajusted to be in world(ish) space
 vec4 depthTestLinearized(float zCoord){
 	float near = 1.0; 
 	float far  = 100.0; 
