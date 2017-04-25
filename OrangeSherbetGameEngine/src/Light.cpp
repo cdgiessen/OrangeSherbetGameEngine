@@ -79,50 +79,54 @@ void Light::SetOuterCutOff(float val) {
 }
 
 //Fills this light into the appropriate uniform buffers at place i in the lights array
-void Light::FillUniform(GLSLProgram *shader, int i, glm::mat4 eyeSpace) {
+void Light::FillUniform(GLSLProgram *shader, glm::mat4 eyeSpace) {
 	std::string name;
 	switch (this->lightType) {
 		case(LightType::Point):
-			name = "pointLights[" + std::to_string(i) + "].position";
-			shader->setUniform(name.c_str(), eyeSpace*glm::vec4(position,1.0f));
+			name = "pointLights[" + std::to_string(lightIndexByType) + "].position";
+			shader->setUniform(name.c_str(), eyeSpace*glm::vec4(position, 1.0f));
 
-			name = "pointLights[" + std::to_string(i) + "].color";
+			name = "pointLights[" + std::to_string(lightIndexByType) + "].color";
 			shader->setUniform(name.c_str(), GetColor().ToVec3());
 
-			name = "pointLights[" + std::to_string(i) + "].intensity";
+			name = "pointLights[" + std::to_string(lightIndexByType) + "].intensity";
 			shader->setUniform(name.c_str(), intensity);
 			break;
 		
 		case(LightType::Dir):
-			name = "dirlights[" + std::to_string(0) + "].direction";
+			name = "dirlights[" + std::to_string(lightIndexByType) + "].direction";
 			shader->setUniform(name.c_str(), eyeSpace*glm::vec4(direction, 0.0f));
 		
-			name = "dirlights[" + std::to_string(0) + "].color";
+			name = "dirlights[" + std::to_string(lightIndexByType) + "].color";
 			shader->setUniform(name.c_str(), GetColor().ToVec3());
 		
-			name = "dirlights[" + std::to_string(0) + "].intensity";
+			name = "dirlights[" + std::to_string(lightIndexByType) + "].intensity";
 			shader->setUniform(name.c_str(), intensity);
 			break;
 		
 		case(LightType::Spot):
-			name = "spotLights[" + std::to_string(0) + "].position";
+			name = "spotLights[" + std::to_string(lightIndexByType) + "].position";
 			shader->setUniform(name.c_str(), eyeSpace*glm::vec4(position, 1.0f));
 
-			name = "spotLights[" + std::to_string(0) + "].direction";
+			name = "spotLights[" + std::to_string(lightIndexByType) + "].direction";
 			shader->setUniform(name.c_str(), eyeSpace*glm::vec4(direction, 0.0f));
 
-			name = "spotLights[" + std::to_string(0) + "].color";
+			name = "spotLights[" + std::to_string(lightIndexByType) + "].color";
 			shader->setUniform(name.c_str(), GetColor().ToVec3());
 
-			name = "spotLights[" + std::to_string(0) + "].intensity";
+			name = "spotLights[" + std::to_string(lightIndexByType) + "].intensity";
 			shader->setUniform(name.c_str(), intensity);
 
-			name = "spotLights[" + std::to_string(0) + "].cutOff";
+			name = "spotLights[" + std::to_string(lightIndexByType) + "].cutOff";
 			shader->setUniform(name.c_str(), cutOff);
 
-			name = "spotLights[" + std::to_string(0) + "].outerCutOff";
+			name = "spotLights[" + std::to_string(lightIndexByType) + "].outerCutOff";
 			shader->setUniform(name.c_str(), outerCutOff);
 			break;
 
 	}
+}
+
+void Light::SetLightIndex(int index) {
+	lightIndexByType = index;
 }

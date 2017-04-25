@@ -28,6 +28,14 @@ private:
 	std::vector<Light *> lightsInScene;
 	std::vector<GameObject> gameObjectsInScene;
 
+	int maxNumPointLights = 5;
+	int numPointLights = 0;
+
+	int maxNumDirLights = 5;
+	int numDirLights = 0;
+
+	int maxNumSpotLights = 5;
+	int numSpotLights = 0;
 };
 
 #endif SCENE_H

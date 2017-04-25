@@ -45,8 +45,8 @@ uniform sampler2D t_emissive;
 uniform sampler2D t_height;
 
 uniform PointLight pointLights[5];
-uniform DirLight dirlights[1];
-uniform SpotLight spotLights[1];
+uniform DirLight dirlights[5];
+uniform SpotLight spotLights[5];
 
 in vec3 fragmentPos;
 in vec3 normalDir;
@@ -136,11 +136,11 @@ void main() {
 		result += BlinnPhongPointLightADS( i, fragmentPos, norm, viewDir);
 	}
 
-	for(int i = 0; i < 1; i++) {
+	for(int i = 0; i < 5; i++) {
 		result += DirectionalLightADS(i, fragmentPos, norm, viewDir);
 	}
 
-	for(int i = 0; i < 1; i++){
+	for(int i = 0; i < 5; i++){
 		result += SpotLightADS(i, fragmentPos, norm, viewDir);
 	}
 	

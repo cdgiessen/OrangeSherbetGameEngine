@@ -49,7 +49,7 @@ void GameObject::Draw(glm::mat4 newViewMatrix, std::vector<Light* > *listOfLight
 	shader->setUniform("normalMat", glm::transpose(glm::inverse( glm::mat3(transform->GetViewMatrix()*transform->GetMatrix()) )) );
 
 	for (int i = 0; i < listOfLights->size(); i++) {
-		(*listOfLights)[i]->FillUniform(shader, i, transform->GetViewMatrix());
+		(*listOfLights)[i]->FillUniform(shader, transform->GetViewMatrix());
 	}
 
 	mesh->Draw(shader);

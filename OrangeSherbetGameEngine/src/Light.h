@@ -42,10 +42,13 @@ public:
 	float GetOuterCutOff();
 	void SetOuterCutOff(float val);
 
-	void FillUniform(GLSLProgram *shader, int place, glm::mat4 eyeSpace);
+	void FillUniform(GLSLProgram *shader, glm::mat4 eyeSpace);
+
+	void SetLightIndex(int index);
 
 private:
 	Light::LightType lightType = LightType::Point;
+	int lightIndexByType; //For putting this light into the correct array index in the shader. Each type has a seperate index that is kept track of by the scene
 
 	float intensity;
 	Color lightColor;

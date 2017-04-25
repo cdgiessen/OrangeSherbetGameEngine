@@ -20,7 +20,30 @@ void Scene::AddGameObject(GameObject *obj) {
 }
 
 void Scene::AddLight(Light *light) {
-	lightsInScene.push_back(light);
+	switch (light->GetLightType())
+	{
+	case (Light::LightType::Point):
+		if (numPointLights < maxNumPointLights) {
+			numPointLights++;
+			light->SetLightIndex(numPointLights - 1);
+			lightsInScene.push_back(light);
+		}
+		break;
+	case(Light::LightType::Dir):
+		if (numDirLights < maxNumDirLights) {
+			numDirLights++;
+			light->SetLightIndex(numDirLights - 1);
+			lightsInScene.push_back(light);
+		}
+		break;
+	case(Light::LightType::Spot):
+		if (numSpotLights < maxNumSpotLights) {
+			numSpotLights++;
+			light->SetLightIndex(numSpotLights - 1);
+			lightsInScene.push_back(light);
+		}
+		break;
+	}
 }
 
 void Scene::DrawScene(glm::mat4 view) {
