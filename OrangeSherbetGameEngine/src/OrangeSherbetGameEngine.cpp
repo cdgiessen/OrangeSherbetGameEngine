@@ -14,15 +14,15 @@
 
 #include <noise/noise.h>
 
-//#include <json.hpp>
+#include <json.hpp>
 
-//using json = nlohmann::json;
+using json = nlohmann::json;
 
 //#include "CML\cml.h"
 //#include "CML\mat4.h"
 
 // Default Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1600, HEIGHT = 900;
 
 GLFWwindow *window;
 
@@ -86,8 +86,18 @@ void OrangeSherbetGameEngine::TempMouseButton() { //GLFWwindow* window, int glfw
 
 int OrangeSherbetGameEngine::StartUp() {
 	std::cout << "Starting up the Orange Sherbet Game Engine" << std::endl;
-	
-	window = new Window(WIDTH, HEIGHT, false, "OGSE");
+
+	// read a JSON file
+	std::ifstream i("settings.json");
+	json jT;
+	i >> jT;
+
+	std::cout << std::setw(4) << jT << std::endl;
+
+	int screenWidth = jT["screen_dimentions"]["screen_width"];
+	int screenHeight = jT["screen_dimentions"]["screen_height"];
+
+	window = new Window(screenWidth, screenHeight, false, "OGSE");
 
 	inputManager = new InputManager(window->getGLFWWindow());
 
