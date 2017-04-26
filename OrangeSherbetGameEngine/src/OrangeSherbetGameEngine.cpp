@@ -14,10 +14,6 @@
 
 #include <noise/noise.h>
 
-#include <json.hpp>
-
-using json = nlohmann::json;
-
 //#include "CML\cml.h"
 //#include "CML\mat4.h"
 
@@ -82,22 +78,30 @@ void OrangeSherbetGameEngine::TempMouseButton() { //GLFWwindow* window, int glfw
 		std::cout << "Left Clicked" << std::endl;
 }
 
+nlohmann::json OrangeSherbetGameEngine::LoadSettings() {
+	// read the settings file. Needs to do error checking if it isn't present, then load defaults.
+	std::ifstream input_settings("settings.json");
+	nlohmann::json json_settings;
+	input_settings >> json_settings;
 
+	std::cout << std::setw(4) << json_settings << std::endl;
+
+	int screenWidth = json_settings["screen_dimentions"]["screen_width"];
+	int screenHeight = json_settings["screen_dimentions"]["screen_height"];
+	if (screenWidth <= 0)
+		json_settings["screen_dimentions"]["screen_width"] = 800;
+	if (screenHeight <= 0)
+		json_settings["screen_dimentions"]["screen_height"] = 600;
+
+	return json_settings;
+}
 
 int OrangeSherbetGameEngine::StartUp() {
 	std::cout << "Starting up the Orange Sherbet Game Engine" << std::endl;
 
-	// read a JSON file
-	std::ifstream i("settings.json");
-	json jT;
-	i >> jT;
+	nlohmann::json settings = LoadSettings();
 
-	std::cout << std::setw(4) << jT << std::endl;
-
-	int screenWidth = jT["screen_dimentions"]["screen_width"];
-	int screenHeight = jT["screen_dimentions"]["screen_height"];
-
-	window = new Window(screenWidth, screenHeight, false, "OGSE");
+	window = new Window(settings["screen_dimentions"]["screen_width"], settings["screen_dimentions"]["screen_height"], false, "OGSE");
 
 	inputManager = new InputManager(window->getGLFWWindow());
 
