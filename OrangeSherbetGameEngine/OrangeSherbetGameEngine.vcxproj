@@ -212,6 +212,8 @@
     <None Include="Assets\Models\teapot\teapot.max" />
     <None Include="Shaders\DefaultShader.frag" />
     <None Include="Shaders\DefaultShader.vert" />
+    <None Include="Shaders\DepthShader.frag" />
+    <None Include="Shaders\DepthShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Images\SolidColorCube.png" />

@@ -157,6 +157,8 @@
     <None Include="Shaders\DefaultShader.frag">
       <Filter>Resource Files\DefaultShaders</Filter>
     </None>
+    <None Include="Shaders\DepthShader.vert" />
+    <None Include="Shaders\DepthShader.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Images\SolidColorCube.png">
