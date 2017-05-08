@@ -18,7 +18,7 @@
 //#include "CML\mat4.h"
 
 // Default Window dimensions
-const GLuint WIDTH = 1600, HEIGHT = 900;
+const GLuint WIDTH = 800, HEIGHT = 600;
 
 GLFWwindow *window;
 
@@ -77,7 +77,7 @@ void OrangeSherbetGameEngine::TempMouseButton() { //GLFWwindow* window, int glfw
 	if (glfwGetMouseButton(window->getGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT))
 		std::cout << "Left Clicked" << std::endl;
 }
-
+/*
 nlohmann::json OrangeSherbetGameEngine::LoadSettings() {
 	// read the settings file. Needs to do error checking if it isn't present, then load defaults.
 	std::ifstream input_settings("settings.json");
@@ -94,15 +94,15 @@ nlohmann::json OrangeSherbetGameEngine::LoadSettings() {
 		json_settings["screen_dimentions"]["screen_height"] = 600;
 
 	return json_settings;
-}
+}*/
 
 int OrangeSherbetGameEngine::StartUp() {
 	std::cout << "Starting up the Orange Sherbet Game Engine" << std::endl;
 
-	nlohmann::json settings = LoadSettings();
+	//nlohmann::json settings = LoadSettings();
 
-	window = new Window(settings["screen_dimentions"]["screen_width"], settings["screen_dimentions"]["screen_height"], false, "OGSE");
-
+	//window = new Window(settings["screen_dimentions"]["screen_width"], settings["screen_dimentions"]["screen_height"], false, "OGSE");
+	window = new Window(WIDTH, HEIGHT, false, "OGSE");
 	inputManager = new InputManager(window->getGLFWWindow());
 
 	scene = new Scene();
@@ -236,7 +236,7 @@ void OrangeSherbetGameEngine::TempRun() {
 	teapot.transform->SetLocalPosition(glm::vec3(0, -1.0f, 0));
 	teapot.transform->SetLocalScale(glm::vec3(0.01f, 0.015f, 0.01f));
 	
-	Light* dir = new Light(Color(1.0f, 0.95f, 0.6f), glm::vec3(0, 0, 0), glm::vec3(0, -15, 0), 0.5f, Light::LightType::Dir);
+	Light* dir = new Light(Color(1.0f, 0.95f, 0.6f), glm::vec3(0, 0, 0), glm::vec3(0, -15, 0), 0.0f, Light::LightType::Dir);
 	Light* spot = new Light(Color(1.0f, 0.95f, 0.6f), glm::vec3(0, 10, 0), glm::vec3(0, 1, 0), 1.0f, glm::radians(8.5f), glm::radians(15.0f), Light::LightType::Spot);
 	
 	scene->AddLight(new Light(Colors::WHITE, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.8f, Light::LightType::Point));

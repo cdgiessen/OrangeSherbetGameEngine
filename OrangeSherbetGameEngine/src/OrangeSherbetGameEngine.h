@@ -11,7 +11,7 @@
 
 #include <GLFW\glfw3.h>
 
-#include <json.hpp>
+//#include <json.hpp>
 
 #include "Window.h"
 #include "InputManager.h"
@@ -31,7 +31,7 @@ class OrangeSherbetGameEngine
 		OrangeSherbetGameEngine();
 		~OrangeSherbetGameEngine();
 
-		nlohmann::json LoadSettings();
+		//nlohmann::json LoadSettings();
 
 		int StartUp();
 

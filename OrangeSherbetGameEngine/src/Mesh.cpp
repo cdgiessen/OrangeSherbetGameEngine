@@ -33,6 +33,10 @@ Mesh* LoadMesh(std::string inputfile, Material* mat) {
 	std::vector<GLuint> indices;
 
 	for (const auto& shape : shapes) {
+		vertices.reserve(shape.mesh.indices.size());
+		indices.reserve(shape.mesh.indices.size() * 3);
+		uniqueVertices.reserve(shape.mesh.indices.size() * 3);
+
 		for (const auto& index : shape.mesh.indices) {
 			Vertex vertex = {};
 
@@ -89,6 +93,9 @@ Mesh* LoadMeshNoNormals(std::string inputfile, Material* mat) {
 	std::vector<GLuint> indices;
 
 	for (const auto& shape : shapes) {
+		vertices.reserve(shape.mesh.indices.size());
+		indices.reserve(shape.mesh.indices.size() * 3);
+		uniqueVertices.reserve(shape.mesh.indices.size() * 3);
 		for (const auto& index : shape.mesh.indices) {
 			Vertex vertex = {};
 
