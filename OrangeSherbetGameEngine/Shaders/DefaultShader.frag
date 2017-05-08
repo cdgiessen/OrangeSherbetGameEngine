@@ -36,6 +36,7 @@ subroutine vec3 SpecularTextureMode();
 subroutine uniform SpecularTextureMode specTexMode;
 
 uniform Material material;
+uniform sampler2D depthMap;
 
 uniform sampler2D t_albedo;
 uniform sampler2D t_diffuse;
@@ -43,6 +44,7 @@ uniform sampler2D t_specular;
 uniform sampler2D t_normal;
 uniform sampler2D t_emissive;
 uniform sampler2D t_height;
+
 
 uniform PointLight pointLights[5];
 uniform DirLight dirlights[5];
@@ -146,7 +148,11 @@ void main() {
 	
 	result *= albedoTexMode();
 
+	float gamma = 2.2;
+    result = pow(result, vec3(1.0/gamma));
+
 	color = vec4(result, 1.0f);
+
 }
 
 //gets the depth of each pixel, reajusted to be in world(ish) space

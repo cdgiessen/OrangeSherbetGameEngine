@@ -34,6 +34,7 @@ glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH 
 
 Shader* defaultShader;
 GLSLProgram* shader;
+GLSLProgram* depthShader;
 Mesh* cubeMesh;
 Mesh* quadMesh;
 
@@ -153,7 +154,7 @@ void OrangeSherbetGameEngine::UpdateStuff() {
 	lightList[2]->SetPosition(glm::vec3(-4.0f + sin(myTime.GetCurrentTime()*3.0f)*3.0f, 2.0f, 4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
 	lightList[3]->SetPosition(glm::vec3(4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f, 2.0f, -4.0f + cos(myTime.GetCurrentTime()*3.0f)*3.0f));
 	lightList[4]->SetPosition(glm::vec3(-4.0f + sin(-myTime.GetCurrentTime()*3.0f)*3.0f, 2.0f, -4.0f + cos(-myTime.GetCurrentTime()*3.0f)*3.0f));
-
+	
 	lightList[6]->SetDirection(camera.Front);
 	lightList[6]->SetPosition(camera.Position);
 	lightList[7]->SetDirection(glm::vec3(cos(myTime.GetCurrentTime()*3.0f)*30.0f, -10 + sin(myTime.GetCurrentTime()*12.0f)*60.0f, -5.0f));
@@ -172,6 +173,11 @@ void OrangeSherbetGameEngine::TempRun() {
 	shader->compileShader("Shaders/DefaultShader.frag", GLSLShader::FRAGMENT);
 	shader->link();
 
+	depthShader = new GLSLProgram();
+	depthShader->compileShader("Shaders/DepthShader.vert", GLSLShader::VERTEX);
+	depthShader->compileShader("Shaders/DepthShader.frag", GLSLShader::FRAGMENT);
+	depthShader->link();
+	
 	camera.SetProjMatrix(projection);
 
 	Texture* cubeTexture = new Texture("Assets/Models/Cube/albedo.png", 500, 500, (TextureType)0);
@@ -251,7 +257,6 @@ void OrangeSherbetGameEngine::TempRun() {
 	scene->AddLight(new Light(Colors::BLUE, glm::vec3(0, 10, 0), glm::vec3(0, 1, 0), 3.0f, glm::radians(8.5f), glm::radians(15.0f), Light::LightType::Spot));
 	scene->AddLight(new Light(Colors::YELLOW, glm::vec3(0, 10, 0), glm::vec3(0, 1, 0), 3.0f, glm::radians(8.5f), glm::radians(15.0f), Light::LightType::Spot));
 
-
 	// Main Game loop
 	while (!glfwWindowShouldClose(window->getGLFWWindow()))
 	{
@@ -265,15 +270,6 @@ void OrangeSherbetGameEngine::TempRun() {
 			scene->UpdateProjectionMatrix(camera.GetProjMatrix());
 			window->windowSizeChanged = false;
 		}
-
-		// Render
-		// Clear the colorbuffer
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
-		//glClearColor(sin(myTime.GetCurrentTime()), 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the colorbuffer
-
-
-		glm::mat4 view = camera.GetViewMatrix();
 
 		cubeObject0.transform->SetLocalRotation(0, myTime.GetCurrentTime(), 0);
 		cubeObject1.transform->SetLocalRotation(270, myTime.GetCurrentTime(), 45);
@@ -295,7 +291,15 @@ void OrangeSherbetGameEngine::TempRun() {
 
 		UpdateStuff();
 
+		// Render
+		// Clear the colorbuffer
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Set the background to a nice muted green
+		//glClearColor(sin(myTime.GetCurrentTime()), 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the colorbuffer
+
+		glm::mat4 view = camera.GetViewMatrix();
 		scene->DrawScene(view);
+		
 		//simple flashliht toggle. press T to turn on, G to turn off
 		if (inputManager->GetKey(71)) 
 			spot->SetIntensity(0.0f);
