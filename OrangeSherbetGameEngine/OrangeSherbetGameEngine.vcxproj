@@ -216,6 +216,7 @@
     <None Include="Shaders\DepthShader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\..\Pictures\Game Engine Captures\ADS with point, dir, and spot lights working.PNG" />
     <Image Include="Assets\Images\SolidColorCube.png" />
     <Image Include="Assets\Images\TestTexture.png" />
     <Image Include="Assets\Models\cube\default.png" />

@@ -176,5 +176,8 @@
     <Image Include="Assets\Models\teapot\default.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\..\Pictures\Game Engine Captures\ADS with point, dir, and spot lights working.PNG">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
