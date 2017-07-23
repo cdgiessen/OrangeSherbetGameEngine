@@ -1,5 +1,5 @@
 # OrangeSherbetGameEngine
-My own OenGL Game Engine
+My own OpenGL Game Engine
 
 Uses OpenGL 4.0, GLFW3, and GLEW
 stb_image.h is the image loader and tinyobjloader.h is the obj file loaders.
