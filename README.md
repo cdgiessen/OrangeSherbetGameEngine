@@ -10,7 +10,7 @@ Envisioned to be a data-driven componenet based architecture, how much of that h
 
 This project is for The University of Tulsa Game Engine Architecture Class.
 
-##Screenshot of engine in action
+## Screenshot of engine in action
 ![](https://github.com/cdgiessen/OrangeSherbetGameEngine/blob/master/ADS%20with%20point%2C%20dir%2C%20and%20spot%20lights%20working.PNG)
 
 
