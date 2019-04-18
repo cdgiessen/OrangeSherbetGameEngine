@@ -1,7 +1,7 @@
 #include "Transform.h"
 
 //Transform::Transform(cml::mat4f viewMat, glm::mat4 projectionMat) : position(cml::VEC3_ZERO), rotation(cml::QUAT_IDENTITY), scale(cml::VEC3_ONE), model(cml::mat4f()), view(viewMat), projection(projectionMat) {}
-Transform::Transform(glm::mat4 viewMat, glm::mat4 projectionMat) : position(glm::vec3(0, 0, 0)), rotation(glm::angleAxis(0.0f, glm::vec3(1.0f, 0.0f, 0.0f))), scale(glm::vec3(1, 1, 1)), model(glm::mat4()), view(viewMat), projection(projectionMat) 
+Transform::Transform(glm::mat4 viewMat, glm::mat4 projectionMat) : position(glm::vec3(0, 0, 0)), rotation(glm::angleAxis(0.0f, glm::vec3(1.0f, 0.0f, 0.0f))), scale(glm::vec3(1, 1, 1)), model(glm::mat4(1.0f)), view(viewMat), projection(projectionMat) 
 {
 	isDirty = true; //make the model on first need
 }
@@ -93,7 +93,7 @@ glm::mat4 Transform::GetMatrix() {
 }
 
 void Transform::UpdateMatrix() {
-	model = glm::mat4();
+	model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	model = model * glm::mat4_cast(rotation);
 	//model = glm::rotate(model, glm::angle(rotation), glm::axis(rotation));
